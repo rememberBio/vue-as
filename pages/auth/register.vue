@@ -140,10 +140,10 @@ export default {
         user.types = ['pageManager'];
         await createUser(user).then(async (newUser) => {
           localStorage.setItem("currentUser", JSON.stringify(newUser));
-        this.$store.commit("setState", {
-          value: newUser,
-          state: "currentUser",
-        });
+          this.$store.commit("setState", {
+            value: newUser,
+            state: "currentUser",
+          });
           this.sendEmailLink();
          
         }).catch((error)=> {

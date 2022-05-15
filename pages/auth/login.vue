@@ -83,6 +83,7 @@ export default {
           value: response,
           state: "currentUser",
         });
+        localStorage.setItem("currentUser", JSON.stringify(response));
       });
     },
   },
