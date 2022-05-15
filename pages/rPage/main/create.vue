@@ -14,16 +14,12 @@
                 <label class="form-label"> Name</label>
                 <div class="wrap-input">
                   <input
-                    :class="{ invalid: v$.name.$error }"
                     type="text"
                     name="name"
                     placeholder="Full Name Of The Deceased"
-                    v-model="v$.name.$model"
+                    v-model="name"
                     @input="changeRememberPageState('name', $event)"
                   />
-                  <div v-if="v$.name.$error" class="input-error">
-                    Required Field
-                  </div>
                 </div>
               </div>
             </div>
@@ -41,13 +37,7 @@
                   >
                     a few words about him.
                   </div>
-                  <div
-                    class="input-error"
-                    v-for="(error, errorIndex) in v$.brief.$errors"
-                    :key="errorIndex"
-                  >
-                    {{ error.$message }}
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -65,13 +55,7 @@
                   >
                     more about him..
                   </div>
-                  <div
-                    class="input-error"
-                    v-for="(error, errorIndex) in v$.about.$errors"
-                    :key="errorIndex"
-                  >
-                    {{ error.$message }}
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -81,19 +65,12 @@
                 <label class="form-label"> Date Of Birth:</label>
                 <div class="wrap-input">
                   <input
-                    :class="{ invalid: v$.dateOfBirth.$error }"
                     type="date"
                     name="dateOfBirth"
-                    v-model="v$.dateOfBirth.$model"
+                    v-model="dateOfBirth"
                     @change="changeRememberPageState('dateOfBirth', $event)"
                   />
-                  <div
-                    class="input-error"
-                    v-for="(error, errorIndex) in v$.dateOfBirth.$errors"
-                    :key="errorIndex"
-                  >
-                    {{ error.$message }}
-                  </div>
+                
                 </div>
               </div>
             </div>
@@ -103,19 +80,12 @@
                 <label class="form-label"> Date Of Death:</label>
                 <div class="wrap-input">
                   <input
-                    :class="{ invalid: v$.dateOfDeath.$error }"
                     type="date"
                     name="dateOfDeath"
-                    v-model="v$.dateOfDeath.$model"
+                    v-model="dateOfDeath"
                     @change="changeRememberPageState('dateOfDeath', $event)"
                   />
-                  <div
-                    class="input-error"
-                    v-for="(error, errorIndex) in v$.dateOfDeath.$errors"
-                    :key="errorIndex"
-                  >
-                    {{ error.$message }}
-                  </div>
+                 
                 </div>
               </div>
             </div>
@@ -127,7 +97,7 @@
                   <input
                     type="text"
                     name="country"
-                    v-model="v$.country.$model"
+                    v-model="country"
                     @input="changeRememberPageState('country', $event)"
                   />
                 </div>
@@ -141,7 +111,7 @@
                   <select
                     name="spouse"
                     id="spouse"
-                    v-model="v$.spouse.$model.type"
+                    v-model="spouse.type"
                     @input="changeRememberPageState('spouse', $event)"
                   >
                     <option value="-1">Select</option>
@@ -156,7 +126,7 @@
                     type="text"
                     name="spouse-name"
                     placeholder="Name"
-                    v-model="v$.spouse.$model.name"
+                    v-model="spouse.name"
                     @input="changeRememberPageState('spouse', $event)"
                   />
                 </div>
@@ -165,7 +135,7 @@
                     type="text"
                     name="spouse-link"
                     placeholder="Link to Remember page"
-                    v-model="v$.spouse.$model.rememberPageLink"
+                    v-model="spouse.rememberPageLink"
                     @input="changeRememberPageState('spouse', $event)"
                   />
                 </div>
@@ -181,7 +151,7 @@
                     type="text"
                     name="parent-1-name"
                     placeholder="Father"
-                    v-model="v$.parents.$model[0].name"
+                    v-model="parents[0].name"
                     @input="changeRememberPageState('parents', $event)"
                   />
                 </div>
@@ -190,7 +160,7 @@
                     type="text"
                     name="parent-1-link"
                     placeholder="Link to Remember page"
-                    v-model="v$.parents.$model[0].rememberPageLink"
+                    v-model="parents[0].rememberPageLink"
                     @input="changeRememberPageState('parents', $event)"
                   />
                 </div>
@@ -202,7 +172,7 @@
                     type="text"
                     name="parent-2-name"
                     placeholder="Mother"
-                    v-model="v$.parents.$model[1].name"
+                    v-model="parents[1].name"
                     @input="changeRememberPageState('parents', $event)"
                   />
                 </div>
@@ -211,7 +181,7 @@
                     type="text"
                     name="parent-2-link"
                     placeholder="Link to Remember page"
-                    v-model="v$.parents.$model[1].rememberPageLink"
+                    v-model="parents[1].rememberPageLink"
                     @input="changeRememberPageState('parents', $event)"
                   />
                 </div>
@@ -239,7 +209,7 @@
                     type="text"
                     name="children-name"
                     placeholder="Child's Name"
-                    v-model="v$.children.$model[index].name"
+                    v-model="children[index].name"
                     @input="changeRememberPageState('children', $event)"
                   />
                 </div>
@@ -248,7 +218,7 @@
                     type="text"
                     name="children-link"
                     placeholder="Link To Rememeber Page"
-                    v-model="v$.children.$model[index].rememberPageLink"
+                    v-model="children[index].rememberPageLink"
                     @input="changeRememberPageState('children', $event)"
                   />
                 </div>
@@ -291,7 +261,7 @@
                     type="number"
                     name="timeline-date"
                     placeholder="0000"
-                    v-model="v$.timeline.$model[index].year"
+                    v-model="timeline[index].year"
                     @input="changeRememberPageState('timeline', $event)"
                   />
                 </div>
@@ -301,7 +271,7 @@
                     type="text"
                     name="timeline-desc"
                     placeholder=""
-                    v-model="v$.timeline.$model[index].shortDesc"
+                    v-model="timeline[index].shortDesc"
                     @input="changeRememberPageState('timeline', $event)"
                   />
                 </div>
@@ -360,7 +330,7 @@
                     name="story-date"
                     placeholder=""
                     :data-index="index"
-                    v-model="v$.stories.$model[index].date"
+                    v-model="stories[index].date"
                     @input="changeRememberPageState('stories', $event)"
                   />
                 </div>
@@ -371,7 +341,7 @@
                     name="story-name"
                     placeholder="Name"
                     :data-index="index"
-                    v-model="v$.stories.$model[index].witnessName"
+                    v-model="stories[index].witnessName"
                     @input="changeRememberPageState('stories', $event)"
                   />
                 </div>
@@ -418,7 +388,7 @@
                     name="gallery-item-start-year"
                     placeholder="0000"
                     :data-index="index"
-                    v-model="v$.gallery.$model.items[index].startYear"
+                    v-model="gallery.items[index].startYear"
                     @input="changeRememberPageState('gallery', $event)"
                   />
                 </div>
@@ -429,7 +399,7 @@
                     name="gallery-item-end-year"
                     placeholder="0000"
                     :data-index="index"
-                    v-model="v$.gallery.$model.items[index].endYear"
+                    v-model="gallery.items[index].endYear"
                     @input="changeRememberPageState('gallery', $event)"
                   />
                 </div>
@@ -455,7 +425,7 @@
                       name="gallery-album-name"
                       placeholder="Type Here"
                       :data-index="indexAl"
-                      v-model="v$.gallery.$model.items[index].albumes[indexAl].name"
+                      v-model="gallery.items[index].albumes[indexAl].name"
                       @input="changeRememberPageState('gallery', $event)"
                     />
                   </div>
@@ -466,7 +436,7 @@
                       name="gallery-album-start-year"
                       placeholder="0000"
                       :data-index="indexAl"
-                      v-model="v$.gallery.$model.items[index].albumes[indexAl].startYear"
+                      v-model="gallery.items[index].albumes[indexAl].startYear"
                       @input="changeRememberPageState('gallery', $event)"
                     />
                   </div>
@@ -477,7 +447,7 @@
                       name="gallery-album-end-year"
                       placeholder="0000"
                       :data-index="indexAl"
-                      v-model="v$.gallery.$model.items[index].albumes[indexAl].startYear"
+                      v-model="gallery.items[index].albumes[indexAl].startYear"
                       @input="changeRememberPageState('gallery', $event)"
                     />
                   </div>
@@ -529,7 +499,7 @@
                     name="place-name"
                     placeholder="Type Here"
                     :data-index="index"
-                    v-model="v$.placesOfCommemoration.$model[index].name"
+                    v-model="placesOfCommemoration[index].name"
                     @input="
                       changeRememberPageState('placesOfCommemoration', $event)
                     "
@@ -542,7 +512,7 @@
                     name="place-address"
                     placeholder="Type Here"
                     :data-index="index"
-                    v-model="v$.placesOfCommemoration.$model[index].address"
+                    v-model="placesOfCommemoration[index].address"
                     @input="
                       changeRememberPageState('placesOfCommemoration', $event)
                     "
@@ -570,7 +540,7 @@
                     name="place-short-desc"
                     placeholder="Type Here"
                     :data-index="index"
-                    v-model="v$.placesOfCommemoration.$model[index].shortDesc"
+                    v-model="placesOfCommemoration[index].shortDesc"
                     @input="
                       changeRememberPageState('placesOfCommemoration', $event)
                     "
@@ -603,7 +573,7 @@
                     type="text"
                     name="grave-name"
                     placeholder="Type Here"
-                    v-model="v$.grave.$model.nameOfCemetery"
+                    v-model="grave.nameOfCemetery"
                     @input="changeRememberPageState('grave', $event)"
                   />
                 </div>
@@ -813,17 +783,17 @@ export default {
       };
     },
     createRememberPage: function () {
-      if (this.checkValidForm()) {
+      //if (this.checkValidForm()) {
         // eslint-disable-next-line no-console
         console.log("hi");
-      }
+      //}
     },
-    checkValidForm: async function () {
-      let isFormCorrect = await this.v$.$validate();
-      if (isFormCorrect) {
-        return true;
-      } else return false;
-    },
+    // checkValidForm: async function () {
+    //   let isFormCorrect = await this.v$.$validate();
+    //   if (isFormCorrect) {
+    //     return true;
+    //   } else return false;
+    // },
     changeRememberPageState: async function (attributeName, event) {
       //let value = event.target.value;
       if (
@@ -872,16 +842,13 @@ export default {
         }
       }
       let value = this[attributeName];
-      let isFieldCorrect = await this.v$[attributeName].$validate();
-      if (isFieldCorrect) {
-        let currentRpEditing = this.$store.state.curEditRP;
-        let attrs = currentRpEditing.attributes;
-        attrs[attributeName] = value;
-        this.$store.commit("setState", {
-          value: currentRpEditing,
-          state: "curEditRP",
+      //let isFieldCorrect = await this.v$[attributeName].$validate();
+      //if (isFieldCorrect) {
+        this.$store.commit("setCurEditRPAttrState", {
+          value: value,
+          attr: attributeName,
         });
-      }
+//}
     },
     addElement: function (attributeName, event, galleryItemIndex = 0) {
       event.preventDefault();
@@ -952,12 +919,9 @@ export default {
       this.grave.address.location.lng = lng;
       this.grave.address.name = name;
 
-      let currentRpEditing = this.$store.state.curEditRP;
-      let attrs = currentRpEditing.attributes;
-      attrs["grave"].address = this.grave.address;
-      this.$store.commit("setState", {
-        value: currentRpEditing,
-        state: "curEditRP",
+      this.$store.commit("setCurEditRPAttrState", {
+          value: this.grave,
+          attr: "grave",
       });
     },
   },

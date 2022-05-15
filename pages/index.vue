@@ -1,9 +1,17 @@
 <template>
-  <div>Hii!!</div>
+  <div class=""> 
+     <button @click="logout"> Logout </button>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'IndexPage',
-}
+  name: "IndexPage",
+  methods: {
+    logout() {
+      $nuxt.$fire.auth.signOut();
+    },
+  },
+  created() {},
+};
 </script>

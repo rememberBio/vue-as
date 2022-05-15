@@ -8,73 +8,72 @@
         <div class="flex">
           <div class="wrap-input left-input">
             <input
-              :class="{ invalid: v$.firstName.$error }"
               type="text"
               name="first name"
               placeholder="First Name"
-              v-model="v$.firstName.$model"
+              v-model="firstName"
             />
-            <div v-if="v$.firstName.$error" class="input-error">
+            <!-- <div v-if="v$.firstName.$error" class="input-error">
               Required Field
-            </div>
+            </div> -->
           </div>
           <div class="wrap-input">
             <input
-              :class="{ invalid: v$.lastName.$error }"
               type="text"
               name="last name"
               placeholder="Last Name"
-              v-model="v$.lastName.$model"
+              v-model="lastName"
             />
-            <div v-if="v$.lastName.$error" class="input-error">
+            <!-- <div v-if="lastName" class="input-error">
               Required Field
-            </div>
+            </div> -->
           </div>
         </div>
 
         <label class="form-label"> Email Address</label>
         <div class="wrap-input">
           <input
-            :class="{ invalid: v$.email.$error }"
             type="email"
             name="email"
             placeholder="youremail@gmail.con"
-            v-model="v$.email.$model"
+            v-model="email"
           />
-          <div
+          <!-- <div
             class="input-errors"
             v-for="error of v$.email.$errors"
             :key="error.$uid"
           >
             <div class="error-msg">{{ error.$message }}</div>
-          </div>
+          </div> -->
         </div>
         <label class="form-label"> Phone Number</label>
         <div class="wrap-input">
           <input
-            :class="{ invalid: v$.phone.$error }"
             type="text"
             name="phone"
             placeholder="+9999-9999-9999"
-            v-model="v$.phone.$model"
+            v-model="phone"
           />
-          <div v-if="v$.phone.$error" class="input-error">Invalid Phone</div>
+          <!-- <div v-if="v$.phone.$error" class="input-error">Invalid Phone</div> -->
         </div>
         <button  v-if="!emailSend" type="submit">next</button>
         <nuxt-link to="/auth/login">
             <p>already have an account? login</p>
           </nuxt-link>
       </form>
+      <div v-if="errorMessage">{{errorMessage}}</div>
       <div class="email-send"  v-if="emailSend">
-        <div class="title">Hi, {{ v$.firstName.$model}} {{ v$.lastName.$model}}</div>
+        <div class="title">Hi, {{ firstName}} {{ lastName}}</div>
         <p class="content">
           we're happy you signed up for remember. to continue please confirm your
           email address.
         </p>
-        <button class="fill-button verify-now" @click="createAccount">Verify Now</button>
-        <a class="continue-request">
-          continue process and verify later.
-        </a>
+         <button
+            class="fill-button verify-now"
+            @click="sendEmailLink"
+          >
+            Verify Now
+        </button>
       </div>
     </div>
   </div>
@@ -82,7 +81,7 @@
 <script>
 
 const actionCodeSettings = {
-  url: window.location.origin + "/auth/createPassword",
+  url: window.location.origin + "/auth/resetPassword",
   handleCodeInApp: true,
 };
 import { createUser } from "~/services/user-service.js";
@@ -108,6 +107,7 @@ export default {
       lastName: "",
       phone: "",
       emailSend: false,
+      errorMessage: "",
       url: window.location.href,
       currentUser: localStorage.getItem("currentUser"),
     };
@@ -128,62 +128,69 @@ export default {
       };
     },*/
     createAccount: async function () {
-      if (this.checkValidForm()) {
+      //if (this.checkValidForm()) {
         let email = this.email;
-         await this.$fire.auth
-        .sendSignInLinkToEmail(email, actionCodeSettings)
-        .then((response) => {
-          self.getLoginUser(email);
-          this.emailSend = true;
-          localStorage.setItem("emailForSignIn", email);
-          let newUser = new User();
-          newUser.firstName = this.firstName;
-          newUser.lastName = this.lastName;
-          newUser.email = email;
-          newUser.phone = this.phone;
-          newUser.types = ['pageManager'];
-          createUser(newUser);
-          self.$router.replace("/rememberPage/main");
-        })
-        .catch((error) => {
-          this.errorCode = error.code;
-          this.errorMessage = error.message;
+        const self = this;
+        //SAVE USER IN DB
+        let user = new User();
+        user.firstName = self.firstName;
+        user.lastName = self.lastName;
+        user.email = email;
+        user.phone = self.phone;
+        user.types = ['pageManager'];
+        await createUser(user).then(async (newUser) => {
+          localStorage.setItem("currentUser", JSON.stringify(newUser));
+        this.$store.commit("setState", {
+          value: newUser,
+          state: "currentUser",
         });
-      }
+          this.sendEmailLink();
+         
+        }).catch((error)=> {
+          let data = error.response.data;
+          if(data.includes("Error, expected `email` to be unique")) 
+          this.errorMessage = "This email is already registered in the system, please register with another email or go to the login screen";
+          else
+          this.errorMessage = error.response.data;
+        });
+       
+      //}
     },
-    createUser: async function (user) {
-      await createUser(user).then((newUser) => {
-        localStorage.setItem("currentUser", JSON.stringify(newUser));
-        this.$store.state.currentUser = newUser;
+    sendEmailLink: async function() {
+      let email = this.email;
+      await this.$fire.auth
+      .sendSignInLinkToEmail(email, actionCodeSettings)
+      .then((response) => {
+        localStorage.setItem("emailForSignIn", email);
+        this.emailSend = true;
+      })
+      .catch((error) => {
+        this.errorCode = error.code;
+        this.errorMessage = error.message;
       });
-    },
-    checkValidForm: async function () {
-      let isFormCorrect = await this.v$.$validate();
-      if (isFormCorrect) {
-        //change the icon
-        //this.$router.replace({ path: "/auth/createPassword" });
-        return true;
-      } else return false;
-    },
+    }
+    // checkValidForm: async function () {
+    //   let isFormCorrect = await this.v$.$validate();
+    //   if (isFormCorrect) {
+    //     //change the icon
+    //     //this.$router.replace({ path: "/auth/createPassword" });
+    //     return true;
+    //   } else return false;
+    // },
   },
   created() {
-    if(!this.currentUser) {
-      currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (this.currentUser && this.currentUser != "") {
+      this.email = this.currentUser.email;
+      this.firstName = this.currentUser.firstName;
+      this.lastName = this.currentUser.lastName;
+      this.phone = this.currentUser.phone;
+      this.$store.commit("setState", {
+        value: this.currentUser,
+        state: "currentUser",
+      });
     }
-    if (currentUser) {
-      this.email = currentUser.email;
-      this.firstName = currentUser.firstName;
-      this.lastName = currentUser.lastName;
-      this.phone = currentUser.phone;
-    }
-    if (!this.$store.state.currentUser)
-      this.$store.state.currentUser = currentUser;
-
-  },
-  computed: {
-    emailVerified: function () {
-      return localStorage.getItem("emailVerified") == "true";
-    },
+    if((localStorage.getItem("emailForSignIn") ||  localStorage.getItem("emailVerified"))  && this.currentUser && this.currentUser != "") this.emailSend = true;
   },
 };
 </script>

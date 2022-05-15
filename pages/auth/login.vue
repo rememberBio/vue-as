@@ -2,11 +2,7 @@
   <div class="page-container">
     <Header />
     <div class="login">
-         <img
-        class="len-title about-you-title desktop"
-        alt="login title"
-      />
-       <div class="register-link" >New to lendot?  <NuxtLink to="/createRequest/createAccount" > Create an Account</NuxtLink></div>
+      <div class="register-link" >New to lendot?  <NuxtLink to="/auth/register" > Create an Account</NuxtLink></div>
       <form @submit.prevent="login">
       
 
@@ -30,17 +26,11 @@
             class="password-field"
              v-model="password"
           />
-          <img
-            class="show-password"
-            alt="edit icon"
-            @click="(event) => showPassword(event, 1)"
-          />
         </div>
-        <p class="forgot-password">Forgot password?</p>
       
         <button type="submit" class="">Log In</button>
       </form>
-     
+     <div v-if="errorMessage">{{errorMessage}}</div>
     </div>
   </div>
 </template>
@@ -55,6 +45,7 @@ export default {
     return {
       password: "",
       email: "",
+      errorMessage:""
     };
   },
   methods: {
@@ -77,11 +68,13 @@ export default {
         .signInWithEmailAndPassword(email, password)
         .then((response) => {
           self.getLoginUser(email);
-          self.$router.replace("/rememberPage/main");
+          self.$router.replace("/rPage/main/create");
         })
         .catch((error) => {
-          this.errorCode = error.code;
-          this.errorMessage = error.message;
+          if(error.code == "auth/user-not-found")
+            this.errorMessage = "incorrect username or password";
+          else
+            this.errorMessage = error.message;
         });
     },
     async getLoginUser(email) {

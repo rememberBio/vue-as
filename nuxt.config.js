@@ -30,7 +30,7 @@ export default {
   css: ['~/assets/css/main.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['~/plugins/Vuelidate.js'],
+  plugins: ['~/plugins/vuelidate.js','~/plugins/vueGoogleMaps.js'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -74,7 +74,9 @@ export default {
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    transpile: ['@fawmi/vue-google-maps']
+  },
   server: {
     port: 8080, // default: 3000
     host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost' // default: localhost

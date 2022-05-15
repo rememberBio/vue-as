@@ -2,16 +2,15 @@
   <div class="page-container">
     <Header />
     <div class="create-password">
-      <form @submit.prevent="createPassword">
+      <form @submit.prevent="createPassword" v-if="!isLinkError">
         <h3>Create your password</h3>
 
         <label>New Password</label>
         <div class="wrap-input">
           <input
-            :class="{ invalid: v$.password.$error }"
             type="password"
             name="password"
-            v-model="v$.password.$model"
+            v-model="password"
             :id="'password_field' + 1"
             class="password-field"
           />
@@ -22,21 +21,20 @@
             @click="(event) => showPassword(event, 1)"
           /> -->
         </div>
-        <div
+        <!-- <div
           class="input-error"
           v-for="(error, errorIndex) in v$.password.$errors"
           :key="errorIndex"
         >
           {{ error.$message }}
-        </div>
+        </div> -->
 
         <label> Confirm New Password</label>
         <div class="wrap-input">
           <input
-            :class="{ invalid: v$.confirmPassword.$error }"
             type="password"
             name="confirm password"
-            v-model="v$.confirmPassword.$model"
+            v-model="confirmPassword"
             :id="'password_field' + 2"
             class="password-field"
           />
@@ -47,15 +45,16 @@
             @click="(event) => showPassword(event, 2)"
           /> -->
         </div>
-        <div
+        <!-- <div
           class="input-error"
           v-for="(error, errorIndex) in v$.confirmPassword.$errors"
           :key="errorIndex"
         >
           {{ error.$message }}
-        </div>
+        </div> -->
         <button type="submit" class="">Save</button>
       </form>
+      <div v-else>{{isLinkError}}</div>
       <div class="form-terms">
         <div class="form-term">
           <!-- <img
@@ -101,6 +100,7 @@ export default {
     return {
       password: "",
       confirmPassword: "",
+      isLinkError: ""
     };
   },
   setup() {
@@ -129,8 +129,8 @@ export default {
       password.setAttribute("type", type);
     },
     createPassword: async function () {
-      let confirmPassword = await this.v$.$validate();
-      if (confirmPassword) {
+      //let confirmPassword = await this.v$.$validate();
+      //if (confirmPassword) {
         let updatedUser = new User();
         updatedUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -143,11 +143,11 @@ export default {
             await updatePasswordInNode(updatedUser._id, this.password).then((res) => {
               localStorage.setItem("currentUser", JSON.stringify(updatedUser));
               this.$router.push({
-                path: "/rememebrPage/main"
+                path: "/rPage/main/create"
               });
             });
         })
-      }
+      //}
     },
     confirmSignIn: async function () {
       if(this.$fire.auth.isSignInWithEmailLink(window.location.href)) {
@@ -167,15 +167,19 @@ export default {
           localStorage.setItem("emailVerified", true);
         })
         .catch((error) => {
-          ("error", error);
+          if (this.emailVerified == true) {
+            this.$router.push({
+              path: "/auth/register",
+            });
+          } 
         });
       }
       else {
         if (this.emailVerified != true) {
           this.$router.push({
-            path: "/auth/createAccount",
+            path: "/auth/register",
           });
-        }
+        } 
       }
     },
     updateUser: async function (email, isActive) {

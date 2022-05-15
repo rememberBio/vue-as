@@ -2,6 +2,7 @@
   <div id="mainPage">
     <div class="main-container">
         <!-- hero -->
+    {{$store.state.curEditRP.attributes.name }}
       <section class="hero main-hero flex">
         <div class="wrap-left-hero left-side">
             <div class="desktop-only">
@@ -175,6 +176,26 @@
             </div>
         </section>
         <!-- End stories -->
+        <!-- Gallery -->
+        <section class="main-gallery">
+            <h2 class="main-heading">Gallery</h2>
+            <div class="wrap-content" id="galley-main-slider">
+                <div v-for="(item,indexItem) in currentRPAttrs.gallery.items" :key="indexItem">
+                    <div v-for="(album,indexAlbum) in item.albumes" :key="indexAlbum + 1">
+                    <a href="" >
+                        <img v-for="(image,indexPhoto) in album.images" :key="indexPhoto + 2" class="lazy" :src="image" alt="">
+                        <video class="lazy" v-for="(video,indexVideo) in album.videos" :key="indexVideo +3">
+                            <source :src="video">
+                        </video>
+                    </a>
+                    </div>
+                </div>
+            </div>
+            <div class="wrap-bottom-link-main">
+                <a href="" class="main-link-main">To The Gallery ></a>
+            </div>
+        </section>
+        <!-- End Gallery -->
         <!-- places -->
         <section class="main-places">
             <h2 class="main-heading">Places Of Commemoration</h2>
@@ -228,7 +249,7 @@
                 </a>
             </div>
         </section>
-        <!-- End grave -->
+        
     </div>
   </div>
 </template>
@@ -241,6 +262,11 @@ import '@/assets/css/editRememberPage.css';
 
 export default {
   name: "remeberPageDemo",
+  computed: {
+    currentRPAttrs: function () {
+        return this.$store.state.curEditRP.attributes
+    }
+  },
   data() {
     return {
         numOfCandles: 0,
@@ -255,10 +281,6 @@ export default {
   },
   created: function () {
   },
-  computed: {
-    currentRPAttrs: function () {
-     return this.$store.state.curEditRP.attributes
-    }
-  },
+ 
 };
 </script>
