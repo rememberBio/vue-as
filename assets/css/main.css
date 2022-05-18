@@ -1,175 +1,1065 @@
-:root {
-    --custom-blue: #161853;
-    --custom-pink: #EC255A;
-    --custom-gray: #A3A4BE;
-    --custom-light-gray: #F3F3F3;
-    --custom-light-pink: #FFF8FA;
+/*!
+Theme Name: remmember
+Theme URI: http://underscores.me/
+Author: Underscores.me
+Author URI: http://underscores.me/
+Description: Description
+Version: 1.0.0
+Tested up to: 5.4
+Requires PHP: 5.6
+License: GNU General Public License v2 or later
+License URI: LICENSE
+Text Domain: remmember
+Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned.
+
+remmember is based on Underscores https://underscores.me/, (C) 2012-2020 Automattic, Inc.
+Underscores is distributed under the terms of the GNU GPL v2 or later.
+
+Normalizing styles have been helped along thanks to the fine work of
+Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
+*/
+
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+# Generic
+	- Normalize
+	- Box sizing
+# Base
+	- Typography
+	- Elements
+	- Links
+	- Forms
+## Layouts
+# Components
+	- Navigation
+	- Posts and pages
+	- Comments
+	- Widgets
+	- Media
+	- Captions
+	- Galleries
+# plugins
+	- Jetpack infinite scroll
+# Utilities
+	- Accessibility
+	- Alignments
+
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+# Generic
+--------------------------------------------------------------*/
+
+/* Normalize
+--------------------------------------------- */
+
+/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+
+/* Document
+	 ========================================================================== */
+
+/**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+ :root {
+	--custom-white: #FFFFFF;
+	--custom-blue: #022855;
+	--custom-gray: #00000029;
+	--custom-light-blue: #00B3BF;
+	--custom-black: #000000;
+}
+
+/* fonts */
+@font-face {
+	font-family: "Rubik";
+	src: url(~/assets/fonts/Rubik-Regular.ttf);
+	font-weight: normal;
+}
+
+@font-face {
+	font-family: "Rubik";
+	src: url(~/assets/fonts/Rubik-Bold.ttf);
+	font-weight: bold;
+}
+
+@font-face {
+	font-family: "Rubik Medium";
+	src: url(~/assets/fonts/Rubik-Medium.ttf);
+	font-weight: normal;
 }
 
 html {
-    height: 100%;
+	line-height: 1.15;
+	-webkit-text-size-adjust: 100%;
 }
 
+/* Sections
+	 ========================================================================== */
+
+/**
+ * Remove the margin in all browsers.
+ */
 body {
-    font-size: 14px;
-    color: var(--custom-blue);
-    font-family: 'Poppins', sans-serif;
-    box-sizing: border-box;
-    margin: 0;
-    height: 100%;
+	margin: 0;
+	font-family: 'Rubik';
 }
 
-p,
-h3 {
-    margin: 0;
+/**
+ * Render the `main` element consistently in IE.
+ */
+main {
+	display: block;
 }
 
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+h1 {
+	font-size: 2em;
+	margin: 0.67em 0;
+}
+
+/* Grouping content
+	 ========================================================================== */
+
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+hr {
+	box-sizing: content-box;
+	height: 0;
+	overflow: visible;
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+pre {
+	font-family: "Rubik";
+	font-size: 1em;
+}
+
+/* Text-level semantics
+	 ========================================================================== */
+
+/**
+ * Remove the gray background on active links in IE 10.
+ */
 a {
-    text-decoration: none;
+	background-color: transparent;
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
 }
 
-#app {
-    height: 100%;
+/**
+ * 1. Remove the bottom border in Chrome 57-
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+abbr[title] {
+	border-bottom: none;
+	text-decoration: underline;
+	text-decoration: underline dotted;
 }
 
-.main-container {
-    max-width: 840px;
-    margin: auto;
-    height: 100%;
+/**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+b,
+strong {
+	font-weight: bolder;
 }
 
-.main-content {
-    max-width: 780px;
-    margin: auto;
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+code,
+kbd,
+samp {
+	font-family: "Rubik";
+	font-size: 1em;
 }
 
-button {
-    width: 141px;
-    height: 52px;
-    background-color: var(--custom-pink);
-    color: white;
-    border: unset;
-    border-radius: 26px;
-    font-weight: bold;
-    font-size: 20px;
-    cursor: pointer;
+/**
+ * Add the correct font size in all browsers.
+ */
+small {
+	font-size: 80%;
 }
 
-button[type="submit"] {
-    margin-left: auto;
-    display: block;
-    cursor: pointer
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+sub,
+sup {
+	font-size: 75%;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
 }
 
+sub {
+	bottom: -0.25em;
+}
+
+sup {
+	top: -0.5em;
+}
+
+/* Embedded content
+	 ========================================================================== */
+
+/**
+ * Remove the border on images inside links in IE 10.
+ */
+img {
+	border-style: none;
+}
+
+/* Forms
+	 ========================================================================== */
+
+/**
+ * 1. Change the font styles in all browsers.
+ * 2. Remove the margin in Firefox and Safari.
+ */
+button,
 input,
-input:focus,
-input:focus-visible,
+optgroup,
+select,
+textarea {
+	font-family: "Rubik";
+	font-size: 100%;
+	line-height: 1.15;
+	margin: 0;
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+button,
+input {
+	overflow: visible;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+button,
 select {
-    width: 100%;
-    height: 48px;
-    padding: 0 20px;
-    box-sizing: border-box;
-    border: solid 1px var(--custom-blue);
-    border-radius: 11px;
-    font-size: 16px;
+	text-transform: none;
 }
 
-select {
-    color: var(--custom-gray)
+/**
+ * Correct the inability to style clickable types in iOS and Safari.
+ */
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+	-webkit-appearance: button;
+
 }
 
-select option:not(:disabled) {
-    border-bottom: 1px var(--custom-blue);
-    font-family: 'Poppins', sans-serif;
-    color: var(--custom-blue);
-    padding: 10px 0px;
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+	border-style: none;
+	padding: 0;
 }
 
-select.checked {
-    color: var(--custom-blue);
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+	outline: 1px dotted ButtonText;
 }
 
-select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background: transparent;
-    /*background-image: url("./images/polygon.svg");*/
-    background-repeat: no-repeat;
-    background-position-x: calc(100% - 26px);
-    background-position-y: 22px;
+/**
+ * Correct the padding in Firefox.
+ */
+fieldset {
+	padding: 0.35em 0.75em 0.625em;
 }
 
-.wrap-input {
-    margin-bottom: 40px;
-    width: 100%;
-    margin-top: 7px
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *		`fieldset` elements in all browsers.
+ */
+legend {
+	box-sizing: border-box;
+	color: inherit;
+	display: table;
+	max-width: 100%;
+	padding: 0;
+	white-space: normal;
 }
 
-input::placeholder {
-    color: var(--custom-gray);
-    font-family: 'Poppins', sans-serif;
+/**
+ * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+progress {
+	vertical-align: baseline;
 }
 
-.left-input {
-    margin-right: 17px;
+/**
+ * Remove the default vertical scrollbar in IE 10+.
+ */
+textarea {
+	overflow: auto;
 }
 
-.input-error {
-    font-size: 14px;
-    margin-top: 5px;
-    color: var(--custom-pink)
+/**
+ * 1. Add the correct box sizing in IE 10.
+ * 2. Remove the padding in IE 10.
+ */
+[type="checkbox"],
+[type="radio"] {
+	box-sizing: border-box;
+	padding: 0;
 }
 
-input.invalid {
-    border-color: var(--custom-pink);
-    color: var(--custom-pink)
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+	height: auto;
 }
 
-.wrap-input .error-msg {
-    font-size: 12px;
-    margin-top: 5px;
-    color: var(--custom-pink)
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+[type="search"] {
+	-webkit-appearance: textfield;
+	outline-offset: -2px;
 }
 
-.form-label {
-    margin-bottom: 8px;
-    font-weight: bold;
+/**
+ * Remove the inner padding in Chrome and Safari on macOS.
+ */
+[type="search"]::-webkit-search-decoration {
+	-webkit-appearance: none;
 }
 
-.flex {
-    display: flex;
-    justify-content: space-between;
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+::-webkit-file-upload-button {
+	-webkit-appearance: button;
+	font: inherit;
 }
 
-.len-title {
-    margin-bottom: 33px;
-    margin-top: calc(101px - 40.5px);
+/* Interactive
+	 ========================================================================== */
+
+/*
+ * Add the correct display in Edge, IE 10+, and Firefox.
+ */
+details {
+	display: block;
 }
 
-.sub-title {
-    margin-bottom: 19px;
-    font-size: 20px;
-    font-weight: bold;
+/*
+ * Add the correct display in all browsers.
+ */
+summary {
+	display: list-item;
 }
 
-.border-button,
-.fill-button {
-    width: 113px;
-    height: 23px;
-    border-radius: 26px;
-    font-size: 14px;
-    font-weight: normal;
+/* Misc
+	 ========================================================================== */
+
+/**
+ * Add the correct display in IE 10+.
+ */
+template {
+	display: none;
 }
 
-.border-button {
-    border: solid 2px var(--custom-pink);
-    background-color: unset;
+/**
+ * Add the correct display in IE 10.
+ */
+[hidden] {
+	display: none;
 }
 
-.fill-button {
-    background-color: var(--custom-pink);
+/* Box sizing
+--------------------------------------------- */
+
+/* Inherit box-sizing to more easily change it's value on a component level.
+@link http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+html {
+	box-sizing: border-box;
+}
+
+/*--------------------------------------------------------------
+# Base
+--------------------------------------------------------------*/
+
+/* Typography
+--------------------------------------------- */
+body,
+button,
+input,
+select,
+optgroup,
+textarea {
+	font-family: "Rubik";
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	clear: both;
+}
+
+dfn,
+cite,
+em,
+i {
+	font-style: italic;
+}
+
+blockquote {
+	margin: 0 1.5em;
+}
+
+address {
+	margin: 0 0 1.5em;
+}
+
+pre {
+	background: #eee;
+	font-family: "Rubik";
+	line-height: 1.6;
+	margin-bottom: 1.6em;
+	max-width: 100%;
+	overflow: auto;
+	padding: 1.6em;
+}
+
+code,
+kbd,
+tt,
+var {
+	font-family: "Rubik";
+}
+
+abbr,
+acronym {
+	border-bottom: 1px dotted #666;
+	cursor: help;
+}
+
+mark,
+ins {
+	background: #fff9c0;
+	text-decoration: none;
+}
+
+big {
+	font-size: 125%;
+}
+
+/* Elements
+--------------------------------------------- */
+body {
+	background: #fff;
+	overflow-x: hidden;
+	font-size: 14px;
+	font-family: 'Rubik';
+}
+
+hr {
+	background-color: #ccc;
+	border: 0;
+	height: 1px;
+	margin-bottom: 1.5em;
+}
+
+ul,
+ol {
+	margin: 0 0 1.5em 3em;
+}
+
+ul {
+	list-style: disc;
+}
+
+ol {
+	list-style: decimal;
+}
+
+li > ul,
+li > ol {
+	margin-bottom: 0;
+	margin-left: 1.5em;
+}
+
+dt {
+	font-weight: 700;
+}
+
+dd {
+	margin: 0 1.5em 1.5em;
+}
+
+/* Make sure embeds and iframes fit their containers. */
+embed,
+iframe,
+object {
+	max-width: 100%;
+}
+
+img {
+	height: auto;
+	max-width: 100%;
+}
+
+figure {
+	margin: 1em 0;
 }
 
 table {
+	margin: 0 0 1.5em;
+	width: 100%;
+}
+
+/* Links
+--------------------------------------------- */
+a {
+	text-decoration: none;
+	color: #000000;
+}
+
+a:hover,
+a:active,
+a:focus {
+	outline: 0;
+}
+
+/* Forms
+--------------------------------------------- */
+
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+.btn-lb {
+	border: none;
+    box-shadow: 0px 3px 12px #00000029;
+	border-radius: 24px;
+	padding: 8px 18px;
+    background-color: var(--custom-light-blue);
+    color: white;
+	width: unset;
+	font-size: 14px;
+	height: max-content;
+	border: 1px solid var(--custom-light-blue);
+	cursor: pointer;
+}
+
+.btn-lb-reverse {
+	color: var(--custom-light-blue) !important;
+    background-color: white !important;
+	border: 1px solid var(--custom-light-blue) !important;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+input[type="range"],
+input[type="date"],
+input[type="month"],
+input[type="week"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="color"],
+textarea,
+select {
+	font-size: 14px;
+	color:#000000;
+	border: 1px solid #E5EAED;
+	border-radius: 15px;
+    background-color: white;
+    padding: 13px 15px;
+    font-size: 14px;
+	width: 100%;
+	margin-bottom: 14px;
+	outline: none;
+}
+
+input::placeholder,.custom-editor,input[type=date] {
+	color: #ACABAB;
+}
+
+textarea {
+	width: 100%;
+}
+.custom-editor {
+	border-radius: 15px;
+	border: 1px solid #E5EAED;
+	padding: 13px 15px;
+	height: 156px;
+	outline: none;
+	background: white;
+	margin-bottom: 11px;
+}
+.custom-editor.focus {
+	color: #000000;
+}
+label {
+	font-size: 16px;
+	color: var(--custom-blue);
+	font-family: 'Rubik Medium';
+	margin-bottom: 5px;
+	display: block;
+}
+.rp-scroll {
+	overflow: auto;
+}
+.rp-scroll::-webkit-scrollbar {
+    height: 100%; 
+	width:14px;
+}
+/* Track */
+.rp-scroll::-webkit-scrollbar-track {
+    border: 1px solid #E5EAED;
+    width:14px;
+	background-color: white;
+}
+   
+/* Handle */
+.rp-scroll::-webkit-scrollbar-thumb {
+    background: var(--custom-light-blue); 
+    border-radius: 10px;
+}  
+/*--------------------------------------------------------------
+# Layouts
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+# Components
+--------------------------------------------------------------*/
+
+/* Navigation
+--------------------------------------------- */
+.main-navigation {
+	display: flex;
     width: 100%;
+    justify-content: center;
+}
+
+.main-navigation ul {
+	display: none;
+	list-style: none;
+	margin: 0;
+	padding-left: 0;
+}
+body:not(.home,.single,.remmember_page-template-default) #page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #fbfbfb;
+}
+.wrap-home-page,.main-site-page {
+	flex: 1;
+}
+body:not(.home) header#generalHeader {background: white !important;border-bottom: 1px solid #707070;}
+
+.main-navigation ul ul {
+	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+	float: left;
+	position: absolute;
+	top: 100%;
+	left: -999em;
+	z-index: 99999;
+}
+
+.main-navigation ul ul ul {
+	left: -999em;
+	top: 0;
+}
+
+.main-navigation ul ul li:hover > ul,
+.main-navigation ul ul li.focus > ul {
+	display: block;
+	left: auto;
+}
+
+.main-navigation ul ul a {
+	width: 200px;
+}
+
+.main-navigation ul li:hover > ul,
+.main-navigation ul li.focus > ul {
+	left: auto;
+}
+
+.main-navigation li {
+	position: relative;
+}
+
+.main-navigation a {
+	display: block;
+	text-decoration: none;
+	color: black;
+}
+
+/* Small menu. */
+.menu-toggle,
+.main-navigation.toggled ul {
+	display: block;
+}
+
+button.menu-toggle-header {background: transparent;border: none;padding: 0;cursor: pointer;}
+
+button.menu-toggle-header img {width: 25px;}
+
+
+body:not(.home) header#generalHeader .wrap-btns a.login {border-color: var(--custom-blue);color: var(--custom-blue);}
+
+body:not(.home) header#generalHeader a.wrap-serach-img {border-color: var(--custom-blue);}
+
+.wrap-col-content {width: max-content;margin-right: 0;margin-left: auto;}
+
+
+/* wpml lang swachers*/
+.custom-switchers span#toggle-menu-item {
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    display: inline-block;
+}
+
+.custom-switchers:not(.opened) .wrap-drop-down {
+    display: none;
+}
+
+.custom-switchers span#toggle-menu-item img {
+    width: 28px;
+}
+
+.custom-switchers.opened .wrap-drop-down,#generalHeader nav#site-navigation.toggled ul {
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    min-width: 141px;
+    position: absolute;
+    top: 29px;
+    padding: 15px 0 0px;
+	box-shadow: 0px 3px 6px #00000029;
+}
+.custom-switchers.opened .wrap-drop-down a, .custom-switchers.opened .wrap-drop-down .lang-menu-item {
+    color: var(--custom-blue);
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.custom-switchers.opened .wrap-drop-down .lang-menu-item.current {
+    border-bottom: 1px solid #E8E8E8;
+    padding-bottom: 6.5px;
+	font-family: 'Rubik Medium';
+}
+
+.custom-switchers.opened .wrap-drop-down>span.current {
+    padding: 0px 16px;
+}
+
+.custom-switchers.opened .wrap-drop-down span.lang-menu-item:not(.current) {
+    line-height: 35px;
+    cursor: pointer;
+}
+
+.custom-switchers.opened .wrap-drop-down a {
+    width: 100%;
+    display: inline-block;
+    height: 100%;
+    line-height: 35px;
+    padding: 0px 16px;
+	outline: none;
+}
+
+.custom-switchers {
+    height: 28px;
+    position: relative;
+    padding-right: 1.5vw;
+    margin-top: 5px;
+}
+
+span#toggle-menu-item {
+    width: 28px;
+    height: 28px;
+    background: white;
+    border-radius: 50%;
+}
+/* END wpml lung swachers*/
+
+p#breadcrumbs {margin: 0;font-size: 14px;}
+
+p#breadcrumbs a,span.breadcrumb_arrow {color: var(--custom-blue);}
+
+span.breadcrumb_last,p#breadcrumbs a:last-of-type+span {color: #9F9F9F;}
+
+@media screen and (min-width: 1800px) {
+	.custom-switchers {
+		padding-right: 3.5%;
+	}
+}
+@media screen and (min-width: 1101px) {
+
+	.menu-toggle {
+		display: none;
+	}
+
+	.main-navigation ul {
+		display: flex;
+	}
+}
+@media screen and (max-width: 1100px) {
+	
+	span.close-menu.mobile-only img {
+		filter: brightness(0);
+		width: 12px;
+		height: 12px;
+		margin-left: auto;
+		margin-right: 24px;
+		margin-top: 17px;
+		margin-bottom: 1.5px;
+	}
+	/**/
+	#site-navigation .wrap-btns.mobile-only {
+		flex-direction: column;
+		gap: 11px;
+		margin-bottom: 46px;
+	}
+	
+	#site-navigation .wrap-btns.mobile-only a {
+		width: 270px;
+		max-width: 90%;
+		margin: auto;
+	}
+	#site-navigation .wrap-btns.mobile-only .login {
+		color: var(--custom-light-blue);
+		border-color: var(--custom-light-blue);
+		text-align: center;
+	}
+	.main-navigation li:last-of-type {
+		margin-bottom: 140px;
+	}
+	
+	button.menu-toggle-header img {height: 20px;width: auto;max-width: unset;}
+	
+	button.menu-toggle-header {height: 20px;}
+	
+	.custom-switchers.opened .wrap-drop-down {
+		top: 24px;
+		right: 0;
+	}
+	.custom-switchers span#toggle-menu-item img {
+		height: 20px;
+	}
+	
+	.custom-switchers span#toggle-menu-item {
+		width: 20px;
+		height: 20px;
+		display: flex;
+	}
+	
+	.custom-switchers{
+		margin-top: 0;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		padding-right: 0px;
+	}
+	header#masthead .custom-switchers {
+		margin-left: auto;
+		margin-right: 9px;
+	}
+	
+}
+@media screen and (max-width: 767px) { 
+	
+
+}
+/* Galleries
+--------------------------------------------- */
+.gallery {
+	margin-bottom: 1.5em;
+	display: grid;
+	grid-gap: 1.5em;
+}
+
+.gallery-item {
+	display: inline-block;
+	text-align: center;
+	width: 100%;
+}
+
+.gallery-columns-2 {
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.gallery-columns-3 {
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.gallery-columns-4 {
+	grid-template-columns: repeat(4, 1fr);
+}
+
+.gallery-columns-5 {
+	grid-template-columns: repeat(5, 1fr);
+}
+
+.gallery-columns-6 {
+	grid-template-columns: repeat(6, 1fr);
+}
+
+.gallery-columns-7 {
+	grid-template-columns: repeat(7, 1fr);
+}
+
+.gallery-columns-8 {
+	grid-template-columns: repeat(8, 1fr);
+}
+
+.gallery-columns-9 {
+	grid-template-columns: repeat(9, 1fr);
+}
+
+.gallery-caption {
+	display: block;
+}
+/*--------------------------------------------------------------
+# Utilities
+--------------------------------------------------------------*/
+
+/* Accessibility
+--------------------------------------------- */
+
+/* Text meant only for screen readers. */
+.screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute !important;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+	background-color: #f1f1f1;
+	border-radius: 3px;
+	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+	clip: auto !important;
+	clip-path: none;
+	color: #21759b;
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 700;
+	height: auto;
+	left: 5px;
+	line-height: normal;
+	padding: 15px 23px 14px;
+	text-decoration: none;
+	top: 5px;
+	width: auto;
+	z-index: 100000;
+}
+
+/* Do not show the outline on the skip link target. */
+#primary[tabindex="-1"]:focus {
+	outline: 0;
+}
+
+/* Alignments
+--------------------------------------------- */
+.alignleft {
+
+	/*rtl:ignore*/
+	float: left;
+
+	/*rtl:ignore*/
+	margin-right: 1.5em;
+	margin-bottom: 1.5em;
+}
+
+.alignright {
+
+	/*rtl:ignore*/
+	float: right;
+
+	/*rtl:ignore*/
+	margin-left: 1.5em;
+	margin-bottom: 1.5em;
+}
+
+.aligncenter {
+	clear: both;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 1.5em;
+}
+.flex {
+    display: flex;
+}
+.flex-col {
+	flex-direction: column;
+}
+.font-14 {
+	font-size: 14px;
+}
+.font-12 {
+	font-size: 12px;
+}
+.font-16 {
+	font-size: 16px;
 }

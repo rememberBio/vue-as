@@ -1,4 +1,4 @@
-export class RememberPage {
+export class rememberPage {
     constructor(link,pageManager,editors,watchedPeoples,candlesAndFlowers,rememberPageId) {
         this.link = link;
         this.pageManager = pageManager;
@@ -11,7 +11,7 @@ export class RememberPage {
             brief: "", //short description about people
             about: "",
             dateOfBirth: "",
-            dateOdDeath: "",
+            dateOfDeath: "",
             country: "",
             parents: [{
                 name: "",
@@ -66,7 +66,8 @@ export class RememberPage {
                     },
                     name:"",
                 },
-            }
+            },
+            addHebrewDate: false,
         },
         this._id = rememberPageId;
     }

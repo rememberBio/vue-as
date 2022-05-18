@@ -1,4 +1,3 @@
-div#mainPage section {padding-bottom: 30px;border-bottom: 1px solid var(--custom-blue);}
 .hero.section.flex .left-side {display: flex;flex-direction: column;}
 
 .hero.section.flex .left-side .name {font: normal normal bold 37px/44px Rubik;}
@@ -21,12 +20,12 @@ div#mainPage section {padding-bottom: 30px;border-bottom: 1px solid var(--custom
 .mobile-only {
     display: none;
 }
-.wrap-remmber-item-main section {
+#mainPage section {
     width: 100%;
 }
 
-.wrap-remmber-item-main section .wrap-content,.wrap-bottom-link-main, .wrap-remmber-item-main section h2,a.main-link-main {
-    width: 75%;
+#mainPage section .wrap-content,.wrap-bottom-link-main, #mainPage section h2,a.main-link-main {
+    width: 90%;
     margin: auto;
 }
 
@@ -37,7 +36,7 @@ section.hero.main-hero {
 }
 
 .wrap-left-hero {
-    width: inherit;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -95,7 +94,7 @@ section.hero.main-hero h1 {
 
 .wrap-left-hero>.desktop-only {
     display: flex;
-    width: 75%;
+    width: 90%;
     align-items: center;
     margin: 3.5vh auto;
     justify-content: space-between;
@@ -103,15 +102,16 @@ section.hero.main-hero h1 {
     gap: 20px;
 }
 .wrap-left-hero>.desktop-only .text {
-    max-width: 500px;
+    width: 310px;
+    min-width: 310px;
 }
 .wrap-left-hero img, .main-hero img {
     border-radius: 22px;
     height: 100%;
-    max-height: 59vh;
+    max-height: 50vh;
 }
 section.hero.main-hero .wrap-form-footer {
-    width: 90%;
+    width: 37%;
     height: unset;
 }
 
@@ -128,8 +128,31 @@ section.hero.main-hero .wrap-form-footer form [type=submit] {
     width: 40% !important;
     display: inline-block;
 }
-
-
+form#registerForm button[type=submit] img {
+    width: auto;
+    height: 100%;
+}
+form#registerForm button[type=submit] {
+    border: none;
+    color: white;
+    background-color: var(--custom-light-blue);
+    height: 100%;
+    cursor: pointer;
+    border-radius: 0px 15px 15px 0px;
+}
+form#registerForm input[type=email] {
+    width: 80%;
+    padding: 15px;
+    border-radius: 15px 0px 0px 15px;
+    color: var(--custom-blue);
+}
+form#registerForm {
+    display: flex;
+    width: 100%;
+}
+.wrap-form-footer * {
+    height: 45px;
+}
 
 .main-candles-and-flowers .write-candles-flowers-btn {
     width: 422px;
@@ -185,12 +208,13 @@ section.hero.main-hero .wrap-form-footer form [type=submit] {
 
 section.main-candles-and-flowers {
     display: flex;
-    width: 75%;
+    width: 90% !important;
     gap: 25px;
     padding: 60px 0px 66px;
+    margin: auto;
 }
 
-.wrap-remmber-item-main h2 {
+#mainPage h2 {
     font-size: 25px;
     color: var(--custom-blue);
     font-family: 'Rubik Medium';
@@ -201,7 +225,7 @@ section.main-candles-and-flowers {
     margin-bottom: 0;
 }
 
-.wrap-remmber-item-main section .wrap-content {
+#mainPage section .wrap-content {
     padding: 0px 30px;
 }
 
@@ -283,11 +307,11 @@ a.main-link-main {
 }
 
 section.main-stories .wrap-content {
-    margin-top: 32px;
+    margin-top: 32px !important;
     display: flex;
     flex-wrap: wrap;
     gap: 23px 3%;
-    margin-bottom: 60px;
+    margin-bottom: 60px !important;
 }
 
 section.main-stories .wrap-content>a {
@@ -330,8 +354,8 @@ a.main-link-main:hover {
 }
 
 section.main-gallery h2 {
-    color: white;
-    border-color: white;
+    color: white !important;
+    border-color: white !important;
     margin-bottom: 32px;
 }
 
@@ -398,8 +422,8 @@ section.main-gallery .gallery-video {
 /* palces section */
 
 section.main-places .wrap-content {
-    margin-top: 28px;
-    margin-bottom: 61px;
+    margin-top: 28px !important;
+    margin-bottom: 61px !important;
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
@@ -491,6 +515,14 @@ div#galley-main-slider a {
     width: max-content;
     margin: 0px 15px;
 }
+
+.wrap-form-footer {
+    height: 40px;
+}
+
+.wrap-form-footer * {
+    height: 45px;
+}
 @media screen and (min-width: 2000px) {
     section.hero.main-hero h1 {
         font-size: 5em;
@@ -564,15 +596,15 @@ div#galley-main-slider a {
         align-items: flex-start;
     }
 
-    .wrap-remmber-item-main section {padding-right: 0;padding-left: 0;}
+    #mainPage section {padding-right: 0;padding-left: 0;}
 
     .main-candles-and-flowers .write-candles-flowers-btn>img {min-width: 35px;width: 40px;}
 
-    .wrap-remmber-item-main section .wrap-content, .wrap-bottom-link-main, .wrap-remmber-item-main section h2, a.main-link-main {
+    #mainPage section .wrap-content, .wrap-bottom-link-main, #mainPage section h2, a.main-link-main {
         width: 100%;
     }
 
-    .wrap-remmber-item-main section:not(.main-hero), a.main-link-main {padding-left: 13px;padding-right: 13px;}
+    #mainPage section:not(.main-hero), a.main-link-main {padding-left: 13px;padding-right: 13px;}
 
     .wrap-left-hero {
         width: 100%;
@@ -688,21 +720,21 @@ div#galley-main-slider a {
         margin-bottom: 39px;
     }
 
-    .wrap-remmber-item-main h2 {
+    #mainPage h2 {
         font-size: 15px;
         padding-bottom: 2px;
         padding-left: 11px;
     }
 
-    .wrap-remmber-item-main section .wrap-content {
+    #mainPage section .wrap-content {
         padding: 0px 11px;
     }
 
     section.main-stories .wrap-content {
-        margin-top: 21px;
+        margin-top: 21px !important;
         flex-direction: column;
         gap: 15px;
-        margin-bottom: 30px;
+        margin-bottom: 30px !important;
     }
 
     section.main-stories .wrap-content>a {
@@ -738,7 +770,7 @@ div#galley-main-slider a {
         padding: 39px 0px;
     }
 
-    .wrap-remmber-item-main section .wrap-content {margin-top: 21px;margin-bottom: 34px;}
+    #mainPage section .wrap-content {margin-top: 21px;margin-bottom: 34px;}
 
     section.main-comments .wrap-content>a {
         flex-direction: column;
@@ -757,7 +789,7 @@ div#galley-main-slider a {
         font-size: 12px;
     }
     
-    .wrap-remmber-item-main section .wrap-content {
+    #mainPage section .wrap-content {
         margin-top: 12px;
         flex-wrap: wrap;
         gap: 12px;

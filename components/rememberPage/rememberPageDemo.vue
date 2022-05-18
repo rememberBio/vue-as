@@ -2,7 +2,6 @@
   <div id="mainPage">
     <div class="main-container">
         <!-- hero -->
-    {{$store.state.curEditRP.attributes.name }}
       <section class="hero main-hero flex">
         <div class="wrap-left-hero left-side">
             <div class="desktop-only">
@@ -257,14 +256,14 @@
 <script>
 import moment from 'moment';
 
-import '@/assets/css/editRememberPage.css';
+import '@/assets/css/editrememberPage.css';
 
 
 export default {
-  name: "remeberPageDemo",
+  name: "rememberPageDemo",
   computed: {
     currentRPAttrs: function () {
-        return this.$store.state.curEditRP.attributes
+        return this.$store.state.curEditRP.attributes;
     }
   },
   data() {
@@ -274,7 +273,7 @@ export default {
     };
   },
   methods: {
-      formatDate: function (value) {    
+      formatDate: function (value) {
         if(value)
             return moment(String(value)).format('DD/MM/YYYY');
       }

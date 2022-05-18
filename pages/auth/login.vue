@@ -68,7 +68,7 @@ export default {
         .signInWithEmailAndPassword(email, password)
         .then((response) => {
           self.getLoginUser(email);
-          self.$router.replace("/rPage/main/create");
+          self.$router.replace("/rp/main/create");
         })
         .catch((error) => {
           if(error.code == "auth/user-not-found")

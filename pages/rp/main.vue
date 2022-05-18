@@ -1,28 +1,28 @@
 <template>
   <div class="flex">
-    <div class="left-side">
+    <div class="left-side sidebar rp-scroll">
         <SidebarHeader />
         <NuxtChild/>
         <SidebarFooter />
     </div>
     <div class="right-side">
-        <remeberPageDemo />
+        <rememberPageDemo />
     </div>
   </div>
 </template>
 
 <script>
-import remeberPageDemo from "../../components/rememberPage/remeberPageDemo.vue";
+import rememberPageDemo from "../../components/rememberPage/rememberPageDemo.vue";
 import SidebarFooter from '../../components/rememberPage/sidebarFooter.vue';
 import SidebarHeader from '../../components/rememberPage/sidebarHeader.vue';
-import { RememberPage } from '../../models/rememberPage';
+import { rememberPage } from '../../models/rememberPage';
 
 import { createToken } from '../../services/user-service';
 import "@/assets/css/mainRememberPage.css";
 
 export default {
-    name:"CreateRememebrPageMain",
-    components: { remeberPageDemo,SidebarHeader,SidebarFooter },
+    name:"CreateRememebrpMain",
+    components: { rememberPageDemo,SidebarHeader,SidebarFooter },
     data() {
       return {
         token: null,
@@ -49,7 +49,7 @@ export default {
     }
     if(!this.$store.state.curEditRP) {
       this.$store.commit("setState", {
-        value: new RememberPage(),
+        value: new rememberPage(),
         state: "curEditRP",
       });
     }

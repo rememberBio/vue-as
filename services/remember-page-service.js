@@ -6,15 +6,15 @@ const headers = {
       'Authorization': `Bearer ${adminToken}`
     },
 }
-const createRememberPage = async(newRememberPage) => {
-    const response = await axios.post('/api/rp/createOrUpdate', newRememberPage,headers);
+const createrememberPage = async(newrememberPage) => {
+    const response = await axios.post('/api/rp/createOrUpdate', newrememberPage,headers);
     return response.data;
 }
-const updateRememberPage = async(id, rememberPage) => {
+const updaterememberPage = async(id, rememberPage) => {
     const response = await axios.post('/api/user/updateUser', { id: id, rememberPage: rememberPage },headers);
     return response.data;
 }
 module.exports = {
-    updateRememberPage,
-    createRememberPage
+    updaterememberPage,
+    createrememberPage
 }

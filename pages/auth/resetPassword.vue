@@ -143,7 +143,7 @@ export default {
             await updatePasswordInNode(updatedUser._id, this.password).then((res) => {
               localStorage.setItem("currentUser", JSON.stringify(updatedUser));
               this.$router.push({
-                path: "/rPage/main/create"
+                path: "/rp/main/create"
               });
             });
         })
