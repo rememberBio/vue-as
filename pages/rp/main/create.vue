@@ -1231,7 +1231,8 @@ export default {
 
       if(attributeName == "stories" || attributeName == 'placesOfCommemoration') {
         let fileUrl = this[attributeName][index].image;
-        await removeFile(fileUrl);
+        if(fileUrl)
+          await removeFile(fileUrl);
       }
 
       if (index != null && index >= 0 && array.length > index) {
