@@ -88,8 +88,8 @@
 import Header from "~/components/templateParts/header.vue";
 //import useVuelidate from "vuelidate/core";
 //import { required, minLength, sameAs } from "vuelidate/validators";
-import { updatePasswordInNode } from "~/services/user-service.js";
-import { updateUserStatus } from "~/services/user-service.js";
+import { updatePasswordInNode } from "~/services/userService.js";
+import { updateUserStatus } from "~/services/userService.js";
 
 import { User } from "../../models/user";
 

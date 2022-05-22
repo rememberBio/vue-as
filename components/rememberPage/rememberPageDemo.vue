@@ -13,8 +13,8 @@
                     <a href="">Read More >></a>
                 </div>
                  <img 
-                  v-if="currentRPAttrs.heroImg" 
-                  :src="currentRPAttrs.heroImg" alt=""
+                  v-if="currentRPAttrs.mainImg" 
+                  :src="currentRPAttrs.mainImg" alt=""
                   class="main-hero-img desktop-only">
                   <img 
                   v-else
@@ -46,8 +46,8 @@
                 <a href="">Read More >></a>
             </div>
              <img 
-                  v-if="currentRPAttrs.heroImg" 
-                  :src="currentRPAttrs.heroImg" alt=""
+                  v-if="currentRPAttrs.mainImg" 
+                  :src="currentRPAttrs.mainImg" alt=""
                   class="main-hero-img desktop-only">
                   <img 
                   v-else
@@ -151,7 +151,7 @@
         <section class="main-stories">
             <h2 class="main-heading">Stories</h2>
             <div class="wrap-content" 
-                v-if="currentRPAttrs.stories && currentRPAttrs.stories.length > 0 && (currentRPAttrs.stories[0].content || currentRPAttrs.stories[0].date || currentRPAttrs.stories[0].witnessName) ">
+                v-if="currentRPAttrs.stories && currentRPAttrs.stories.length > 0 && (currentRPAttrs.stories[0].content || currentRPAttrs.stories[0].date || currentRPAttrs.stories[0].witnessName || currentRPAttrs.stories[0].image) ">
                 <a href="" class="wrap-story" 
                 v-for="(story, index) in currentRPAttrs.stories.slice(0, 4)"
                 :key="index">
@@ -180,12 +180,15 @@
             <h2 class="main-heading">Gallery</h2>
             <div class="wrap-content" id="galley-main-slider">
                 <div v-for="(item,indexItem) in currentRPAttrs.gallery.items" :key="indexItem">
-                    <div v-for="(album,indexAlbum) in item.albumes" :key="indexAlbum + 1">
+                    <div v-for="(album,indexAlbum) in item.albumes" :key="indexAlbum + '1'">
                     <a href="" >
-                        <img v-for="(image,indexPhoto) in album.images" :key="indexPhoto + 2" class="lazy" :src="image" alt="">
-                        <video class="lazy" v-for="(video,indexVideo) in album.videos" :key="indexVideo +3">
-                            <source :src="video">
-                        </video>
+                        <div v-for="(image,indexPhoto) in album.images" :key="indexPhoto + '2'" class="wrap-image">
+                            <img class="lazy" :src="image" alt="" v-if="image">
+                        </div>
+                        <div class="wrap-video" v-for="(video,indexVideo) in album.videos" :key="indexVideo +'3'">
+                            <video class="lazy" :src="video" v-if="video">
+                            </video>
+                        </div>
                     </a>
                     </div>
                 </div>
@@ -199,7 +202,7 @@
         <section class="main-places">
             <h2 class="main-heading">Places Of Commemoration</h2>
             <div class="wrap-content"
-            v-if="currentRPAttrs.placesOfCommemoration && currentRPAttrs.placesOfCommemoration.length > 0 && (currentRPAttrs.placesOfCommemoration[0].name || currentRPAttrs.placesOfCommemoration[0].address || currentRPAttrs.placesOfCommemoration[0].shortDesc || currentRPAttrs.placesOfCommemoration[0].textAbout) ">
+            v-if="currentRPAttrs.placesOfCommemoration && currentRPAttrs.placesOfCommemoration.length > 0 && (currentRPAttrs.placesOfCommemoration[0].name || currentRPAttrs.placesOfCommemoration[0].address || currentRPAttrs.placesOfCommemoration[0].shortDesc || currentRPAttrs.placesOfCommemoration[0].textAbout || currentRPAttrs.placesOfCommemoration[0].image) ">
                 <a href="" class="wrap-place" 
                 v-for="(place, index) in currentRPAttrs.placesOfCommemoration.slice(0, 4)"
                 :class="{ notHaveImage:!place.image }"

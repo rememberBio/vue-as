@@ -84,7 +84,7 @@ const actionCodeSettings = {
   url: window.location.origin + "/auth/resetPassword",
   handleCodeInApp: true,
 };
-import { createUser } from "~/services/user-service.js";
+import { createUser } from "~/services/userService.js";
 import { User } from "~/models/user";
 //vuelidate
 /*import useVuelidate from "vuelidate/core";
@@ -139,11 +139,13 @@ export default {
         user.phone = self.phone;
         user.types = ['pageManager'];
         await createUser(user).then(async (newUser) => {
-          localStorage.setItem("currentUser", JSON.stringify(newUser));
           this.$store.commit("setState", {
             value: newUser,
             state: "currentUser",
           });
+          newUser.password = '';
+          localStorage.setItem("currentUser", JSON.stringify(newUser));
+         
           this.sendEmailLink();
          
         }).catch((error)=> {

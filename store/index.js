@@ -1,7 +1,9 @@
 import Vue from 'vue'
 export const state = () => ({
-    currentUser: {},
-    curEditRP: null
+    currentUser: null,
+    curEditRP: null,
+    playLoader:false,
+    loaderMessage:""
 
 })
 export const mutations = {
@@ -24,6 +26,7 @@ export const mutations = {
         else {
             state.curEditRP.attributes[payload.attr] = payload.value;
         }
+        localStorage.setItem('currentEditedRP',JSON.stringify(state.curEditRP));
     },
 }
 export const actions = {
@@ -47,8 +50,9 @@ function copyElementsProps(element,elementToCopy) {
         if(Array.isArray(value)) {
             if( element[key] == undefined ) element[key] = [];
             copyArrayOfElementsProps(element[key],value);
-        } else
+        } else {
             Vue.set(element, key, value)
+        }
     })
 }
 function copyArrayOfElementsProps(elementsArr,elementsArrToCopy) {
@@ -62,7 +66,12 @@ function copyArrayOfElementsProps(elementsArr,elementsArrToCopy) {
 
     for (let index = 0; index < elementsArrToCopy.length; index++) {
         const element = elementsArrToCopy[index];
+        if(elementsArr == undefined) elementsArr = [];
         if(elementsArr.length < index + 1) elementsArr.push({});
-        copyElementsProps(elementsArr[index],element);
+        if(typeof(element) == 'string' ) {
+            Vue.set(elementsArr, index, element)
+        }
+        else
+            copyElementsProps(elementsArr[index],element);
     }
 }

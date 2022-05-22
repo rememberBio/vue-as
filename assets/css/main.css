@@ -628,7 +628,7 @@ select {
 	margin-bottom: 14px;
 	outline: none;
 }
-
+span.error-message {margin: -10px 0px 14px;color: red;display: block;}
 input::placeholder,.custom-editor,input[type=date] {
 	color: #ACABAB;
 }
@@ -1062,4 +1062,14 @@ span.breadcrumb_last,p#breadcrumbs a:last-of-type+span {color: #9F9F9F;}
 }
 .font-16 {
 	font-size: 16px;
+}
+.wrap-loader {position: fixed;background-color: rgba(255,255,255,1);z-index: 1;width: 29%;height: 100%;display: flex;align-items: center;justify-content: center;}
+.loader {
+    width: 20%;
+}
+.loader>div {
+    text-align: center;
+    font-size: 16px;
+    color: var(--custom-light-blue);
+    font-family: 'Rubik Medium';
 }

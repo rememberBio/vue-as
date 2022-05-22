@@ -2,7 +2,7 @@
   <div class="page-container">
     <Header />
     <div class="login">
-      <div class="register-link" >New to lendot?  <NuxtLink to="/auth/register" > Create an Account</NuxtLink></div>
+      <div class="register-link" >New to Remember?  <NuxtLink to="/auth/register" > Create an Account</NuxtLink></div>
       <form @submit.prevent="login">
       
 
@@ -11,8 +11,7 @@
           <input
             type="text"
             name="email"
-            v-model="email"
-                    />
+            v-model="email"/>
          
         </div>
        
@@ -36,7 +35,7 @@
 </template>
 <script>
 import Header from "~/components/templateParts/header.vue";
-import { getUserByEmail } from "~/services/user-service.js";
+import { getUserByEmailAndPassword } from "~/services/userService.js";
 
 export default {
   components: { Header },
@@ -66,8 +65,8 @@ export default {
       let self = this;
       await this.$fire.auth
         .signInWithEmailAndPassword(email, password)
-        .then((response) => {
-          self.getLoginUser(email);
+        .then( async (response) => {
+          await self.getLoginUser(email,password);
           self.$router.replace("/rp/main/create");
         })
         .catch((error) => {
@@ -77,12 +76,13 @@ export default {
             this.errorMessage = error.message;
         });
     },
-    async getLoginUser(email) {
-      getUserByEmail(email).then((response) => {
+    async getLoginUser(email,password) {
+      getUserByEmailAndPassword(email,password).then((response) => {
         this.$store.commit("setState", {
           value: response,
           state: "currentUser",
         });
+        response.password = '';
         localStorage.setItem("currentUser", JSON.stringify(response));
       });
     },
@@ -96,20 +96,7 @@ export default {
   max-width: 808px;
   color: var(--custom-blue);
 }
-.wrap-password {
-  margin-bottom: 10px;
-  padding: 0 20px;
-  box-sizing: border-box;
-  border: solid 1px var(--custom-blue);
-  border-radius: 11px;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-}
-.wrap-password input {
-  border: unset;
-  outline: none;
-}
+
 .register-link {
   margin-top: 10px;
   margin-bottom: 47px;

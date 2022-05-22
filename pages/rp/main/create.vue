@@ -13,24 +13,33 @@
               <label class="field-label"> Main Image</label>
               <label class="small-small-field-label upload-image" for="main-image"> 
                 upload main image
-                <div class="image-container">
-                  <div class="no-image" v-if="!mainImg">
-                      <img :src="require('@/assets/images/createPage/upload_photo.svg')"  alt="">
-                  </div>
-                  <div v-else class="images">
-                    <img :src="mainImg" alt="">
-                  </div>
+                <div class="no-image" v-if="!mainImg">
+                    <img :src="require('@/assets/images/createPage/upload_photo.svg')"  alt="">
                 </div>
               </label>
+              <div class="image-container">
+                <div  v-if="mainImg" class="images">
+                  <div class="background-image" :style="'background-image:url(' + mainImg +  ')'"></div>
+                  <a
+                  href=""
+                  class="remove"
+                  @click="removeFileFunc($event,mainImg,'mainImg','image')"
+                  ><img :src="require('@/assets/images/blue-x.svg')" /></a>
+                </div>
+              </div>
               <div class="wrap-input">
                 <input
+                  v-if="!mainImg"
                   type="file"
                   id="main-image"
                   name="main-image"
                   placeholder=""
                   accept="image/*"
-                  @input="changerememberPageState('mainImg', $event)"
+                  @change="(event) => uploadFiles(event,'mainImg','image')"
                 />
+                <span class="error-message" v-if="errorUploadMainImage">
+                  {{errorUploadMainImage}}
+                </span>
               </div>
             </div>
             <!-- name -->
@@ -225,7 +234,7 @@
                     v-if="index > 0"
                     class="remove"
                     @click="removeEl('children', index, $event)"
-                    ><img :src="require('@/assets/images/createPage/remove.svg')" /></a
+                    ><img :src="require('@/assets/images/blue-x.svg')" /></a
                   >
                 </label>
                 <div class="wrap-field">
@@ -280,7 +289,7 @@
                     v-if="index > 0"
                     class="remove"
                     @click="removeEl('timeline', index, $event)"
-                    ><img :src="require('@/assets/images/createPage/remove.svg')" /></a
+                    ><img :src="require('@/assets/images/blue-x.svg')" /></a
                   >
                 </label>
                 <div class="wrap-field">
@@ -339,7 +348,7 @@
                         v-if="index > 0"
                         class="remove"
                         @click="removeEl('stories', index, $event)"
-                        ><img :src="require('@/assets/images/createPage/remove.svg')" /></a
+                        ><img :src="require('@/assets/images/blue-x.svg')" /></a
                       >
                 </label>
                 <div class="wrap-field">
@@ -373,25 +382,34 @@
                 </div>
                 <div class="wrap-field">
                   <label class="small-small-field-label upload-image" :for="'story-image' + index">add image
-                    <div class="image-container">
-                       <div class="no-image" v-if="!story.image">
-                            <img :src="require('@/assets/images/createPage/upload_photo.svg')"  alt="">
-                        </div>
-                        <div v-else class="images">
-                          <img :src="story.image" alt="">
-                        </div>
+                    <div class="no-image" v-if="!story.image">
+                        <img :src="require('@/assets/images/createPage/upload_photo.svg')"  alt="">
                     </div>
                   </label>
+                  <div class="image-container">
+                      <div v-if="story.image" class="images">
+                        <div class="background-image" :style="'background-image:url(' + story.image +  ')'"></div>
+                        <a
+                        href=""
+                        class="remove"
+                        @click="removeFileFunc($event,story.image,'stories','image',index)"
+                        ><img :src="require('@/assets/images/blue-x.svg')" /></a>
+                      </div>
+                  </div>
                   <div class="wrap-input">
                     <input
+                      v-if="!story.image"
                       type="file"
                       :id="'story-image' + index"
                       accept="image/*"
                       name="story-image"
                       placeholder=""
                       :data-index="index"
-                      @input="changerememberPageState('stories', $event)"
+                      @change="(event) => uploadFiles(event,'stories','image',index)"                    
                     />
+                    <span class="error-message" v-if="errorUploadStoryImage && errorUploadStoryImage.index == index">
+                      {{errorUploadStoryImage.message}}
+                    </span>
                   </div>
                 </div>
                 <div class="wrap-field">
@@ -440,7 +458,7 @@
                     v-if="index > 0"
                     class="remove"
                     @click="removeEl('gallery', index, $event)"
-                    ><img :src="require('@/assets/images/createPage/remove.svg')" /></a
+                    ><img :src="require('@/assets/images/blue-x.svg')" /></a
                   >
                 </label>
                 <div class="wrap-field">
@@ -474,14 +492,14 @@
                 v-for="(album, indexAl) in item.albumes"
                 :key="indexAl"
                 >
-                  <label for="" class="field-label" :class="{ 'wrap-remove': index > 0}">
+                  <label for="" class="field-label" :class="{ 'wrap-remove': indexAl > 0}">
                     Albume {{ indexAl + 1 }}
                     <a
                       href=""
                       v-if="indexAl > 0"
                       class="remove"
                       @click="removeEl('album-gallery', indexAl, $event,index)"
-                      ><img :src="require('@/assets/images/createPage/remove.svg')" /></a
+                      ><img :src="require('@/assets/images/blue-x.svg')" /></a
                     >
                   </label>
                   <div class="wrap-field">
@@ -524,17 +542,34 @@
                       </div>
                   </div>
                   <div class="wrap-field upload-images">
-                    <label class="small-small-field-label upload-image" :for="'album-image-' + indexAl + '-' + index">
-                      upload images 
-                      <div class="image-container">
-                         <div class="no-image">
-                              <img :src="require('@/assets/images/createPage/upload_photo.svg')"  alt="">
-                          </div>
-                          <div class="images" v-for="(image, indexAlImg) in album.images"
-                                  :key="indexAlImg" >
-                            <img v-if="image" :src="image" alt="">
-                          </div>
+                    <label v-if="album.images&&album.images.length&&album.images[0]" class="small-small-field-label upload-video"> upload images </label>
+                    <span class="error-message multiply-upload-error-message" v-if="errorUploadGalleryImage && errorUploadGalleryImage.index == index && errorUploadGalleryImage.albumIndex == indexAl && errorUploadGalleryImage.type == 'image'">
+                      {{errorUploadGalleryImage.message}}
+                    </span>
+                    <div v-if="album.images&&album.images.length&&album.images[0]" class="image-container multiply-images">
+                      <div class="images" v-for="(image, indexAlImg) in album.images"
+                         :key="indexAlImg">
+                        <div class="background-image" v-if="image" :style="'background-image:url(' + image +  ')'"></div>
+                          <a
+                          v-if="image"
+                          href=""
+                          class="remove"
+                          @click="removeFileFunc($event,image,'gallery','image',indexAlImg,index,indexAl)"
+                          ><img :src="require('@/assets/images/blue-x.svg')" /></a>
                       </div>
+                    </div>
+                    <label v-else class="small-small-field-label upload-image" :for="'album-image-' + indexAl + '-' + index">
+                      upload images 
+                      <div class="no-image full-width">
+                          <img :src="require('@/assets/images/createPage/upload_photo.svg')"  alt="">
+                      </div>
+                    </label>
+                    <label v-if="album.images&&album.images.length&&album.images[0]" class="small-field-label upload-video" :for="'album-image-' + indexAl + '-' + index">
+                      <div class="wrap-add-button add-file">
+                      <a>
+                        Upload more images</a
+                      >
+                    </div>
                     </label>
                     <div class="wrap-input">
                       <input
@@ -544,23 +579,41 @@
                         placeholder=""
                         multiple
                         accept="image/*"
-                        @input="changerememberPageState('gallery', $event)"
+                        @change="(event) => uploadFiles(event,'gallery','image',index,indexAl)"
                       />
                     </div>
                   </div>
                   <div class="wrap-field upload-videos">
-                    <label class="small-small-field-label upload-video" :for="'album-video-' + indexAl + '-' + index"> upload videos 
-                      <div class="image-container">
-                         <div class="no-image" >
-                              <img :src="require('@/assets/images/createPage/uploads_videos.svg')"  alt="">
-                          </div>
-                          <div class="videos"  v-for="(video, indexAlVideo) in album.videos"
-                                  :key="indexAlVideo">
-                            <video  v-if="video" :src="video">
-                            </video>
-                          </div>
+                    <label v-if="album.videos&&album.videos.length&&(album.videos[0] || (album.videos.length > 1 &&album.videos[1]))" class="small-small-field-label upload-video"> upload videos </label>
+                    <span class="error-message multiply-upload-error-message" v-if="errorUploadGalleryImage && errorUploadGalleryImage.index == index && errorUploadGalleryImage.albumIndex == indexAl && errorUploadGalleryImage.type== 'video'">
+                      {{errorUploadGalleryImage.message}}
+                    </span>
+                    <div v-if="album.videos&&album.videos.length&&(album.videos[0] || (album.videos.length > 1 &&album.videos[1]))" class="image-container multiply-images">
+                      <div class="videos"  v-for="(video, indexAlVideo) in album.videos"
+                              :key="indexAlVideo">
+                        <video  v-if="video" :src="video">
+                        </video>
+                        <a
+                          href=""
+                          v-if="video"
+                          class="remove"
+                          @click="removeFileFunc($event,video,'gallery','video',indexAlVideo,index,indexAl)"
+                          ><img :src="require('@/assets/images/blue-x.svg')" /></a>
+                      </div>
+                    </div>
+                    <label  v-else class="small-small-field-label upload-video" :for="'album-video-' + indexAl + '-' + index"> upload videos 
+                      <div class="no-image full-width" >
+                          <img :src="require('@/assets/images/createPage/uploads_videos.svg')"  alt="">
                       </div>
                     </label>
+                    <label v-if="album.videos&&album.videos.length&&(album.videos[0] || (album.videos.length > 1 &&album.videos[1]))" class="small-field-label upload-video" :for="'album-video-' + indexAl + '-' + index">
+                       <div class="wrap-add-button add-file">
+                        <a>
+                          Upload more videos</a
+                        >
+                      </div>
+                    </label>
+                    
                     <div class="wrap-input">
                       <input
                         type="file"
@@ -569,8 +622,9 @@
                         placeholder=""
                         multiple
                         accept="video/*"
-                        @input="changerememberPageState('gallery', $event)"
+                        @change="(event) => uploadFiles(event,'gallery','video',index,indexAl)"
                       />
+                     
                     </div>
                   </div>
                 </div>
@@ -610,22 +664,28 @@
                     v-if="index > 0"
                     class="remove"
                     @click="removeEl('placesOfCommemoration', index, $event)"
-                    ><img :src="require('@/assets/images/createPage/remove.svg')" /></a
+                    ><img :src="require('@/assets/images/blue-x.svg')" /></a
                   >
                 </label>
                 <div class="wrap-field">
                   <label class="field-label"> Image Of Place</label>
                   <label class="small-small-field-label upload-image" :for="'place-image' + index">
                     upload image 
-                    <div class="image-container">
-                       <div class="no-image" v-if="!place.image">
-                            <img :src="require('@/assets/images/createPage/upload_photo.svg')"  alt="">
-                        </div>
-                        <div v-else class="images">
-                          <img :src="place.image" alt="">
-                        </div>
+                    <div class="no-image" v-if="!place.image">
+                        <img :src="require('@/assets/images/createPage/upload_photo.svg')"  alt="">
                     </div>
+                       
                   </label>
+                  <div class="image-container">
+                    <div v-if="place.image" class="images">
+                      <div class="background-image" :style="'background-image:url(' + place.image +  ')'"></div>
+                      <a
+                        href=""
+                        class="remove"
+                        @click="removeFileFunc($event,place.image,'placesOfCommemoration','image',index)"
+                        ><img :src="require('@/assets/images/blue-x.svg')" /></a>
+                    </div>
+                  </div>
                   <div class="wrap-input">
                     <input
                       type="file"
@@ -633,8 +693,11 @@
                       name="place-image"
                       accept="image/*"
                       placeholder=""
-                      @input="changerememberPageState('placesOfCommemoration', $event)"
+                      @change="(event) => uploadFiles(event,'placesOfCommemoration','image',index)"
                     />
+                     <span class="error-message" v-if="errorUploadPlaceImage && errorUploadPlaceImage.index == index">
+                      {{errorUploadPlaceImage.message}}
+                    </span>
                   </div>
                 </div>
                 <div class="wrap-field">
@@ -720,17 +783,31 @@
             <div class="wrap-field-group">
               <div class="wrap-field upload-images">
                 <label class="field-label"> Images Gallery Of The Grave</label>
-                <label class="small-small-field-label upload-image" for="grave-images">
-                upload images to gallery 
-                <div class="image-container">
-                    <div class="no-image">
-                        <img :src="require('@/assets/images/createPage/upload_photo.svg')"  alt="">
-                    </div>
-                    <div class="images">
-                      <img  v-for="(image, indexImg) in grave.images"
-                            :key="indexImg" :src="image" alt="">
-                    </div>
+                <label v-if="grave.images&&grave.images.length" class="small-small-field-label"> upload images to gallery </label>
+                <div v-if="grave.images&&grave.images.length" class="image-container multiply-images">
+                  <div class="images" v-for="(image, indexImg) in grave.images"
+                  :key="indexImg">
+                    <div class="background-image" v-if="image" :style="'background-image:url(' + image +  ')'"></div>
+                    <a
+                    v-if="image"
+                    href=""
+                    class="remove"
+                    @click="removeFileFunc($event,image,'grave','image',indexImg)"
+                    ><img :src="require('@/assets/images/blue-x.svg')" /></a>
+                  </div>
                 </div>
+                <label v-else class="small-small-field-label upload-image" for="grave-images">
+                  upload images to gallery 
+                  <div class="no-image full-width">
+                      <img :src="require('@/assets/images/createPage/upload_photo.svg')"  alt="">
+                  </div>
+                </label>
+                <label for="grave-images"  v-if="grave.images&&grave.images.length" class='small-field-label'>
+                  <div class="wrap-add-button add-file">
+                    <a>
+                      Upload more images</a
+                    >
+                  </div>
                 </label>
                 <div class="wrap-input">
                   <input
@@ -740,8 +817,11 @@
                     placeholder=""
                     multiple
                     accept="image/*"
-                    @input="changerememberPageState('grave', $event)"
+                    @change="(event) => uploadFiles(event,'grave','image')"
                   />
+                  <span class="error-message" v-if="errorUploadGraveImage">
+                    {{errorUploadGraveImage.message}}
+                  </span>
                 </div>
               </div>
               <div class="wrap-field">
@@ -794,8 +874,9 @@
   </div>
 </template>
 <script>
-import { createrememberPageService } from "../../../services/remember-page-service";
+import { createrememberPageService } from "../../../services/rememberPageService";
 import { rememberPage } from "../../../models/rememberPage";
+import { uploadFile, removeFile, removeFiles } from '../../../services/s3Service';
 
 import dates from "../../../functions/dates";
 
@@ -864,8 +945,8 @@ export default {
                 name: "",
                 startYear: "",
                 endYear: "",
-                images: [""],
-                videos: [""],
+                images: [],
+                videos: [],
               },
             ],
           },
@@ -880,7 +961,7 @@ export default {
         },
       ],
       grave: {
-        images: [""],
+        images: [],
         nameOfCemetery: "",
         address: {
           location: {
@@ -900,6 +981,25 @@ export default {
       showGalleryFieldGroups: false,
       showPlacesFieldGroups: false,
       showGraveFieldGroups: false,
+
+      //errors messages
+      //uploads images and videos
+      errorUploadMainImage : "",
+      errorUploadStoryImage : {
+        index:"",
+        message:""
+      },
+      errorUploadPlaceImage : {
+        index:"",
+        message:""
+      },
+      errorUploadGalleryImage : {
+        index:"",
+        albumIndex:"",
+        message:""
+      },
+      errorUploadGraveImage : "",
+
     };
   },
   /*validations() {
@@ -1052,10 +1152,7 @@ export default {
       let value = this[attributeName];
       //let isFieldCorrect = await this.v$[attributeName].$validate();
       //if (isFieldCorrect) {
-        this.$store.commit("setCurEditRPAttrState", {
-          value: value,
-          attr: attributeName,
-        });
+        this.updateCurrentEditedRPAttributes(attributeName,value);
 
       //}
     },
@@ -1085,8 +1182,8 @@ export default {
                 name: "",
                 startYear: "",
                 endYear: "",
-                images: [""],
-                videos: [""],
+                images: [],
+                videos: [],
               },
             ]
           });
@@ -1097,30 +1194,53 @@ export default {
             name: "",
             startYear: "",
             endYear: "",
-            images: [""],
-            videos: [""],
+            images: [],
+            videos: [],
           });
           break;
       }
     },
-    removeEl: function (attributeName, index, event, galleryAlbumItemIndex = 0) {
+    removeEl: async function (attributeName, index, event, galleryAlbumItemIndex = 0) {
       event.preventDefault();
+      this.playLoader("Remove...");
       let array = this[attributeName];
       if(attributeName == "gallery") {
         array = array.items;
+        const albumes = array[index].albumes;
+        let files = [];
+        for (let j = 0; j < albumes.length; j++) {
+          const album = albumes[j];
+          if(album.images && album.images.length)
+            files = files.concat(album.images);
+          if(album.videos && album.videos.length)
+            files = files.concat(album.videos);
+        }
+        if(files.length)
+          await removeFiles(files);
       } else if(attributeName == "album-gallery") {
+        let files = [];
         array = this['gallery'].items[galleryAlbumItemIndex].albumes;
+        const album = array[index];
+        if(album.images && album.images.length)
+          files = files.concat(album.images);
+        if(album.videos && album.videos.length)
+          files = files.concat(album.videos);
+        if(files.length)
+          await removeFiles(files);
       }
-      
+
+      if(attributeName == "stories" || attributeName == 'placesOfCommemoration') {
+        let fileUrl = this[attributeName][index].image;
+        await removeFile(fileUrl);
+      }
+
       if (index != null && index >= 0 && array.length > index) {
         array = array.splice(index, 1);
       }
       if(attributeName == "stories") this.updateStoryContentDisplay(index);
 
-      this.$store.commit("setCurEditRPAttrState", {
-        value: this[attributeName],
-        attr: attributeName,
-      });
+      this.updateCurrentEditedRPAttributes(attributeName,this[attributeName]);
+      this.stopLoader();
 
     },
     toggleGroupsWrapper: function (desc) {
@@ -1135,10 +1255,8 @@ export default {
       this.grave.address.location.lng = lng;
       this.grave.address.name = name;
 
-      this.$store.commit("setCurEditRPAttrState", {
-          value: this.grave,
-          attr: "grave",
-      });
+      this.updateCurrentEditedRPAttributes("grave",this.grave);
+
     },
     updateStoryContentDisplay(storyIndex) {
       if(storyIndex >= 0 && this.stories.length -1 >= storyIndex) {
@@ -1146,18 +1264,170 @@ export default {
             "unique-element-stories-" + storyIndex
           ).innerHTML = this.stories[storyIndex].content;
       }
+    },
+    async removeFileFunc(event,fileUrl,attrName,fileType,fileIndex,itemIndex,albumIndex) {
+      event.preventDefault();
+      this.playLoader('Delete...');
+      let self = this;
+      await removeFile(fileUrl).then((res)=> {
+        switch (attrName) {
+            case 'stories':
+              this.stories[fileIndex].image = "";
+              break;
+            case 'grave':
+              this.grave.images.splice(fileIndex,1);
+              break;
+            case 'gallery':
+              if(fileType == "image")
+                this.gallery.items[itemIndex].albumes[albumIndex].images.splice(fileIndex,1);
+              else 
+               this.gallery.items[itemIndex].albumes[albumIndex].videos.splice(fileIndex,1);
+              break;
+            case 'placesOfCommemoration':
+              this.placesOfCommemoration[fileIndex].image = "";
+              break;
+            case 'mainImg':
+              this.mainImg = "";
+              break;
+        }
+        this.updateCurrentEditedRPAttributes(attrName,this[attrName]);
+        this.renderDisplay(this,attrName);
+        this.stopLoader();
+      }).catch((err)=>{
+        this.stopLoader();
+      })
+    },
+    async uploadFiles(event,attrName,fileTypeThatCanUploaded,indexItem,indexAlbum) {
+      this.playLoader();
+      let files = [];
+      let self = this;
+      if (event) files = event.target.files;
+      if(!files.length) 
+        this.stopLoader();
+            
+      for (let index = 0; index < files.length; index++) {
+        let file = files[index];
+        await uploadFile(file,fileTypeThatCanUploaded,this.$store.state.currentUser._id).then((fileUrl) => {
+          //console.log(fileUrl, " :file url");
+          if(attrName == 'stories' || attrName == 'placesOfCommemoration') {
+            self[attrName][indexItem].image = fileUrl;
+            if(attrName == 'stories') this.errorUploadStoryImage = "";
+            else this.errorUploadPlaceImage = "";
+          } else if(attrName == 'gallery') {
+              let tmpArr = [];
+              if(fileTypeThatCanUploaded == "video")
+                tmpArr = self[attrName].items[indexItem].albumes[indexAlbum].videos;
+              else                
+                tmpArr = self[attrName].items[indexItem].albumes[indexAlbum].images;
+              if(tmpArr == undefined) tmpArr = [];
+              tmpArr.push(fileUrl);
+              this.errorUploadGalleryImage = ""
+          } else if(attrName == 'grave') {
+            self['grave'].images.push(fileUrl);
+            this.errorUploadGraveImage = ""
+          }
+          else {
+            this.errorUploadMainImage = ""
+            self[attrName] = fileUrl;
+          }
+         
+          this.updateCurrentEditedRPAttributes(attrName,this[attrName]);
+          this.renderDisplay(self,attrName);
+          this.stopLoader();
+            
+
+        }).catch((err)=>{
+          switch (attrName) {
+            case 'stories':
+              this.errorUploadStoryImage = {
+                index: indexItem,
+                message: err
+              }
+              break;
+            case 'grave':
+              this.errorUploadGraveImage = {
+                index: indexItem,
+                message: err
+              }
+              break;
+            case 'gallery':
+              this.errorUploadGalleryImage = {
+                index: indexItem,
+                albumIndex: indexAlbum,
+                message: err,
+                type: fileTypeThatCanUploaded
+              }
+              break;
+            case 'grave':
+              this.errorUploadGraveImage = err;
+              break;
+            case 'placesOfCommemoration':
+                this.errorUploadPlaceImage = {
+                  index: indexItem,
+                  message: err
+                };
+                break;
+            case 'mainImg':
+                this.errorUploadMainImage = err;
+                break;
+          }
+          this.stopLoader();
+        });
+      }
+    },
+    stopLoader (){
+      this.$store.commit('setState',{
+        state:"playLoader",
+        value: false
+      })
+      this.$store.commit('setState',{
+        state:"loaderMessage",
+        value: ""
+      })
+    },
+    playLoader (loaderMessage = "Upload..."){
+      this.$store.commit('setState',{
+        state:"playLoader",
+        value: true
+      })
+      this.$store.commit('setState',{
+        state:"loaderMessage",
+        value: loaderMessage
+      })
+    },
+    updateCurrentEditedRPAttributes(attrName,value) {
+      this.$store.commit("setCurEditRPAttrState", {
+        value: value,
+        attr: attrName,
+      });
+    },
+    renderDisplay(thisEl,attrName) {
+      //Render the display
+      if(Array.isArray(thisEl[attrName])) {
+        thisEl[attrName].push({});
+        thisEl[attrName].pop();
+      } else if(attrName == 'gallery') {
+        thisEl['gallery'].items.push({});
+        thisEl['gallery'].items.pop();
+      } 
     }
   },
   created() {
-    if (!this.$store.state.curEditRP) {
-      this.$store.commit("setState", {
-        value: new rememberPage(),
-        state: "curEditRP",
-      });
-    } else {
-      // eslint-disable-next-line no-console
-      console.log("there are object in state");
-    }
+    const currentEditedRPAttrs = JSON.parse(localStorage.getItem('currentEditedRP')).attributes;
+    let self = this;
+    Object.keys(currentEditedRPAttrs).forEach( key => {
+        let value = currentEditedRPAttrs[key];
+       
+        if(key == 'parents' && value.length < 2)
+        {
+          self[key][0] = value[0];
+          self[key].push({});
+        }
+        else {
+          self[key] = value;
+        }
+    })
+
     this.$eventBus.on('submit-form', () => this.$refs.createForm.submit(),this);
   },
   computed: {
@@ -1206,6 +1476,18 @@ export default {
 label.field-label.wrap-remove {display: flex;justify-content: space-between;align-items: center;}
 
 .image-container {margin-bottom: 14px;}
+.image-container.multiply-images .background-image {
+    width: 69px !important;
+    height: 69px;
+}
+.image-container.multiply-images {
+    background: white;
+    border-radius: 15px;
+    padding: 16px 20px;
+    gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
 .fields-devider {
   height: 6px;
   display: block;

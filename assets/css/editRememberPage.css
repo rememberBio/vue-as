@@ -393,23 +393,26 @@ button.slide-arrow img {
 }
 
 button.slide-arrow.next-arrow {left: unset;right: -15px;transform: rotate(180deg);}
-section.main-gallery .gallery-video::after {
+section.main-gallery .wrap-video::after,.image-container .videos::after {
     content: "";
     left: 0;
     right: 0;
     bottom: 0;
     top: 0;
     position: absolute;
-    background-image: url(/wp-content/images/2022/03/Group-170.svg);
+    background-image: url('@/assets/images/createPage/play-video.svg');
     background-repeat: no-repeat;
     background-size: 91px;
     z-index: 1;
     background-position: center;
 }
-
-section.main-gallery .gallery-video {
+.image-container .videos::after {
+    background-size: 35px;
+}
+section.main-gallery .wrap-video,.image-container .videos {
     position: relative;
-    z-index: -1;
+    display: flex;
+    width: max-content;
 }
 /* END gallery section */
 
@@ -468,6 +471,7 @@ section.main-places .wrap-content>a .wrap-place-bottom .name {
 }
 section.main-places {
     margin-bottom: 83px;
+    margin-top: 82px;
 }
 section.main-places .wrap-content>a img {
     border-radius: 15px;
@@ -556,7 +560,7 @@ div#galley-main-slider a {
     button.slide-arrow img {
         width: 7px;
     }
-    section.main-gallery .gallery-video::after {
+    section.main-gallery .wrap-video::after,.image-container .videos::after {
         background-size: 32px;
     }
     

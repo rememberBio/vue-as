@@ -44,8 +44,8 @@ export class rememberPage {
                         name: "",
                         startYear: "",
                         endYear: "",
-                        images: [""],
-                        videos: [""]
+                        images: [],
+                        videos: []
                     }]
                 }]
             },
@@ -57,7 +57,7 @@ export class rememberPage {
                 address: ""
             }],
             grave: {
-                images: [""],
+                images: [],
                 nameOfCemetery: "",
                 address: {
                     location: {

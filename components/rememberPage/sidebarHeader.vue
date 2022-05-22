@@ -58,6 +58,7 @@ export default {
 .sidebar-header {
     position: fixed;
     width: 29%;
+    z-index: 999;
 }
 </style>
 

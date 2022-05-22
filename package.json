@@ -19,7 +19,7 @@
     "@nuxtjs/firebase": "^8.2.2",
     "@nuxtjs/recaptcha": "^1.0.4",
     "axios": "^0.27.2",
-    "core-js": "^3.19.3",
+    "core-js": "^3.22.5",
     "dotenv": "^16.0.1",
     "firebase": "^9.8.1",
     "moment": "^2.29.3",

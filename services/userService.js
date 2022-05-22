@@ -20,8 +20,8 @@ const deleteUser = async() => {
     const response = await axios.get(`${apiTarget}/user/deleteUser`,headers);
     return response.data;
 }
-const getUserByEmail = async(email) => {
-    const response = await axios.get(`${apiTarget}/user/getUserByEmail/${email}`,headers);
+const getUserByEmailAndPassword = async(email,password) => {
+    const response = await axios.get(`${apiTarget}/user/getUserByEmailAndPassword/${email}/${password}`,headers);
     return response.data;
 }
 const getUsers = async() => {
@@ -50,7 +50,7 @@ const updateUserStatus = async(email, isActive) => {
 module.exports = {
     createUser,
     deleteUser,
-    getUserByEmail,
+    getUserByEmailAndPassword,
     getUsers,
     updateUser,
     updateUserStatus,
