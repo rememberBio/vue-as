@@ -660,12 +660,12 @@ label {
 }
 .rp-scroll::-webkit-scrollbar {
     height: 100%; 
-	width:14px;
+	width:12px;
 }
 /* Track */
 .rp-scroll::-webkit-scrollbar-track {
     border: 1px solid #E5EAED;
-    width:14px;
+    width:12px;
 	background-color: white;
 }
    

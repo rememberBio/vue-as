@@ -233,12 +233,19 @@
         <section class="main-tomb">
             <h2 class="main-heading">The Tomb</h2>
             <div class="wrap-content">
-                <div class="custom-acf-map"  v-if="currentRPAttrs.grave.address.location.lat  && currentRPAttrs.grave.address.location.lng">
-                    <GMapMap
-                      :center="currentRPAttrs.grave.address.location"
-                      :zoom="15"
-                      :map-type-id="roadmap"
-                    />
+                <div class="custom-acf-map"  v-if="currentRPAttrs.grave.address&&currentRPAttrs.grave.address.location.lat  && currentRPAttrs.grave.address.location.lng">
+                    <gmaps-map
+                    :options="{
+                    center: currentRPAttrs.grave.address.location,
+                    zoom: 15,
+                    fullscreenControl: false,
+                    mapTypeControl: false,
+                    rotateControl: false,
+                    scaleControl: false,
+                    streetViewControl: false,
+                    zoomControl: false,
+                    }"
+                    ></gmaps-map>
                 </div>
                 <div class="custom-acf-map" v-else>
                 </div>
@@ -258,6 +265,7 @@
 
 <script>
 import moment from 'moment';
+import { gmapsMap } from "x5-gmaps";
 
 import '~/assets/css/editRememberPage.css';
 
@@ -269,6 +277,7 @@ export default {
         return this.$store.state.curEditRP.attributes;
     }
   },
+  components: { gmapsMap },
   data() {
     return {
         numOfCandles: 0,

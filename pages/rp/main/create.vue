@@ -838,11 +838,14 @@
               </div>
               <div class="wrap-field">
                 <label class="field-label"> Grave Location </label>
-                <GMapAutocomplete
+                <!-- <GMapAutocomplete
                   placeholder="Type And Select"
                   @place_changed="setPlace($event)"
                 >
-                </GMapAutocomplete>
+                </GMapAutocomplete> -->
+                <input v-if="!this.grave.address.name" ref="autocomplete"  type="text" id="autocomplete" placeholder="Type And Select" />
+                <input v-else ref="autocomplete" type="text" id="autocomplete" :placeholder="this.grave.address.name" />
+
               </div>
               <div
                 class="wrap-map"
@@ -859,11 +862,23 @@
                 </div>
               </div>
               <div class="wrap-map" v-else>
-                <GMapMap
+                <!-- <GMapMap
                   :center="this.grave.address.location"
                   :zoom="15"
                   :map-type-id="roadmap"
-                />
+                /> -->
+                <gmaps-map
+                :options="{
+                  center: this.grave.address.location,
+                  zoom: 15,
+                  fullscreenControl: false,
+                  mapTypeControl: false,
+                  rotateControl: false,
+                  scaleControl: false,
+                  streetViewControl: false,
+                  zoomControl: false,
+                }"
+                ></gmaps-map>
               </div>
             </div>
           </div>
@@ -874,9 +889,11 @@
   </div>
 </template>
 <script>
+
 import { createrememberPageService } from "../../../services/rememberPageService";
 import { rememberPage } from "../../../models/rememberPage";
 import { uploadFile, removeFile, removeFiles } from '../../../services/s3Service';
+import { gmaps, gmapsMap } from "x5-gmaps";
 
 import dates from "../../../functions/dates";
 
@@ -892,7 +909,7 @@ import {
 } from "vuelidate/validators";*/
 export default {
   name: "CreatePageSidebar",
-  components: {},
+  components: { gmapsMap },
   /*setup() {
     return { v$: useVuelidate() };
   },*/
@@ -1000,6 +1017,20 @@ export default {
       },
       errorUploadGraveImage : "",
 
+      //google maps
+      mapOptions: {
+        zoom: 15,
+        fullscreenControl: false,
+        mapTypeControl: false,
+        rotateControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        zoomControl: false,
+      },
+      autocomplete: null,
+      places: null,
+     
+
     };
   },
   /*validations() {
@@ -1055,6 +1086,17 @@ export default {
     };
   },*/
   methods: {
+    //google maps
+    setGoogleMap() {
+      gmaps().then((maps) => {
+        // Search
+        this.autocomplete = new maps.places.Autocomplete(
+          this.$refs.autocomplete
+        );
+        this.autocomplete.addListener("place_changed", this.setPlace);
+
+      });
+    },
     status(validation) {
       return {
         error: validation.$error,
@@ -1247,17 +1289,17 @@ export default {
     toggleGroupsWrapper: function (desc) {
       this["show" + desc + "FieldGroups"] =
         !this["show" + desc + "FieldGroups"];
+      if(desc == 'Grave' && this["show" + desc + "FieldGroups"]) this.setGoogleMap();
     },
-    setPlace(event) {
-      let lat = event.geometry.location.lat();
-      let lng = event.geometry.location.lng();
-      let name = event.formatted_address;
-      this.grave.address.location.lat = lat;
-      this.grave.address.location.lng = lng;
-      this.grave.address.name = name;
-
-      this.updateCurrentEditedRPAttributes("grave",this.grave);
-
+    setPlace() {
+      const place = this.autocomplete.getPlace();
+      // Set end point to selected address
+      if (place.geometry) {
+        let name = place.formatted_address;
+        this.grave.address.location = { lat: place.geometry.location.lat(),lng: place.geometry.location.lng() };
+        this.grave.address.name = name;
+        this.updateCurrentEditedRPAttributes("grave",this.grave);
+      }
     },
     updateStoryContentDisplay(storyIndex) {
       if(storyIndex >= 0 && this.stories.length -1 >= storyIndex) {
@@ -1429,6 +1471,7 @@ export default {
     })
 
     this.$eventBus.on('submit-form', () => this.$refs.createForm.submit(),this);
+    
   },
   computed: {
     emailVerified: function () {
@@ -1439,10 +1482,17 @@ export default {
 </script>
 
 <style>
-.vue-map {
+.wrap-map {
   height: 213px;
-  background: white;
   border-radius: 17px;
+  background: white;
+  display: flex;
+}
+.gmaps-map {
+ border-radius: 17px;
+}
+.vue-map {
+  width: 100%;
   display: flex;
 }
 .vue-map > img {

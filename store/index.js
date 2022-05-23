@@ -32,7 +32,7 @@ export const mutations = {
 export const actions = {
     onAuthStateChangedAction(state, { authUser, claims }) {
         if (!authUser) {
-            this.$router.push('/auth/login')
+            this.$router.push('/auth/login');
             console.log("not connect");
 
         } /*else {
@@ -47,9 +47,15 @@ export const actions = {
 function copyElementsProps(element,elementToCopy) {
     Object.keys(elementToCopy).forEach( key => {
         let value = elementToCopy[key];
-        if(Array.isArray(value)) {
-            if( element[key] == undefined ) element[key] = [];
-            copyArrayOfElementsProps(element[key],value);
+        if(typeof(value) == 'object') {
+            if(Array.isArray(value)){
+                if( element[key] == undefined ) element[key] = [];
+                copyArrayOfElementsProps(element[key],value);
+            }
+            else {
+                if( element[key] == undefined ) element[key] = {};
+                copyElementsProps(element[key],value);
+            }
         } else {
             Vue.set(element, key, value)
         }
