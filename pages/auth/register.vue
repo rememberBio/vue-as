@@ -2,7 +2,7 @@
 
   <div id="create-account" class="main-container">
     <div class="main-content">
-      <h1>createAccount</h1>
+      <h1>create Account</h1>
       <form @submit.prevent="createAccount" v-if="!emailSend">
         <label class="form-label"> Name</label>
         <div class="flex">
@@ -150,8 +150,9 @@ export default {
          
         }).catch((error)=> {
           let data = error.response.data;
-          if(data.includes("Error, expected `email` to be unique")) 
-          this.errorMessage = "This email is already registered in the system, please register with another email or go to the login screen";
+          if(data.includes("Error, expected `email` to be unique")) {
+            this.errorMessage = "This email is already registered in the system, please register with another email or go to the login screen";
+          }
           else
           this.errorMessage = error.response.data;
         });

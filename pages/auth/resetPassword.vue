@@ -142,9 +142,12 @@ export default {
            //node js update password
             await updatePasswordInNode(updatedUser._id, this.password).then((res) => {
               localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+              localStorage.removeItem("emailVerified");
+
               this.$router.push({
                 path: "/rp/main/create"
               });
+
             });
         })
       //}
@@ -160,18 +163,18 @@ export default {
         .then((result) => {
           // Clear email from storage.
           window.localStorage.removeItem("emailForSignIn");
-          let userFromFB = result.user;
-          localStorage.setItem("currentUser", JSON.stringify(result.user));
-          //save on mongo with isActive=false
-          this.updateUser(userFromFB.email, true);
           localStorage.setItem("emailVerified", true);
+
+          //save on mongo with isActive=true
+          this.updateUser(email, true);
         })
         .catch((error) => {
-          if (this.emailVerified == true) {
-            this.$router.push({
-              path: "/auth/register",
-            });
-          } 
+          console.log("error occured in auth link");
+          console.log(error);
+          window.localStorage.setItem("emailForSignIn",email);
+          this.$router.push({
+            path: "/auth/register",
+          });
         });
       }
       else {

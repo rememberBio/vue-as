@@ -259,7 +259,7 @@
 <script>
 import moment from 'moment';
 
-import '@/assets/css/editrememberPage.css';
+import '~/assets/css/editrememberPage.css';
 
 
 export default {

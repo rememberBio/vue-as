@@ -1,51 +1,65 @@
 import { rememberPage } from "~/models/rememberPage";
-export default function({ route, redirect }) {
-    console.log("here auth");
-    if (route.path == "/auth/login") {
-        if ($nuxt.$fire.auth.currentUser)
-        {
-            return redirect('/rp/main/create');
-        }
-    }
-    if (route.path == "/") {
-        if (!$nuxt.$fire.auth.currentUser)
-            return redirect('/auth/login');
-        else
-            return redirect('/rp/main/create');
-    }
-    if (route.path.includes("/rp/main")) {
-        if (!$nuxt.$fire.auth.currentUser) 
-        {
-            return redirect('/auth/login');
-        } else {
-          
-            if (!$nuxt.$store.state.curEditRP) {
-                let currendEditedFromLocalStorage = localStorage.getItem('currentEditedRP');
-                if(!currendEditedFromLocalStorage) {
-                    currendEditedFromLocalStorage = new rememberPage();
-                    localStorage.setItem('currentEditedRP',JSON.stringify(currendEditedFromLocalStorage));
-                } else {
-                    currendEditedFromLocalStorage = JSON.parse(currendEditedFromLocalStorage);
-                }    
 
-                $nuxt.$store.commit("setState", {
-                    value: currendEditedFromLocalStorage,
-                    state: "curEditRP",
-                });
+//auth
+const loginRoute = "/auth/login";
+const registerRoute = "/auth/register";
+//remember pages
+const createPageRoute = "/rp/main/create";
+
+
+
+export default function({ route, redirect }) {
+
+    const emailVerified = localStorage.getItem("emailVerified");
+
+    if (route.path == loginRoute) {
+        if(emailVerified) {
+            return redirect(registerRoute);
+        }
+        else if ($nuxt.$fire.auth.currentUser)
+        {
+            return redirect(createPageRoute);
+        } 
+        else return route;
+    } 
+    else {
+        if (route.path == "/") {
+            return redirect(createPageRoute);
+        }
+        else if (route.path.includes("/rp/main")) {
+            if (!$nuxt.$fire.auth.currentUser || emailVerified) 
+            {
+                return redirect(loginRoute);
             } 
-            let userFromStorage = localStorage.getItem("currentUser");
-            if(userFromStorage) {
-                if (!$nuxt.$store.state.currentUser) {
+            else {
+                if (!$nuxt.$store.state.curEditRP) {
+                    let currendEditedFromLocalStorage = localStorage.getItem('currentEditedRP');
+                    if(!currendEditedFromLocalStorage) {
+                        currendEditedFromLocalStorage = new rememberPage();
+                        localStorage.setItem('currentEditedRP',JSON.stringify(currendEditedFromLocalStorage));
+                    } else {
+                        currendEditedFromLocalStorage = JSON.parse(currendEditedFromLocalStorage);
+                    }    
+
                     $nuxt.$store.commit("setState", {
-                        value: JSON.parse(localStorage.getItem("currentUser")),
-                        state: "currentUser",
+                        value: currendEditedFromLocalStorage,
+                        state: "curEditRP",
                     });
                 } 
-            } else {
-                $nuxt.$fire.auth.signOut();
-                return redirect('/auth/login');
+                let userFromStorage = localStorage.getItem("currentUser");
+                if(userFromStorage) {
+                    if (!$nuxt.$store.state.currentUser) {
+                        $nuxt.$store.commit("setState", {
+                            value: JSON.parse(localStorage.getItem("currentUser")),
+                            state: "currentUser",
+                        });
+                    } 
+                } else {
+                    $nuxt.$fire.auth.signOut();
+                    return redirect(loginRoute);
+                }
+                
             }
-            
         }
     }
 }
