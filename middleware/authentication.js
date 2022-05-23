@@ -10,6 +10,8 @@ export default function({ route, redirect }) {
     if (route.path == "/") {
         if (!$nuxt.$fire.auth.currentUser)
             return redirect('/auth/login');
+        else
+            return redirect('/rp/main/create');
     }
     if (route.path.includes("/rp/main")) {
         if (!$nuxt.$fire.auth.currentUser) 
