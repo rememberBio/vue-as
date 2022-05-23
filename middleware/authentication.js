@@ -50,16 +50,17 @@ export default function({ route, redirect }) {
                 if(userFromStorage) {
                     if (!$nuxt.$store.state.currentUser) {
                         $nuxt.$store.commit("setState", {
-                            value: JSON.parse(localStorage.getItem("currentUser")),
+                            value: JSON.parse(userFromStorage),
                             state: "currentUser",
                         });
                     } 
                 } else {
+                    console.log("sighouttt");
                     $nuxt.$fire.auth.signOut();
                     return redirect(loginRoute);
                 }
-                
             }
+            return route;
         }
     }
 }

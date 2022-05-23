@@ -59,7 +59,6 @@ export default {
       password.setAttribute("type", type);
     },
     async login() {
-      console.log("login");
       let email = this.email;
       let password = this.password;
       let self = this;
@@ -67,23 +66,23 @@ export default {
         .signInWithEmailAndPassword(email, password)
         .then( async (response) => {
           await self.getLoginUser(email,password);
-          self.$router.replace("/rp/main/create");
         })
         .catch((error) => {
           if(error.code == "auth/user-not-found")
-            this.errorMessage = "incorrect username or password";
+            this.errorMessage = "incorrect username";
+          else if(error.code == 'auth/wrong-password') 
+            this.errorMessage = "incorrect password";
           else
             this.errorMessage = error.message;
         });
     },
     async getLoginUser(email,password) {
+      const self = this;
       getUserByEmailAndPassword(email,password).then((response) => {
-        this.$store.commit("setState", {
-          value: response,
-          state: "currentUser",
-        });
-        response.password = '';
         localStorage.setItem("currentUser", JSON.stringify(response));
+        self.$router.push({
+            path: "/rp/main/create"
+        });
       });
     },
   },

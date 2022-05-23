@@ -34,41 +34,16 @@ export default {
       };
     },
     methods: {
-    reidrect: function () {
-      
-      if (!this.isSignIn) {
-        this.$router.push({          // I've tried push and replace
-          path: "/auth/login"
-        });
-      }
-    },
-   
   },
    created: async function () {
      //get user token
-    const updatedUser = JSON.parse(localStorage.getItem("currentUser"));
+    const updatedUser = this.$store.state.currentUser;
     if(updatedUser) {
       let email = updatedUser.email;
       let password = updatedUser.password;
       //this.token = await createToken(email,password);
     }
-    if(!this.$store.state.curEditRP) {
-      this.$store.commit("setState", {
-        value: new rememberPage(),
-        state: "curEditRP",
-      });
-    }
-    this.reidrect();
   },
-  computed: {
-    isSignIn: function () {
-      let currentUser = localStorage.getItem("currentUser");
-      if(currentUser!=null) {
-        currentUser = JSON.parse(currentUser);
-        return currentUser.isActive;
-      }
-      return false;
-    },
-  },
+  computed: {},
 }
 </script>

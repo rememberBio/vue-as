@@ -1418,7 +1418,6 @@ export default {
     let self = this;
     Object.keys(currentEditedRPAttrs).forEach( key => {
         let value = currentEditedRPAttrs[key];
-       
         if(key == 'parents' && value.length < 2)
         {
           self[key][0] = value[0];

@@ -153,8 +153,9 @@ export default {
           if(data.includes("Error, expected `email` to be unique")) {
             this.errorMessage = "This email is already registered in the system, please register with another email or go to the login screen";
           }
-          else
-          this.errorMessage = error.response.data;
+          else {
+            this.errorMessage = error.response.data;
+          }
         });
        
       //}

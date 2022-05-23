@@ -68,7 +68,7 @@ function copyArrayOfElementsProps(elementsArr,elementsArrToCopy) {
         const element = elementsArrToCopy[index];
         if(elementsArr == undefined) elementsArr = [];
         if(elementsArr.length < index + 1) elementsArr.push({});
-        if(typeof(element) == 'string' ) {
+        if( typeof(element) != 'object' ) {
             Vue.set(elementsArr, index, element)
         }
         else
