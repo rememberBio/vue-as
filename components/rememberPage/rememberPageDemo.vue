@@ -180,21 +180,34 @@
         <!-- Gallery -->
         <section class="main-gallery">
             <h2 class="main-heading">Gallery</h2>
+            
             <div class="wrap-content" id="galley-main-slider">
-                <div v-for="(item,indexItem) in currentRPAttrs.gallery.items" :key="indexItem">
-                    <div v-for="(album,indexAlbum) in item.albumes" :key="indexAlbum + '1'">
-                    <a class="disabled" >
-                        <div v-for="(image,indexPhoto) in album.images" :key="indexPhoto + '2'" class="wrap-image">
+                <VueSlickCarousel v-bind="settings" ref="carousel" :key="carouselKey">
+                    <template #prevArrow="">
+                        <button class="slide-arrow prev-arrow"><img src="@/assets/images/white-arrow.svg" /></button>
+                    </template>
+                    <template v-if="getOnlyFilesByType('',currentRPAttrs.gallery.items).length">
+                        <a v-for="(image,indexItem) in getOnlyFilesByType('image',currentRPAttrs.gallery.items)" :key="indexItem" class="wrap-image disabled">
                             <img class="lazy" :src="image" alt="" v-if="image">
-                        </div>
-                        <div class="wrap-video" v-for="(video,indexVideo) in album.videos" :key="indexVideo +'3'">
+                        </a>
+                        <a class="wrap-video disabled"  v-for="(video,indexItem) in getOnlyFilesByType('video',currentRPAttrs.gallery.items)" :key="indexItem">
                             <video class="lazy" :src="video" v-if="video">
                             </video>
-                        </div>
-                    </a>
-                    </div>
-                </div>
+                        </a>
+                    </template>
+                    <template v-else>
+                        <a class="wrap-image empty-image disabled"><img  src="@/assets/images/gray-image.svg" alt=""></a>
+                        <a class="wrap-video empty-image disabled"><img  src="@/assets/images/gray-image.svg" alt=""></a>
+                        <a class="wrap-image empty-image disabled"><img  src="@/assets/images/gray-image.svg" alt=""></a>
+                        <a class="wrap-video empty-image disabled"><img  src="@/assets/images/gray-image.svg" alt=""></a>
+                    </template>
+                    <template #nextArrow="">
+                       <button class="slide-arrow next-arrow"><img src="@/assets/images/white-arrow.svg" /></button>
+                    </template>
+                </VueSlickCarousel>
+              
             </div>
+           
             <div class="wrap-bottom-link-main">
                 <a class="main-link-main disabled">To The Gallery ></a>
             </div>
@@ -268,6 +281,8 @@
 <script>
 import moment from 'moment';
 import { gmapsMap } from "x5-gmaps";
+import VueSlickCarousel from 'vue-slick-carousel'
+import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 
 import '~/assets/css/editRememberPage.css';
 
@@ -279,20 +294,72 @@ export default {
         return this.$store.state.curEditRP.attributes;
     }
   },
-  components: { gmapsMap },
+  components: { gmapsMap,VueSlickCarousel },
   data() {
     return {
         numOfCandles: 0,
-        numOfFlowers: 0
+        numOfFlowers: 0,
+
+        //gallery slider
+        carouselKey: 0,
+        settings: {
+            slidesToShow: 2,
+            centerMode: false,
+            variableWidth: true,
+            autoplay: true,
+            arrows: true, 
+            responsive: [
+            {
+                breakpoint: 1100,
+                settings: {
+                    slidesToShow: 2
+                },
+            },
+            {
+                breakpoint: 767,
+                settings: {
+                    slidesToShow: 1
+                },
+            }]
+        }
     };
   },
   methods: {
       formatDate: function (value) {
         if(value)
             return moment(String(value)).format('DD/MM/YYYY');
+      },
+      getOnlyFilesByType(type,galleryItems) {
+        let files = [];
+        if(Array.isArray(galleryItems)){
+            galleryItems.forEach((item) => {
+                let albumes = item.albumes;
+                if(Array.isArray(albumes)) {
+                    albumes.forEach((album) => {
+                        if(type == 'image' || type == '') {
+                            let images = album.images;
+                            if(Array.isArray(images) && images.length) {
+                                files = files.concat(images);
+                            }
+                        }
+                        if(type == 'video' || type == '') {
+                            let videos = album.videos;
+                            if(Array.isArray(videos) && videos.length) {
+                                files = files.concat(videos);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        return files;
+      },
+      reInitSlider() {
+        this.carouselKey += 1;
       }
   },
   created: function () {
+    this.$eventBus.on('re-init-gallery-slider', () => this.reInitSlider(),this);
   },
  
 };

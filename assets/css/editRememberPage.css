@@ -37,7 +37,9 @@ section.hero.main-hero {
     height: calc(100vh - 91px);
     margin-top: 63px;
 }
-
+a.empty-image.disabled {
+    background: #CBCBCB;
+}
 .wrap-left-hero {
     width: 100%;
     display: flex;
@@ -227,9 +229,11 @@ section.main-candles-and-flowers {
     padding-bottom: 3px;
     margin-bottom: 0;
 }
-
-#mainPage section .wrap-content {
+#mainPage section .wrap-content .slick-slider,#mainPage section .wrap-content {
     padding: 0px 30px;
+}
+div#galley-main-slider {
+    padding: 0 !important;
 }
 
 section.main-about .text {
@@ -360,7 +364,7 @@ a.main-link-main:hover {
 section.main-gallery h2 {
     color: white !important;
     border-color: white !important;
-    margin-bottom: 32px;
+    margin-bottom: 32px !important;
 }
 
 section.main-gallery {
@@ -373,7 +377,7 @@ section.main-gallery img,section.main-gallery video {
 }
 
 div#galley-main-slider {
-    margin-bottom: 61px;
+    margin-bottom: 61px !important;
     position: relative;
 }
 
@@ -384,7 +388,7 @@ button.slide-arrow {
     background: transparent;
     border: none;
     position: absolute;
-    left: -15px;
+    left: -5px;
     top: 107px;
     padding: 0;
     cursor: pointer;
@@ -520,8 +524,8 @@ section.main-tomb .wrap-address .name {
 }
 /* END tomb section */
 div#galley-main-slider a {
-    width: max-content;
-    margin: 0px 15px;
+    width: max-content !important;
+    margin: 0px 10px;
 }
 
 .wrap-form-footer {
@@ -765,7 +769,7 @@ div#galley-main-slider a {
     }
 
     div#galley-main-slider {
-        margin-bottom: 39px;
+        margin-bottom: 39px !important;
         max-width: 80%;
     }
     button.slide-arrow {

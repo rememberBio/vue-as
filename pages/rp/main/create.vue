@@ -1321,7 +1321,8 @@ export default {
         }
         this.updateCurrentEditedRPAttributes(attrName,this[attrName]);
         this.renderDisplay(this,attrName);
-        this.stopLoader();
+        this.$eventBus.emit('re-init-gallery-slider');
+        this.stopLoader();        
       }).catch((err)=>{
         this.stopLoader();
       })
@@ -1363,7 +1364,7 @@ export default {
           this.updateCurrentEditedRPAttributes(attrName,this[attrName]);
           this.renderDisplay(self,attrName);
           this.stopLoader();
-            
+          this.$eventBus.emit('re-init-gallery-slider');
 
         }).catch((err)=>{
           switch (attrName) {
