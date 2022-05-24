@@ -1,0 +1,164 @@
+/* Footer */
+
+
+footer.site-footer.remmember-item-footer {
+    height: 163px;
+    flex-direction: column;
+    padding-left: calc(15% + 268px + 5%);
+    padding-right: 15%;
+}
+
+footer.site-footer.remmember-item-footer {
+    height: 135px;
+    flex-direction: column;
+    padding-left: calc(15% + 268px + 5%);
+    padding-right: 15%;
+    background-color: var(--custom-blue);
+    color: var(--custom-white);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    font-size: 20px;
+    width: 100%;
+}
+
+footer.site-footer.remmember-item-footer>.text {
+    margin-bottom: 10px;
+    margin-top: 23px;
+    width: 360px;
+}
+
+.wrap-form-footer {
+    height: 40px;
+}
+
+.wrap-form-footer * {
+    height: 45px;
+}
+
+form#registerForm {
+    display: flex;
+    width: 100%;
+}
+
+.remmber-footer-count-of-remmbers {
+    box-shadow: 3px -3px 6px #00000029;
+    position: absolute;
+    height: 180px;
+    text-align: center;
+    background-color: var(--custom-light-blue);
+    display: flex;
+    flex-direction: column;
+    padding: 85px 21px 37px;
+    border-radius: 20px 20px 0px 0px;
+    bottom: 0;
+    width: 220px;
+    left: 15%;
+    justify-content: center;
+}
+
+.remmber-footer-count-of-remmbers .text {
+    color: var(--custom-blue);
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: -15px;
+}
+
+div#page {
+    min-height: 100vh;
+    position: relative;
+}
+
+.remmber-footer-count-of-remmbers .num {
+    font-size: 50px;
+    word-break: break-all;
+    font-weight: bold;
+    line-height: 45px;
+    margin-bottom: 17px;
+}
+
+form#registerForm input[type=email] {
+    width: 80%;
+    padding: 15px;
+    border-radius: 15px 0px 0px 15px;
+    color: var(--custom-blue);
+}
+
+
+form#registerForm button[type=submit] { width: 33%;border:none;color: white;background-color: var(--custom-light-blue);height: 100%;cursor: pointer;border-radius: 0px 15px 15px 0px;}
+
+form#registerForm input[type=email]:focus {
+    border: none;
+}
+
+form#registerForm input[type=email]:focus {
+    border: none !important;
+    box-shadow: none;
+    outline:none;
+}
+
+
+form#registerForm input[type=email]::placeholder {
+    color: var(--custom-blue);
+}
+
+footer.site-footer.remmember-item-footer>.wrap-form-footer {
+    width: inherit;
+}
+
+
+form#registerForm button[type=submit] img {
+    width: auto;
+    height: 100%;
+}
+
+@media screen and (min-width: 1800px) { 
+    form#registerForm button[type=submit] img {
+        width: auto;
+        height: 100%;
+        max-width: unset;
+    }
+    .menu-menu-1-container {
+        margin: 0px 5%;
+    }
+}
+
+@media screen and (max-width:767px) {
+    form#registerForm input[type=email] {
+        padding: 12px;
+    }
+    form#registerForm input[type=submit] {font-size: 11px;}
+
+    footer.site-footer.remmember-item-footer.main-tab {
+        padding-left: calc(2% + 94px + 9%);
+        padding-right: 2%;
+    }
+
+    .remmber-footer-count-of-remmbers {
+        left: 2%;
+        max-width: 114px;
+        padding-top: 0;
+        justify-content: center;
+        padding-bottom: 0;
+    }
+
+    .remmber-footer-count-of-remmbers .num {
+        line-height: 30px;
+    }
+    form#registerForm button[type=submit] {
+        width: 47%;
+        padding-top: 0;
+        padding-bottom: 0;
+        padding-left: 6px;
+        padding-right: 6px;
+        display: flex;
+        align-items: center;
+    }
+    form#registerForm button[type=submit] img {
+        width: 100%;
+        height: auto !important;
+        max-width: unset;
+    }
+}

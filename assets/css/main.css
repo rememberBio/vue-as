@@ -243,7 +243,17 @@ textarea {
 	line-height: 1.15;
 	margin: 0;
 }
+select {
+    appearance: none;
+	-moz-appearance: none;
+    -webkit-appearance: none;
+    background: url(@/assets/images/createPage/arrow-bar-down.svg) no-repeat right 20px center white;
+}
 
+input[type=date]::-webkit-calendar-picker-indicator { 
+	-webkit-appearance: none;
+	background: url(@/assets/images/date-picker.svg) no-repeat white; 
+}
 /**
  * Show the overflow in IE.
  * 1. Show the overflow in Edge.
@@ -1062,6 +1072,13 @@ span.breadcrumb_last,p#breadcrumbs a:last-of-type+span {color: #9F9F9F;}
 }
 .font-16 {
 	font-size: 16px;
+}
+a.disabled {
+	pointer-events: none;
+	cursor: default;
+}
+.color-black {
+	color: black !important;
 }
 .wrap-loader {position: fixed;background-color: rgba(255,255,255,1);z-index: 1;width: 29%;height: 100%;display: flex;align-items: center;justify-content: center;}
 .loader {

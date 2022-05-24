@@ -62,6 +62,7 @@
                 <div
                   id="unique-element-brief"
                   class="custom-editor"
+                  :class="{'color-black' : brief}"
                   @input="changerememberPageState('brief', $event)"
                   name="brief"
                   contenteditable
@@ -80,6 +81,7 @@
                 <div
                   id="unique-element-about"
                   class="custom-editor rp-scroll"
+                  :class="{'color-black' : about}"
                   @input="changerememberPageState('about', $event)"
                   name="about"
                   contenteditable
@@ -96,6 +98,7 @@
                 <input
                   type="date"
                   name="dateOfBirth"
+                  :class="{'color-black' : dateOfBirth}"
                   v-model="dateOfBirth"
                   @change="changerememberPageState('dateOfBirth', $event)"
                 />
@@ -108,6 +111,7 @@
               <div class="wrap-input">
                 <input
                   type="date"
+                  :class="{'color-black' : dateOfDeath}"
                   name="dateOfDeath"
                   v-model="dateOfDeath"
                   @change="changerememberPageState('dateOfDeath', $event)"
@@ -132,7 +136,7 @@
               <!-- Spouse -->
               <label class="field-label"> Wife/ Husband </label>
               <div class="wrap-field">
-                <div class="wrap-input">
+                <div class="wrap-input wrap-select">
                   <select
                     name="spouse"
                     id="spouse"
@@ -356,13 +360,13 @@
                     <div
                       :id="'unique-element-stories-' + index"
                       class="custom-editor rp-scroll "
+                      :class="{'color-black' : story.content}"
                       @input="changerememberPageState('stories', $event)"
                       :data-index="index"
                       name="story-text"
                       contenteditable
                     >
-                      <template v-if="story.content" :v-html="story.content">  The Story </template>
-                      <template v-else>  The Story </template>
+                    The Story
                     </div>
                    
                   </div>
@@ -373,6 +377,7 @@
                     <input
                       type="date"
                       name="story-date"
+                      :class="{'color-black' : story.date}"
                       placeholder=""
                       :data-index="index"
                       v-model="stories[index].date"
@@ -678,7 +683,8 @@
                   </label>
                   <div class="image-container">
                     <div v-if="place.image" class="images">
-                      <div class="background-image" :style="'background-image:url(' + place.image +  ')'"></div>
+                      
+                      <div class="background-image" :style="'background-image:url(' + place.image + ')'"></div>
                       <a
                         href=""
                         class="remove"
@@ -736,6 +742,7 @@
                     <div
                       :id="'unique-element-placesOfCommemoration-' + index"
                       class="custom-editor rp-scroll "
+                      :class="{'color-black' : placesOfCommemoration[index].textAbout}"
                       @input="
                         changerememberPageState('placesOfCommemoration', $event)
                       "
@@ -1097,13 +1104,23 @@ export default {
 
       });
     },
+    setPlace() {
+      const place = this.autocomplete.getPlace();
+      // Set end point to selected address
+      if (place.geometry) {
+        let name = place.formatted_address;
+        this.grave.address.location = { lat: place.geometry.location.lat(),lng: place.geometry.location.lng() };
+        this.grave.address.name = name;
+        this.updateCurrentEditedRPAttributes("grave",this.grave);
+      }
+    },
     status(validation) {
       return {
         error: validation.$error,
         dirty: validation.$dirty,
       };
     },
-    createRememberPage: function () {
+    createRememberPage () {
       //if (this.checkValidForm()) {
         // eslint-disable-next-line no-console
         console.log("hi");
@@ -1119,7 +1136,8 @@ export default {
       if (
         attributeName == "brief" ||
         attributeName == "about" ||
-        attributeName == "stories"
+        attributeName == "stories" || 
+        attributeName == 'placesOfCommemoration'
       ) {
         let innerContent;
         if (
@@ -1147,35 +1165,12 @@ export default {
             this[attributeName] = "";
           }
         } else {
-          let tmpInnerContent = innerContent;
+
           innerContent = innerContent
             .replaceAll("<div>", "<br>")
             .replaceAll("</div>", "");
 
           if (attributeName == "brief" )  { 
-            /*let lines = innerContent.split('<br>');
-            if(lines.length > 4 ) {
-              tmpInnerContent = tmpInnerContent.replaceAll("<div>", "<br>")
-              .replaceAll("</div>", "<tmp>");
-              let linesTmp = tmpInnerContent.split('<br>');
-              innerContent = linesTmp[0] +  '<br>' +  linesTmp[1] +  '<br>'+  linesTmp[2] +  '<br>' +  linesTmp[3];
-              document.getElementById(
-                  "unique-element-" + attributeName
-                ).innerHTML = innerContent.replaceAll( "<br>","<div>")
-              .replaceAll("<tmp>","</div>");
-            }
-            else if(innerContent.length > 250)
-            {
-              tmpInnerContent = tmpInnerContent.replaceAll("<div>", "<br>")
-              .replaceAll("</div>", "<tmp>");
-              let innerContent = tmpInnerContent.substr(0,250);
-              innerContent = innerContent.substr(0,250);
-                document.getElementById(
-                  "unique-element-" + attributeName
-                ).innerHTML = innerContent .replaceAll( "<br>","<div>")
-              .replaceAll("<tmp>","</div>");
-            }
-            innerContent = innerContent.replace("<tmp>","");*/
             this[attributeName] = innerContent;
           } 
           else {
@@ -1291,16 +1286,6 @@ export default {
         !this["show" + desc + "FieldGroups"];
       if(desc == 'Grave' && this["show" + desc + "FieldGroups"]) this.setGoogleMap();
     },
-    setPlace() {
-      const place = this.autocomplete.getPlace();
-      // Set end point to selected address
-      if (place.geometry) {
-        let name = place.formatted_address;
-        this.grave.address.location = { lat: place.geometry.location.lat(),lng: place.geometry.location.lng() };
-        this.grave.address.name = name;
-        this.updateCurrentEditedRPAttributes("grave",this.grave);
-      }
-    },
     updateStoryContentDisplay(storyIndex) {
       if(storyIndex >= 0 && this.stories.length -1 >= storyIndex) {
           document.getElementById(
@@ -1308,10 +1293,11 @@ export default {
           ).innerHTML = this.stories[storyIndex].content;
       }
     },
+
+    //files integation with s3
     async removeFileFunc(event,fileUrl,attrName,fileType,fileIndex,itemIndex,albumIndex) {
       event.preventDefault();
       this.playLoader('Delete...');
-      let self = this;
       await removeFile(fileUrl).then((res)=> {
         switch (attrName) {
             case 'stories':
@@ -1514,9 +1500,21 @@ export default {
   width: max-content;
 }
 .rp-link {
-  /**
-  link icon
-   */
+  position: relative;
+}
+.rp-link input {
+  padding-right: 40px;
+}
+.rp-link::after {
+    content: "";
+    background-image: url(@/assets/images/createPage/link.svg);
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    position: absolute;
+    top: 29%;
+    background-size: contain;
+    right: 20px;
 }
 .wrap-loop {margin-bottom: 10px;}
 .remove {

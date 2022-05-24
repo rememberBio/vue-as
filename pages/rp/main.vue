@@ -9,7 +9,9 @@
         <SidebarFooter />
     </div>
     <div class="right-side">
+        <RPHeader/>
         <rememberPageDemo />
+        <RPFooter/>
     </div>
 
   </div>
@@ -19,6 +21,8 @@
 import rememberPageDemo from "../../components/rememberPage/rememberPageDemo.vue";
 import SidebarFooter from '../../components/rememberPage/sidebarFooter.vue';
 import SidebarHeader from '../../components/rememberPage/sidebarHeader.vue';
+import RPFooter from '../../components/rememberPage/rememberPageFooter.vue';
+import RPHeader from '../../components/rememberPage/rememberPageHeader.vue';
 import Loader from '../../components/general/loader.vue';
 import { rememberPage } from '../../models/rememberPage';
 
@@ -27,7 +31,7 @@ import "@/assets/css/mainRememberPage.css";
 
 export default {
     name:"CreateRememebrpMain",
-    components: { rememberPageDemo,SidebarHeader,SidebarFooter,Loader },
+    components: { rememberPageDemo,SidebarHeader,SidebarFooter,Loader,RPFooter,RPHeader },
     data() {
       return {
         token: null,

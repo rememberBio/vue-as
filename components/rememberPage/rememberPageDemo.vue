@@ -10,7 +10,7 @@
                     <h1 class="name" v-else>Full Name Of The Deceased</h1>
                     <span class="desc" v-if="currentRPAttrs.brief" v-html="currentRPAttrs.brief"></span>
                     <span class="desc" v-else>a few words about him.</span> 
-                    <a href="">Read More >></a>
+                    <a class="disabled">Read More >></a>
                 </div>
                  <img 
                   v-if="currentRPAttrs.mainImg" 
@@ -29,7 +29,7 @@
                         <input type="email" name="email" value="" id="email" placeholder="enter your email" >
                         <button type="submit">
                             <img 
-                            :src="require('@/assets/images/logo.svg')"
+                            :src="require('@/assets/images/logo-form.svg')"
                             alt=""
                             style="width:100%">
                         </button>
@@ -43,7 +43,7 @@
                 <h1 class="name" v-else>Full Name Of The Deceased</h1>
                 <span class="desc" v-if="currentRPAttrs.brief">{{currentRPAttrs.brief}}</span>
                 <span class="desc" v-else>a few words about him.</span> 
-                <a href="">Read More >></a>
+                <a class="disabled">Read More >></a>
             </div>
              <img 
                   v-if="currentRPAttrs.mainImg" 
@@ -60,7 +60,7 @@
       <!-- END hero -->
       <!-- cf -->
       <section class="main-candles-and-flowers">
-        <a href="" class="write-candles-flowers-btn">
+        <a class="write-candles-flowers-btn disabled">
             <img :src="require('@/assets/images/createPage/candle.svg')" alt="">
             <div class="right-btn">
                 <span v-if="numOfCandles" class="num">{{numOfCandles}}</span>
@@ -70,7 +70,7 @@
                 <div class="main-cf-btn pointer">light a candle</div>
             </div>
         </a>
-        <a href="<?php echo $url . '/?tab=candle-and-flowers' ?>" class="write-candles-flowers-btn">
+        <a class="write-candles-flowers-btn disabled">
             <img :src="require('@/assets/images/createPage/flower.svg')" alt="">
             <div class="right-btn">
                 <span v-if="numOfCandles" class="num">{{numOfFlowers}}</span>
@@ -88,13 +88,15 @@
         <div class="wrap-content">
             <p class="text" v-html="currentRPAttrs.about"></p>
             <div class="wrap-dates">
-                <a href="" class="date">
+                <a  class="date disabled">
                     <span class="date-desc">Date of birth:</span>
-                    <span class="year">{{formatDate(currentRPAttrs.dateOfBirth)}}</span>
+                    <span class="year" v-if="currentRPAttrs.dateOfBirth">{{formatDate(currentRPAttrs.dateOfBirth)}}</span>
+                    <span class="year" v-else>00/00/0000</span>
                 </a>
-                <a href="" class="date">
+                <a class="date disabled">
                     <span class="date-desc">Date of death:</span>
-                    <span class="year">{{formatDate(currentRPAttrs.dateOfDeath)}}</span>
+                    <span class="year" v-if="currentRPAttrs.dateOfDeath">{{formatDate(currentRPAttrs.dateOfDeath)}}</span>
+                    <span class="year" v-else>00/00/0000</span>
                 </a>
             </div>
             <div class="second-part">
@@ -133,7 +135,7 @@
                     <h3>Children:</h3>
                     <div v-if="currentRPAttrs.children&&currentRPAttrs.children.length" class="wrap-children flex">
                        <div v-for="(child,index) in currentRPAttrs.children" :key="index">
-                            <a v-if="child.rememberPageLink" :href="child.rememberPageLink">
+                            <a  v-if="child.rememberPageLink" :href="child.rememberPageLink">
                                 <span>{{child.name}}</span>
                             </a>
                             <span v-else>{{child.name}}</span>
@@ -143,7 +145,7 @@
             </div>
         </div>
         <div class="wrap-bottom-link-main">
-            <a href="" class="main-link-main">Read More ></a>
+            <a  class="main-link-main disabled">Read More ></a>
         </div>
         </section>
       <!-- End about -->
@@ -152,7 +154,7 @@
             <h2 class="main-heading">Stories</h2>
             <div class="wrap-content" 
                 v-if="currentRPAttrs.stories && currentRPAttrs.stories.length > 0 && (currentRPAttrs.stories[0].content || currentRPAttrs.stories[0].date || currentRPAttrs.stories[0].witnessName || currentRPAttrs.stories[0].image) ">
-                <a href="" class="wrap-story" 
+                <a class="wrap-story disabled" 
                 v-for="(story, index) in currentRPAttrs.stories.slice(0, 4)"
                 :key="index">
                     <div>
@@ -162,7 +164,7 @@
                 </a>
             </div>
             <div class="wrap-content" v-else>
-                <a href="" class="wrap-story" 
+                <a  class="wrap-story disabled" 
                 v-for="index in 4" :key="index">
                     <div>
                         <p class="short-text">Write a story about your loved onel</p>
@@ -171,7 +173,7 @@
                 </a>
             </div>
             <div class="wrap-bottom-link-main">
-                <a href="" class="main-link-main">More Stories ></a>
+                <a  class="main-link-main disabled">More Stories ></a>
             </div>
         </section>
         <!-- End stories -->
@@ -181,7 +183,7 @@
             <div class="wrap-content" id="galley-main-slider">
                 <div v-for="(item,indexItem) in currentRPAttrs.gallery.items" :key="indexItem">
                     <div v-for="(album,indexAlbum) in item.albumes" :key="indexAlbum + '1'">
-                    <a href="" >
+                    <a class="disabled" >
                         <div v-for="(image,indexPhoto) in album.images" :key="indexPhoto + '2'" class="wrap-image">
                             <img class="lazy" :src="image" alt="" v-if="image">
                         </div>
@@ -194,7 +196,7 @@
                 </div>
             </div>
             <div class="wrap-bottom-link-main">
-                <a href="" class="main-link-main">To The Gallery ></a>
+                <a class="main-link-main disabled">To The Gallery ></a>
             </div>
         </section>
         <!-- End Gallery -->
@@ -203,7 +205,7 @@
             <h2 class="main-heading">Places Of Commemoration</h2>
             <div class="wrap-content"
             v-if="currentRPAttrs.placesOfCommemoration && currentRPAttrs.placesOfCommemoration.length > 0 && (currentRPAttrs.placesOfCommemoration[0].name || currentRPAttrs.placesOfCommemoration[0].address || currentRPAttrs.placesOfCommemoration[0].shortDesc || currentRPAttrs.placesOfCommemoration[0].textAbout || currentRPAttrs.placesOfCommemoration[0].image) ">
-                <a href="" class="wrap-place" 
+                <a class="wrap-place disabled" 
                 v-for="(place, index) in currentRPAttrs.placesOfCommemoration.slice(0, 4)"
                 :class="{ notHaveImage:!place.image }"
                 :key="index">
@@ -215,7 +217,7 @@
                 </a>
             </div>
              <div class="wrap-content empty-places" v-else>
-                <a href="" class="wrap-place" 
+                <a  class="wrap-place disabled" 
                 v-for="index in 4" :key="index">
                     <img class="lazy" src="" alt="">
                     <div class="wrap-place-bottom">
@@ -225,7 +227,7 @@
                 </a>
             </div>
             <div class="wrap-bottom-link-main">
-                <a href="" class="main-link-main">View More ></a>
+                <a  class="main-link-main disabled">View More ></a>
             </div>
         </section>
         <!-- End places -->
@@ -249,7 +251,7 @@
                 </div>
                 <div class="custom-acf-map" v-else>
                 </div>
-                <a href="" class="wrap-address">
+                <a class="wrap-address disabled">
                     <span class="name" v-if="currentRPAttrs.grave.nameOfCemetery">{{ currentRPAttrs.grave.nameOfCemetery }}</span>
                     <span class="name" v-else >Place of the tomb</span>
                     <span class="street" v-if="currentRPAttrs.grave.address.name">{{currentRPAttrs.grave.address.name}}</span>

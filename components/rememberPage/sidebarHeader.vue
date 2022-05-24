@@ -2,7 +2,7 @@
  <div class="sidebar-header">
     <div class="blue-sidebar flex">
       <div class="logo">
-        <img :src="require('@/assets/images/logo.png')"  alt="">
+        <img :src="require('@/assets/images/white-logo.png')"  alt="">
       </div>
       <div class="wrap-icons flex">
         <a class="wrap-icon profile flex flex-col">
