@@ -1,83 +1,84 @@
 <template>
-  <div class="page-container">
-    <Header />
-    <div class="create-password">
+  <div class="reset-password auth-page">
+    <h1>CREATE PASSWORD</h1>
+    <div class="auth-link">Continue to sign up, or <nuxt-link to="/auth/login">login</nuxt-link> instead</div>
+    <div class="wrap-auth">
       <form @submit.prevent="createPassword" v-if="!isLinkError">
-        <h3>Create your password</h3>
-
-        <label>New Password</label>
-        <div class="wrap-input">
-          <input
-            type="password"
-            name="password"
-            v-model="password"
-            :id="'password_field' + 1"
-            class="password-field"
-          />
-          <!-- <img
-            class="show-password"
-            alt="edit icon"
-            :src="require('@/assets/images/blue_show_password.svg')"
-            @click="(event) => showPassword(event, 1)"
-          /> -->
+        <div class="wrap-field">
+          <label>New Password</label>
+          <div class="wrap-input">
+            <input
+              type="password"
+              name="password"
+              v-model="password"
+              :id="'password_field' + 1"
+              class="password-field"
+            />
+            <img
+              class="show-password"
+              alt="edit icon"
+              :src="require('@/assets/images/show-password.svg')"
+              @click="(event) => showPassword(event, 1)"
+            />
+          </div>
+          <!-- <div
+            class="input-error"
+            v-for="(error, errorIndex) in v$.password.$errors"
+            :key="errorIndex"
+          >
+            {{ error.$message }}
+          </div> -->
         </div>
-        <!-- <div
-          class="input-error"
-          v-for="(error, errorIndex) in v$.password.$errors"
-          :key="errorIndex"
-        >
-          {{ error.$message }}
-        </div> -->
-
-        <label> Confirm New Password</label>
-        <div class="wrap-input">
-          <input
-            type="password"
-            name="confirm password"
-            v-model="confirmPassword"
-            :id="'password_field' + 2"
-            class="password-field"
-          />
-          <!-- <img
-            class="show-password"
-            alt="edit icon"
-            :src="require('@/assets/images/blue_show_password.svg')"
-            @click="(event) => showPassword(event, 2)"
-          /> -->
+        <div class="wrap-field">
+          <label> Confirm New Password</label>
+          <div class="wrap-input">
+            <input
+              type="password"
+              name="confirm password"
+              v-model="confirmPassword"
+              :id="'password_field' + 2"
+              class="password-field"
+            />
+            <img
+              class="show-password"
+              alt="edit icon"
+              :src="require('@/assets/images/show-password.svg')"
+              @click="(event) => showPassword(event, 2)"
+            /> 
+          </div>
+          <!-- <div
+            class="input-error"
+            v-for="(error, errorIndex) in v$.confirmPassword.$errors"
+            :key="errorIndex"
+          >
+            {{ error.$message }}
+          </div> -->
         </div>
-        <!-- <div
-          class="input-error"
-          v-for="(error, errorIndex) in v$.confirmPassword.$errors"
-          :key="errorIndex"
-        >
-          {{ error.$message }}
-        </div> -->
         <button type="submit" class="">Save</button>
       </form>
       <div v-else>{{isLinkError}}</div>
       <div class="form-terms">
         <div class="form-term">
-          <!-- <img
+          <img
             class="term-icon"
-            :src="require('@/assets/images/form-term-icon.svg')"
-          /> -->
+            :src="require('@/assets/images/fill-rounded-v-icon.svg')"
+          /> 
           <p>At least 8 characters</p>
         </div>
         <div class="form-term">
-          <!-- <img
+          <img
             class="term-icon"
-            :src="require('@/assets/images/form-term-icon.svg')"
-          /> -->
+            :src="require('@/assets/images/fill-rounded-v-icon.svg')"
+          /> 
           <p>
-            A mixture of both uppercase and lowercase letters A mixture of
-            letters and numbers
+           A mixture of both uppercase and lowercase letters A mixture of letters and numbers
           </p>
         </div>
         <div class="form-term">
-          <!-- <img
+          <img
             class="term-icon"
-            :src="require('@/assets/images/form-term-icon.svg')"
-          /> -->
+            :src="require('@/assets/images/fill-rounded-v-icon.svg')"
+          /> 
           <p>Inclusion of at least one special character, e.g., ! @ # ? ]</p>
         </div>
       </div>
@@ -85,7 +86,6 @@
   </div>
 </template>
 <script>
-import Header from "~/components/templateParts/header.vue";
 //import useVuelidate from "vuelidate/core";
 //import { required, minLength, sameAs } from "vuelidate/validators";
 import { updatePasswordInNode } from "~/services/userService.js";
@@ -95,7 +95,7 @@ import { User } from "../../models/user";
 
 export default {
   name: "CreatePassword",
-  components: { Header },
+  components: {  },
   data() {
     return {
       password: "",
@@ -121,10 +121,10 @@ export default {
       let type;
       if (password.getAttribute("type") === "password") {
         type = "text";
-        //event.target.src = require("@/assets/images/blue_hide_password.svg");
+        event.target.src = require("@/assets/images/hide-password.svg");
       } else {
         type = "password";
-        //event.target.src = require("@/assets/images/blue_show_password.svg");
+        event.target.src = require("@/assets/images/show-password.svg");
       }
       password.setAttribute("type", type);
     },
@@ -145,7 +145,7 @@ export default {
               localStorage.removeItem("emailVerified");
 
               this.$router.push({
-                path: "/rp/main/create"
+                path: "/rp/create"
               });
 
             });
@@ -208,64 +208,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.create-password {
-  margin: auto;
-  max-width: 808px;
-  color: var(--custom-blue);
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-.create-password h3 {
-  font-size: 30px;
-  font-weight: 600;
-  margin-bottom: 30px;
-  margin-top: 30px;
-}
-.create-password label {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 30px;
-  margin-bottom: 7px;
-}
-.form-terms {
-  font-size: 18px;
-  margin-top: 105px;
-}
-.form-terms p {
-  max-width: 283px;
-  display: inline-block;
-}
-.form-terms .form-term {
-  margin-bottom: 32px;
-  display: flex;
-  align-items: flex-start;
-}
-.form-terms .term-icon {
-  margin-right: 17px;
-  margin: 5px 17px 0 0;
-}
-button[type="submit"] {
-  width: 190px;
-  margin-left: unset;
-  margin-top: 30px;
-}
-.wrap-input {
-  margin-bottom: 10px;
-  padding: 0 20px;
-  box-sizing: border-box;
-  border: solid 1px var(--custom-blue);
-  border-radius: 11px;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-}
-input,
-input:focus,
-input:focus-visible {
-  border: unset;
-  outline: none;
-}
-</style>

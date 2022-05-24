@@ -4,7 +4,7 @@ import { rememberPage } from "~/models/rememberPage";
 const loginRoute = "/auth/login";
 const registerRoute = "/auth/register";
 //remember pages
-const createPageRoute = "/rp/main/create";
+const createPageRoute = "/rp/create";
 
 
 
@@ -26,7 +26,7 @@ export default function({ route, redirect }) {
         if (route.path == "/") {
             return redirect(createPageRoute);
         }
-        else if (route.path.includes("/rp/main")) {
+        else if (route.path.includes("/rp")) {
             if (!$nuxt.$fire.auth.currentUser || emailVerified) 
             {
                 return redirect(loginRoute);

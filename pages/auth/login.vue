@@ -1,44 +1,52 @@
 <template>
-  <div class="page-container">
-    <Header />
-    <div class="login">
-      <div class="register-link" >New to Remember?  <NuxtLink to="/auth/register" > Create an Account</NuxtLink></div>
-      <form @submit.prevent="login">
-      
-
-        <label class="form-label">Email Address</label>
-        <div class="wrap-input">
-          <input
-            type="text"
-            name="email"
-            v-model="email"/>
-         
+    <div class="login auth-page">
+      <h1>LOGIN</h1>
+      <div class="auth-link" >Log in to continue, or  <NuxtLink to="/auth/register" >sign up</NuxtLink> instead</div>
+      <div class="wrap-auth">
+        <form @submit.prevent="login">
+        
+          <div class="wrap-field">
+            <label class="form-label">Email Address</label>
+            <div class="wrap-input">
+              <input
+                type="text"
+                name="email"
+                placeholder="Email Address"
+                v-model="email"/>
+            </div>
+          </div>
+          <div class="wrap-field">
+            <label class="form-label"> Password</label>
+            <div class="wrap-input wrap-password">
+              <input
+                type="password"
+                name="password"
+                :id="'password_field' + 1"
+                class="password-field"
+                v-model="password"
+                placeholder="Password"
+              />
+              <img
+              class="show-password"
+              alt="edit icon"
+              :src="require('@/assets/images/show-password.svg')"
+              @click="(event) => showPassword(event, 1)"
+              />
+            </div>
+          </div>
+          <button type="submit" class="">Log In</button>
+        </form>
+        <div v-if="errorMessage">{{errorMessage}}</div>
         </div>
-       
-
-        <label class="form-label"> Password</label>
-        <div class="wrap-input wrap-password">
-          <input
-            type="password"
-            name="password"
-            :id="'password_field' + 1"
-            class="password-field"
-             v-model="password"
-          />
-        </div>
-      
-        <button type="submit" class="">Log In</button>
-      </form>
-     <div v-if="errorMessage">{{errorMessage}}</div>
-    </div>
-  </div>
+      </div>
 </template>
+
 <script>
-import Header from "~/components/templateParts/header.vue";
+
 import { getUserByEmailAndPassword } from "~/services/userService.js";
 
 export default {
-  components: { Header },
+  components: {  },
   name: "login",
   data() {
     return {
@@ -53,8 +61,10 @@ export default {
       let type;
       if (password.getAttribute("type") === "password") {
         type = "text";
+        event.target.src = require("@/assets/images/hide-password.svg");
       } else {
         type = "password";
+        event.target.src = require("@/assets/images/show-password.svg");
       }
       password.setAttribute("type", type);
     },
@@ -81,37 +91,10 @@ export default {
       getUserByEmailAndPassword(email,password).then((response) => {
         localStorage.setItem("currentUser", JSON.stringify(response));
         self.$router.push({
-            path: "/rp/main/create"
+            path: "/rp/create"
         });
       });
     },
   },
 };
 </script>
-
-<style scoped>
-.login {
-  margin: auto;
-  max-width: 808px;
-  color: var(--custom-blue);
-}
-
-.register-link {
-  margin-top: 10px;
-  margin-bottom: 47px;
-  font-size: 20px;
-  font-weight: 500;
-}
-.register-link a {
-  text-decoration: underline;
-  color: var(--custom-blue);
-}
-button[type="submit"] {
-  margin-top: 70px;
-}
-.forgot-password {
-  margin-top: 10px;
-  text-align: right;
-  color: var(--custom-pink);
-}
-</style>

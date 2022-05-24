@@ -18,15 +18,15 @@
 </template>
 
 <script>
-import rememberPageDemo from "../../components/rememberPage/rememberPageDemo.vue";
-import SidebarFooter from '../../components/rememberPage/sidebarFooter.vue';
-import SidebarHeader from '../../components/rememberPage/sidebarHeader.vue';
-import RPFooter from '../../components/rememberPage/rememberPageFooter.vue';
-import RPHeader from '../../components/rememberPage/rememberPageHeader.vue';
-import Loader from '../../components/general/loader.vue';
-import { rememberPage } from '../../models/rememberPage';
+import rememberPageDemo from "../components/rememberPage/rememberPageDemo.vue";
+import SidebarFooter from '../components/rememberPage/sidebarFooter.vue';
+import SidebarHeader from '../components/rememberPage/sidebarHeader.vue';
+import RPFooter from '../components/rememberPage/rememberPageFooter.vue';
+import RPHeader from '../components/rememberPage/rememberPageHeader.vue';
+import Loader from '../components/general/loader.vue';
+import { rememberPage } from '../models/rememberPage';
 
-import { createToken } from '../../services/userService';
+import { createToken } from '../services/userService';
 import "@/assets/css/mainRememberPage.css";
 
 export default {

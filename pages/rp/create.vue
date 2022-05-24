@@ -897,12 +897,12 @@
 </template>
 <script>
 
-import { createrememberPageService } from "../../../services/rememberPageService";
-import { rememberPage } from "../../../models/rememberPage";
-import { uploadFile, removeFile, removeFiles } from '../../../services/s3Service';
+import { createrememberPageService } from "../../services/rememberPageService";
+import { rememberPage } from "../../models/rememberPage";
+import { uploadFile, removeFile, removeFiles } from '../../services/s3Service';
 import { gmaps, gmapsMap } from "x5-gmaps";
 
-import dates from "../../../functions/dates";
+import dates from "../../functions/dates";
 
 //vuelidate
 /*import useVuelidate from "vuelidate/core";

@@ -1,0 +1,46 @@
+div#wrap-auth {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: url(/_nuxt/assets/images/auth/auth-background-image.png) no-repeat center white;
+    background-size: cover;
+    color: white;
+}
+.wrap-auth {background: white;box-shadow: 0px 1px 15px #00000029;
+border-radius: 23px;padding: 41px 37px;}
+
+.auth-page {width: 50%;height: 100%;padding-top: 76px;}
+
+div#wrap-auth::after {content: "";display: block;width: 50%;}
+
+div#wrap-auth .header {width: 100%;height: max-content;}
+
+.auth-page h1,.auth-page .auth-link,.auth-page .wrap-auth {width: 468px;margin: auto;}
+
+div#wrap-auth h1 {font-size: 43px;text-transform: uppercase;line-height: 1.5;}
+
+div#wrap-auth .auth-link {font-size: 20px;}
+
+div#wrap-auth .wrap-auth {margin-top: 23px;}
+
+.auth-page h1, .auth-page .auth-link {padding-left: 12px;}
+
+.auth-link a {color: white;border-bottom: 1px solid white;}
+
+div#wrap-auth input {border-color: var(--custom-blue);padding: 13px 22px;font-size: 16px;margin-bottom: 12px;border-radius: 12px;}
+
+div#wrap-auth input::placeholder {color: #6A6A6A;}
+
+.wrap-field img.show-password {position: absolute;right: 32px;top: 31%;cursor: pointer;}
+
+div#wrap-auth .wrap-input {position: relative;}
+
+div#wrap-auth input[type=password] {padding-right: 60px;}
+
+div#wrap-auth label {font-size: 19px;}
+
+div#wrap-auth [type=submit] {margin-top: 30px;width: 100%;border-radius: 12px;height: 57px;font-size: 22px;font-family: 'Rubik Medium';}
+.auth-form-text {
+    color: var(--custom-blue);
+    margin-top: 30px;
+}
