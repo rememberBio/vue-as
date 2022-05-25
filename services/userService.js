@@ -40,7 +40,7 @@ const updatePasswordInNode = async(id, password) => {
 }
 const createToken = async(email, password) => {
     const response = await axios.post(`${apiTarget}/user/createToken`, { email: email, password: password },headers);
-    return response.data;
+    return response.data.token;
 }
 
 const updateUserStatus = async(email, isActive) => {

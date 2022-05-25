@@ -1,6 +1,9 @@
 import Vue from 'vue'
+import { createToken } from '../services/userService';
+
 export const state = () => ({
     currentUser: null,
+    userToken : "",
     curEditRP: null,
     playLoader:false,
     loaderMessage:""
@@ -41,6 +44,16 @@ export const actions = {
             console.log("connect");
         }*/
     },
+}
+export const getters = {
+    async getUserToken (state) {
+
+        let userToken = state.userToken;
+        if(!userToken) {
+            userToken = await createToken(state.currentUser.email,state.currentUser.password);
+        }
+        return userToken;
+    }
 }
 
 //helpers

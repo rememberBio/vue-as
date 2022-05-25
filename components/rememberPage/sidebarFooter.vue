@@ -8,8 +8,13 @@
         <div class="wrap-btns flex">
           <input type="button"
           @click="submitForm($event)" 
-         :class="{ 'btn-lb-reverse': this.submitBtnText!='create' }" :value="this.submitBtnText">
-          <a v-if="this.submitBtnText!='create'" class="btn-lb view-rp" href="">View Remember Page</a>
+          v-if="this.$store.state.curEditRP._id"
+         :class="{ 'btn-lb-reverse': this.$store.state.curEditRP._id }" :value="'update'">
+          <input type="button"
+          v-else
+          @click="submitForm($event)" 
+         :class="{ 'btn-lb-reverse': this.$store.state.curEditRP._id }" :value="'create'">
+          <a v-if="this.$store.state.curEditRP._id" class="btn-lb view-rp" target="_blank" :href="$store.state.curEditRP.link">View Remember Page</a>
         </div>
     </div>
    </div>
@@ -20,14 +25,13 @@ export default {
   name: "SidebarFooter",
    data() {
     return {
-      submitBtnText: 'create'
     }
   },
   methods: {
     submitForm () {
       this.$eventBus.emit('submit-form'); 
     }
-  }
+  },
 };
 </script>
 

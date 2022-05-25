@@ -1,5 +1,7 @@
 export class rememberPage {
-    constructor(link,pageManager,editors,watchedPeoples,candlesAndFlowers,rememberPageId) {
+    constructor(link,pageManager,editors,watchedPeoples,candlesAndFlowers,rememberPageId,status) {
+        if(!status) this.status = "in progress";
+        else this.status = status;
         this.link = link;
         this.pageManager = pageManager;
         this.editors = editors;
@@ -18,7 +20,7 @@ export class rememberPage {
                 rememberPageLink: ""
             }],
             spouse: {
-                type: "", // wife/husband
+                kind: "", // wife/husband
                 name: "",
                 rememberPageLink: ""
             },

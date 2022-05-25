@@ -399,7 +399,7 @@ button.slide-arrow img {
     width: 15px;
     height: 30px;
 }
-
+.slick-slider {height: 271px;}
 button.slide-arrow.next-arrow {left: unset;right: -15px;transform: rotate(180deg);}
 section.main-gallery .wrap-video::after,.image-container .videos::after {
     content: "";

@@ -1,13 +1,13 @@
 <template>
   <div id="create-page-sidebar" class="main-container">
     <div class="main-content">
-      <form @submit.prevent="createRememberPage"  ref="createForm">
+      <form methode="post" ref="createForm">
         <!-- Main -->
         <div class="wrap-field-groups" :class="{ active: showMainFieldGroups }">
           <span class="field-groups-name" @click="toggleGroupsWrapper('Main')"
             >Main <span class="arrow flex"><img :src="require('@/assets/images/createPage/arrow-bar-down.svg')"  alt=""></span></span
           >
-          <div class="field-groups-content" v-if="showMainFieldGroups">
+          <div class="field-groups-content">
             <!-- main image -->
             <div class="wrap-field">
               <label class="field-label"> Main Image</label>
@@ -40,6 +40,9 @@
                 <span class="error-message" v-if="errorUploadMainImage">
                   {{errorUploadMainImage}}
                 </span>
+                <span class="error-message" v-if="!mainImg">
+                  This field is required
+                </span>
               </div>
             </div>
             <!-- name -->
@@ -49,11 +52,15 @@
                 <input
                   type="text"
                   name="name"
+                  required
                   placeholder="Full Name Of The Deceased"
                   v-model="name"
                   @input="changerememberPageState('name', $event)"
                 />
               </div>
+              <span class="error-message" v-if="!name">
+                This field is required
+              </span>
             </div>
             <!-- brief -->
             <div class="wrap-field">
@@ -101,7 +108,6 @@
                   v-model="dateOfBirth"
                   @change="changerememberPageState('dateOfBirth', $event)"
                 />
-              
               </div>
             </div>
             <!-- dateOfDeath -->
@@ -115,7 +121,6 @@
                   v-model="dateOfDeath"
                   @change="changerememberPageState('dateOfDeath', $event)"
                 />
-                
               </div>
             </div>
             <!-- Country -->
@@ -139,7 +144,7 @@
                   <select
                     name="spouse"
                     id="spouse"
-                    v-model="spouse.type"
+                    v-model="spouse.kind"
                     @change="changerememberPageState('spouse', $event)"
                   >
                     <option value="">Select</option>
@@ -277,7 +282,7 @@
           <span class="field-groups-name" @click="toggleGroupsWrapper('About')"
             >About <span class="arrow flex"><img :src="require('@/assets/images/createPage/arrow-bar-down.svg')"  alt=""></span></span
           >
-          <div class="field-groups-content" v-if="showAboutFieldGroups">
+          <div class="field-groups-content">
             <div class="wrap-field-group">
               <label class="field-label"> Timeline</label>
               <div
@@ -315,7 +320,7 @@
                       type="text"
                       name="timeline-desc"
                       placeholder=""
-                      v-model="timeline[index].shortDesc"
+                      v-model="timeline[index].shortDescription"
                       @input="changerememberPageState('timeline', $event)"
                     />
                   </div>
@@ -337,7 +342,7 @@
             @click="toggleGroupsWrapper('Stories')"
             >Stories <span class="arrow flex"><img :src="require('@/assets/images/createPage/arrow-bar-down.svg')"  alt=""></span></span
           >
-          <div class="field-groups-content" v-if="showStoriesFieldGroups">
+          <div class="field-groups-content">
             <div class="wrap-field-group">
               <div
                 class="wrap-loop"
@@ -447,7 +452,7 @@
             @click="toggleGroupsWrapper('Gallery')"
             >Gallery <span class="arrow flex"><img :src="require('@/assets/images/createPage/arrow-bar-down.svg')"  alt=""></span></span
           >
-          <div class="field-groups-content" v-if="showGalleryFieldGroups">
+          <div class="field-groups-content">
             <div class="wrap-field-group">
               <div
                 class="wrap-loop"
@@ -653,7 +658,7 @@
           <span class="field-groups-name" @click="toggleGroupsWrapper('Places')"
             >Places Of Commemoration <span class="arrow flex"><img :src="require('@/assets/images/createPage/arrow-bar-down.svg')"  alt=""></span></span
           >
-          <div class="field-groups-content" v-if="showPlacesFieldGroups">
+          <div class="field-groups-content">
             <div class="wrap-field-group">
               <div
                 class="wrap-loop"
@@ -781,7 +786,7 @@
           <span class="field-groups-name" @click="toggleGroupsWrapper('Grave')"
             >The grave <span class="arrow flex"><img :src="require('@/assets/images/createPage/arrow-bar-down.svg')"  alt=""></span></span
           >
-          <div class="field-groups-content" v-if="showGraveFieldGroups">
+          <div class="field-groups-content">
             <div class="wrap-field-group">
               <div class="wrap-field upload-images">
                 <label class="field-label"> Images Gallery Of The Grave</label>
@@ -892,10 +897,10 @@
 </template>
 <script>
 
-import { createrememberPageService } from "../../services/rememberPageService";
-import { rememberPage } from "../../models/rememberPage";
+import { createOrUpdateRememberPage } from "../../services/rememberPageService";
 import { uploadFile, removeFile, removeFiles } from '../../services/s3Service';
 import { gmaps, gmapsMap } from "x5-gmaps";
+import moment from 'moment';
 
 import dates from "../../functions/dates";
 
@@ -929,7 +934,7 @@ export default {
         { name: "", rememberPageLink: "" },
       ],
       spouse: {
-        type: "", // wife/husband
+        kind: "", // wife/husband
         name: "",
         rememberPageLink: "",
       },
@@ -1119,11 +1124,44 @@ export default {
         dirty: validation.$dirty,
       };
     },
-    createRememberPage () {
-      //if (this.checkValidForm()) {
-        // eslint-disable-next-line no-console
-        console.log("hi");
-      //}
+    convertDateToDatePickerVal: function (value) {
+      if(value)
+          return moment(String(value)).format('YYYY-MM-DD');
+    },
+    async submitForm () {
+      if (this.mainImg) {
+        if(this.name){
+          if(this.$store.state.curEditRP._id)
+          this.playLoader("Update Page...");
+          else
+          this.playLoader("Create Page...");
+
+          const userToken = await this.$store.getters.getUserToken;
+          this.$store.commit("setState",{
+              state:"userToken",
+              value: userToken
+          });
+          await createOrUpdateRememberPage(this.$store.state.curEditRP,userToken).then((rememberPage) => {
+            rememberPage = rememberPage.data;
+            rememberPage.dateOfBirth = convertDateToDatePickerVal(rememberPage.dateOfBirth);
+            rememberPage.dateOfDeath = convertDateToDatePickerVal(rememberPage.dateOfDeath);
+            this.$store.commit('setState',{
+              state:"curEditRP",
+              value: rememberPage
+            });
+            localStorage.setItem('currentEditedRP',JSON.stringify(rememberPage));
+            this.stopLoader();
+          }).catch((err) => {
+            console.log(err);
+            this.stopLoader();
+          });
+        } else {
+          this.showMainFieldGroups = true;
+          this.$refs.createForm[0].focus();
+        }
+      } else {
+        this.showMainFieldGroups = true;
+      }
     },
     // checkValidForm: async function () {
     //   let isFormCorrect = await this.v$.$validate();
@@ -1395,7 +1433,7 @@ export default {
         }
     })
 
-    this.$eventBus.on('submit-form', () => this.$refs.createForm.submit(),this);
+    this.$eventBus.on('submit-form', () => this.submitForm(),this);
     
   },
   computed: {
@@ -1407,6 +1445,8 @@ export default {
 </script>
 
 <style>
+.wrap-field-groups:not(.active) .field-groups-content {display: none;}
+
 .wrap-map {
   height: 213px;
   border-radius: 17px;

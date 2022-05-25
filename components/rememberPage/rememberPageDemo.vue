@@ -107,7 +107,7 @@
                     <span>{{currentRPAttrs.country}}</span>
                 </div>
                 <div class="circle spouse">
-                    <template v-if="currentRPAttrs.spouse&&currentRPAttrs.spouse.type == 'husband'">
+                    <template v-if="currentRPAttrs.spouse&&currentRPAttrs.spouse.kind == 'husband'">
                         <img :src="require('@/assets/images/createPage/husband.svg')" alt="">
                         <h3>Husband:</h3>
                     </template>

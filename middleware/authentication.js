@@ -55,7 +55,6 @@ export default function({ route, redirect }) {
                         });
                     } 
                 } else {
-                    console.log("sighouttt");
                     $nuxt.$fire.auth.signOut();
                     return redirect(loginRoute);
                 }
