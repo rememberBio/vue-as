@@ -8,7 +8,7 @@
                 <div class="text">
                     <h1 class="name" v-if="currentRPAttrs.name">{{currentRPAttrs.name}}</h1>
                     <h1 class="name" v-else>Full Name Of The Deceased</h1>
-                    <span class="desc" v-if="currentRPAttrs.brief" v-html="currentRPAttrs.brief"></span>
+                    <span class="desc" v-if="currentRPAttrs.brief" v-html="convertTextArea(currentRPAttrs.brief)"></span>
                     <span class="desc" v-else>a few words about him.</span> 
                     <a class="disabled">Read More >></a>
                 </div>
@@ -41,7 +41,7 @@
             <div class="text mobile-only">
                 <h1 class="name" v-if="currentRPAttrs.name">{{currentRPAttrs.name}}</h1>
                 <h1 class="name" v-else>Full Name Of The Deceased</h1>
-                <span class="desc" v-if="currentRPAttrs.brief">{{currentRPAttrs.brief}}</span>
+                <span class="desc" v-if="currentRPAttrs.brief" v-html="convertTextArea(currentRPAttrs.brief)"></span>
                 <span class="desc" v-else>a few words about him.</span> 
                 <a class="disabled">Read More >></a>
             </div>
@@ -86,7 +86,8 @@
       <section class="main-about">
         <h2 class="main-heading">About</h2>
         <div class="wrap-content">
-            <p class="text" v-html="currentRPAttrs.about"></p>
+            <p class="text" v-if="currentRPAttrs.about" v-html="convertTextArea(currentRPAttrs.about)"></p>
+            <p class="text" v-else >a few more words about him.</p>
             <div class="wrap-dates">
                 <a  class="date disabled">
                     <span class="date-desc">Date of birth:</span>
@@ -158,7 +159,7 @@
                 v-for="(story, index) in currentRPAttrs.stories.slice(0, 4)"
                 :key="index">
                     <div>
-                        <p class="short-text" v-html="story.content"></p>
+                        <p class="short-text" v-html="convertTextArea(story.content)"></p>
                         <span class="read-more">Read ></span>
                     </div>
                 </a>
@@ -325,6 +326,10 @@ export default {
     };
   },
   methods: {
+      convertTextArea: (value) => {
+          if(value)
+            return value.replaceAll('\n','<br>');
+      },
       formatDate: function (value) {
         if(value)
             return moment(String(value)).format('DD/MM/YYYY');

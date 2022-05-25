@@ -19,7 +19,7 @@
               </label>
               <div class="image-container">
                 <div  v-if="mainImg" class="images">
-                  <div class="background-image" :style="'background-image:url(' + mainImg +  ')'"></div>
+                  <div class="background-image" :style="'background-image:url(' + customEncodeUrl(mainImg) +  ')'"></div>
                   <a
                   href=""
                   class="remove"
@@ -59,36 +59,35 @@
             <div class="wrap-field">
               <label class="field-label"> Brief </label>
               <div class="wrap-input">
-                <div
-                  id="unique-element-brief"
-                  class="custom-editor"
-                  :class="{'color-black' : brief}"
-                  @input="changerememberPageState('brief', $event)"
-                  name="brief"
-                  contenteditable
-                >
-                  a few words about him.
-                </div>
+                <textarea
+                 @input="changerememberPageState('brief', $event)"
+                 name="brief" 
+                 id="brief" 
+                 maxlength="250" 
+                 cols="30" 
+                 rows="6" 
+                 v-model="brief"
+                 placeholder="a few words about him."> 
+                </textarea>
               </div>
               <span class="field-small-text">
-                Up To 4 Lines
+                Up to 250 characters
               </span>
             </div>
             <!-- about -->
             <div class="wrap-field">
               <label class="field-label"> About </label>
               <div class="wrap-input">
-                <div
-                  id="unique-element-about"
-                  class="custom-editor rp-scroll"
-                  :class="{'color-black' : about}"
-                  @input="changerememberPageState('about', $event)"
-                  name="about"
-                  contenteditable
-                >
-                  more about him..
-                </div>
-                
+                <textarea
+                 @input="changerememberPageState('about', $event)"
+                 name="about" 
+                 id="about" 
+                 class="rp-scroll"
+                 cols="30" 
+                 rows="19" 
+                 v-model="about"
+                 placeholder="more about him.."> 
+                </textarea>
               </div>
             </div>
             <!-- dateOfBirth -->
@@ -160,7 +159,7 @@
                   />
                 </div>
               </div>
-              <div class="wrap-field">
+              <!-- <div class="wrap-field">
                 <div class="wrap-input rp-link">
                   <input
                     type="text"
@@ -170,7 +169,7 @@
                     @input="changerememberPageState('spouse', $event)"
                   />
                 </div>
-              </div>
+              </div> -->
             </div>
             <!-- parents -->
             <div class="wrap-field-group">
@@ -187,7 +186,7 @@
                   />
                 </div>
               </div>
-              <div class="wrap-field">
+              <!-- <div class="wrap-field">
                 <div class="wrap-input rp-link">
                   <input
                     type="text"
@@ -197,7 +196,7 @@
                     @input="changerememberPageState('parents', $event)"
                   />
                 </div>
-              </div>
+              </div> -->
               <div class="fields-devider"></div>
                 <!-- parents 2 -->
               <div class="wrap-field">
@@ -211,7 +210,7 @@
                   />
                 </div>
               </div>
-              <div class="wrap-field">
+              <!-- <div class="wrap-field">
                 <div class="wrap-input rp-link">
                   <input
                     type="text"
@@ -221,7 +220,7 @@
                     @input="changerememberPageState('parents', $event)"
                   />
                 </div>
-              </div>
+              </div> -->
             </div>
             <!-- children -->
             <div class="wrap-field-group">
@@ -252,7 +251,7 @@
                     />
                   </div>
                 </div>
-                <div class="wrap-field">
+                <!-- <div class="wrap-field">
                   <div class="wrap-input rp-link">
                     <input
                       type="text"
@@ -262,7 +261,7 @@
                       @input="changerememberPageState('children', $event)"
                     />
                   </div>
-                </div>
+                </div> -->
               </div>
               <div class="wrap-add-button">
                 <a href="" @click="addElement('children', $event)">Add Child</a>
@@ -357,18 +356,17 @@
                 </label>
                 <div class="wrap-field">
                   <div class="wrap-input">
-                    <div
-                      :id="'unique-element-stories-' + index"
-                      class="custom-editor rp-scroll "
-                      :class="{'color-black' : story.content}"
+                    <textarea
                       @input="changerememberPageState('stories', $event)"
                       :data-index="index"
-                      name="story-text"
-                      contenteditable
-                    >
-                    The Story
-                    </div>
-                   
+                      name="story-text" 
+                      class="rp-scroll"
+                      id="story-text"
+                      cols="30" 
+                      rows="10" 
+                      v-model="stories[index].content"
+                      placeholder="The Story"> 
+                    </textarea>
                   </div>
                 </div>
                 <div class="wrap-field">
@@ -393,7 +391,7 @@
                   </label>
                   <div class="image-container">
                       <div v-if="story.image" class="images">
-                        <div class="background-image" :style="'background-image:url(' + story.image +  ')'"></div>
+                        <div class="background-image" :style="'background-image:url(' + customEncodeUrl(story.image) +  ')'"></div>
                         <a
                         href=""
                         class="remove"
@@ -554,7 +552,7 @@
                     <div v-if="album.images&&album.images.length&&album.images[0]" class="image-container multiply-images">
                       <div class="images" v-for="(image, indexAlImg) in album.images"
                          :key="indexAlImg">
-                        <div class="background-image" v-if="image" :style="'background-image:url(' + image +  ')'"></div>
+                        <div class="background-image" v-if="image" :style="'background-image:url(' + customEncodeUrl(image) +  ')'"></div>
                           <a
                           v-if="image"
                           href=""
@@ -683,8 +681,7 @@
                   </label>
                   <div class="image-container">
                     <div v-if="place.image" class="images">
-                      
-                      <div class="background-image" :style="'background-image:url(' + place.image + ')'"></div>
+                      <div class="background-image" :style="'background-image:url(' + customEncodeUrl(place.image) + ')'"></div>
                       <a
                         href=""
                         class="remove"
@@ -739,19 +736,17 @@
                 <div class="wrap-field">
                   <label for="" class="field-label">Text About The Connection To This Place</label>
                   <div class="wrap-input">
-                    <div
-                      :id="'unique-element-placesOfCommemoration-' + index"
-                      class="custom-editor rp-scroll "
-                      :class="{'color-black' : placesOfCommemoration[index].textAbout}"
-                      @input="
-                        changerememberPageState('placesOfCommemoration', $event)
-                      "
+                    <textarea
+                      @input="changerememberPageState('placesOfCommemoration', $event)"
+                      name="place-text" 
+                      id="place-text" 
+                      class="rp-scroll"
                       :data-index="index"
-                      name="place-text"
-                      contenteditable
-                    >
-                      Type Here
-                    </div>
+                      cols="30" 
+                      rows="5" 
+                      v-model="placesOfCommemoration[index].textAbout"
+                      placeholder="Type Here"> 
+                    </textarea>
                   </div>
                 </div>
                 <div class="wrap-field">
@@ -794,7 +789,7 @@
                 <div v-if="grave.images&&grave.images.length" class="image-container multiply-images">
                   <div class="images" v-for="(image, indexImg) in grave.images"
                   :key="indexImg">
-                    <div class="background-image" v-if="image" :style="'background-image:url(' + image +  ')'"></div>
+                    <div class="background-image" v-if="image" :style="'background-image:url(' + customEncodeUrl(image) +  ')'"></div>
                     <a
                     v-if="image"
                     href=""
@@ -1093,6 +1088,10 @@ export default {
     };
   },*/
   methods: {
+    customEncodeUrl(value) {
+      if(value)
+        return encodeURI(value).replaceAll(/\(/g, '%28').replaceAll(/\)/g, '%29');
+    },
     //google maps
     setGoogleMap() {
       gmaps().then((maps) => {
@@ -1133,64 +1132,10 @@ export default {
     //   } else return false;
     // },
     changerememberPageState: async function (attributeName, event) {
-      if (
-        attributeName == "brief" ||
-        attributeName == "about" ||
-        attributeName == "stories" || 
-        attributeName == 'placesOfCommemoration'
-      ) {
-        let innerContent;
-        if (
-          attributeName == "stories" ||
-          attributeName == "placesOfCommemoration"
-        ) {
-          let index = event.target.dataset.index;
-          innerContent = document.getElementById(
-            "unique-element-" + attributeName + "-" + index
-          ).innerHTML;
-        } else {
-          innerContent = document.getElementById(
-            "unique-element-" + attributeName
-          ).innerHTML;
-        }
-
-        if (innerContent == "") {
-          if (attributeName == "stories") {
-            let index = event.target.dataset.index;
-            this[attributeName][index].content = "";
-          } else if (attributeName == "placesOfCommemoration") {
-            let index = event.target.dataset.index;
-            this[attributeName][index].textAbout = "";
-          } else {
-            this[attributeName] = "";
-          }
-        } else {
-
-          innerContent = innerContent
-            .replaceAll("<div>", "<br>")
-            .replaceAll("</div>", "");
-
-          if (attributeName == "brief" )  { 
-            this[attributeName] = innerContent;
-          } 
-          else {
-            if (attributeName == "stories") {
-              let index = event.target.dataset.index;
-              this[attributeName][index].content = innerContent;
-            } else if (attributeName == "placesOfCommemoration") {
-              let index = event.target.dataset.index;
-              this[attributeName][index].textAbout = innerContent;
-            } else {
-              this[attributeName] = innerContent;
-            }
-          }
-        }
-      }
       let value = this[attributeName];
       //let isFieldCorrect = await this.v$[attributeName].$validate();
       //if (isFieldCorrect) {
-        this.updateCurrentEditedRPAttributes(attributeName,value);
-
+      this.updateCurrentEditedRPAttributes(attributeName,value);
       //}
     },
     addElement: function (attributeName, event, galleryItemIndex = 0) {
@@ -1275,7 +1220,6 @@ export default {
       if (index != null && index >= 0 && array.length > index) {
         array = array.splice(index, 1);
       }
-      if(attributeName == "stories") this.updateStoryContentDisplay(index);
 
       this.updateCurrentEditedRPAttributes(attributeName,this[attributeName]);
       this.stopLoader();
@@ -1286,13 +1230,7 @@ export default {
         !this["show" + desc + "FieldGroups"];
       if(desc == 'Grave' && this["show" + desc + "FieldGroups"]) this.setGoogleMap();
     },
-    updateStoryContentDisplay(storyIndex) {
-      if(storyIndex >= 0 && this.stories.length -1 >= storyIndex) {
-          document.getElementById(
-            "unique-element-stories-" + storyIndex
-          ).innerHTML = this.stories[storyIndex].content;
-      }
-    },
+  
 
     //files integation with s3
     async removeFileFunc(event,fileUrl,attrName,fileType,fileIndex,itemIndex,albumIndex) {
@@ -1499,6 +1437,9 @@ export default {
   margin-left: auto;
   display: block;
   width: max-content;
+  margin-top: -14px;
+  display: block;
+  margin-bottom: 14px;
 }
 .rp-link {
   position: relative;
@@ -1564,12 +1505,12 @@ div#create-page-sidebar button[type=submit] {
 }
 div#unique-element-about[name=about] {height: 444px;}
 
-.custom-editor[name=story-text] {height: 213px;}
-.rp-scroll.custom-editor::-webkit-scrollbar {
+textarea[name=story-text] {height: 213px;}
+textarea.rp-scroll::-webkit-scrollbar {
 	width:4px;
 }
 /* Track */
-.rp-scroll.custom-editor::-webkit-scrollbar-track {
+textarea.rp-scroll::-webkit-scrollbar-track {
   width:4px;
 }
 </style>

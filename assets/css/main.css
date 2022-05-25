@@ -253,6 +253,7 @@ select {
 input[type=date]::-webkit-calendar-picker-indicator { 
 	-webkit-appearance: none;
 	background: url(@/assets/images/date-picker.svg) no-repeat white; 
+	cursor: pointer;
 }
 /**
  * Show the overflow in IE.
@@ -338,6 +339,7 @@ progress {
  */
 textarea {
 	overflow: auto;
+	resize: none;
 }
 
 /**
@@ -639,7 +641,7 @@ select {
 	outline: none;
 }
 span.error-message {margin: -10px 0px 14px;color: red;display: block;}
-input::placeholder,.custom-editor,input[type=date] {
+input::placeholder,.custom-editor,input[type=date],textarea::placeholder {
 	color: #ACABAB;
 }
 
