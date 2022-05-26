@@ -23,6 +23,7 @@
             <label class="form-label"> Last Name</label>
             <div class="wrap-input">
               <input
+                required
                 type="text"
                 name="last name"
                 placeholder="Last Name"
@@ -38,6 +39,7 @@
           <label class="form-label"> Email Address</label>
           <div class="wrap-input">
             <input
+              required
               type="email"
               name="email"
               placeholder="Email Address"
@@ -52,13 +54,19 @@
             </div> -->
           </div>
         </div>
-        <button  v-if="!emailSend" type="submit">Sign Up</button>
+        <div class='auth-error-message' v-if="errorMessage&&!emailSend">{{errorMessage}}</div>
+        <button  v-if="!emailSend" type="submit">
+          <template v-if="showLoading">
+            <img class="auth-loading" :src="require('@/assets/images/white-loader.gif')" alt="">
+          </template>
+          <template v-else>Sign Up </template>
+          
+        </button>
         <div class="auth-form-text">
           By signing up, you agree to our <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>.
         </div>
       </form>
-      <div v-if="errorMessage&&!emailSend">{{errorMessage}}</div>
-      <div class="email-send"  v-if="emailSend">
+      <div class="email-send-section"  v-if="emailSend">
         <div class="title">Hi, {{ firstName}} {{ lastName}}</div>
         <p class="content">
         <b>we're happy you signed up for remember! </b>
@@ -105,6 +113,7 @@ export default {
       errorMessage: "",
       url: window.location.href,
       currentUser: localStorage.getItem("currentUser"),
+      showLoading: false
     };
   },
   /*validations() {
@@ -123,6 +132,7 @@ export default {
     },*/
     createAccount: async function () {
       //if (this.checkValidForm()) {
+        this.showLoading = true;
         let email = this.email;
         const self = this;
         //SAVE USER IN DB
@@ -136,19 +146,21 @@ export default {
             value: newUser,
             state: "currentUser",
           });
-          newUser.password = '';
+          //newUser.password = '';
           localStorage.setItem("currentUser", JSON.stringify(newUser));
          
           this.sendEmailLink();
+          this.showLoading = false;
          
         }).catch((error)=> {
           let data = error.response.data;
           if(data.includes("Error, expected `email` to be unique")) {
-            this.errorMessage = "This email is already registered in the system, please register with another email or go to the login screen";
+            this.errorMessage = "This email is already registered in the system";
           }
           else {
             this.errorMessage = error.response.data;
           }
+          this.showLoading = false;
         });
        
       //}

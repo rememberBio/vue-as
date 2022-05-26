@@ -9,6 +9,7 @@
             <label class="form-label">Email Address</label>
             <div class="wrap-input">
               <input
+                required
                 type="text"
                 name="email"
                 placeholder="Email Address"
@@ -19,6 +20,7 @@
             <label class="form-label"> Password</label>
             <div class="wrap-input wrap-password">
               <input
+                required
                 type="password"
                 name="password"
                 :id="'password_field' + 1"
@@ -34,9 +36,15 @@
               />
             </div>
           </div>
-          <button type="submit" class="">Log In</button>
+          <div class='auth-error-message' v-if="errorMessage">{{errorMessage}}</div>
+          <button type="submit" class="">
+            <template v-if="showLoading">
+              <img class="auth-loading" :src="require('@/assets/images/white-loader.gif')" alt="">
+            </template>
+            <template v-else>Log In </template>
+          </button>
+          
         </form>
-        <div v-if="errorMessage">{{errorMessage}}</div>
         </div>
       </div>
 </template>
@@ -52,7 +60,8 @@ export default {
     return {
       password: "",
       email: "",
-      errorMessage:""
+      errorMessage:"",
+      showLoading: false
     };
   },
   methods: {
@@ -72,10 +81,12 @@ export default {
       let email = this.email;
       let password = this.password;
       let self = this;
+      this.showLoading = true;
       await this.$fire.auth
         .signInWithEmailAndPassword(email, password)
         .then( async (response) => {
           await self.getLoginUser(email,password);
+          this.showLoading = false;
         })
         .catch((error) => {
           if(error.code == "auth/user-not-found")
@@ -84,6 +95,7 @@ export default {
             this.errorMessage = "incorrect password";
           else
             this.errorMessage = error.message;
+          this.showLoading = false;
         });
     },
     async getLoginUser(email,password) {

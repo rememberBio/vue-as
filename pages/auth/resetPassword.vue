@@ -3,16 +3,19 @@
     <h1>CREATE PASSWORD</h1>
     <div class="auth-link">Continue to sign up, or <nuxt-link to="/auth/login">login</nuxt-link> instead</div>
     <div class="wrap-auth">
-      <form @submit.prevent="createPassword" v-if="!isLinkError">
+      <form @submit.prevent="createPassword">
         <div class="wrap-field">
           <label>New Password</label>
           <div class="wrap-input">
             <input
+              required
               type="password"
               name="password"
               v-model="password"
               :id="'password_field' + 1"
               class="password-field"
+              :class="{'no-valid' : (!isSame || !is8Char || !isContainsSpacial || !isMix)}"
+              @input="changePassword()"
             />
             <img
               class="show-password"
@@ -33,11 +36,14 @@
           <label> Confirm New Password</label>
           <div class="wrap-input">
             <input
+              required
               type="password"
               name="confirm password"
               v-model="confirmPassword"
               :id="'password_field' + 2"
               class="password-field"
+              :class="{'no-valid' : (!isSame)}"
+              @input="changePassword()"
             />
             <img
               class="show-password"
@@ -54,34 +60,54 @@
             {{ error.$message }}
           </div> -->
         </div>
-        <button type="submit" class="">Save</button>
+        <div class='auth-error-message' v-if="errorMessage">{{errorMessage}}</div>
+
+        <div class="form-terms">
+          <div class="form-term">
+            <img v-if="is8Char"
+              class="term-icon"
+              :src="require('@/assets/images/fill-rounded-v-icon.svg')"
+            /> 
+             <img v-else
+              class="term-icon"
+              :src="require('@/assets/images/v-rounded.png')"
+            /> 
+            <span>At least 8 characters</span>
+          </div>
+          <div class="form-term">
+           <img v-if="isMix"
+              class="term-icon"
+              :src="require('@/assets/images/fill-rounded-v-icon.svg')"
+            /> 
+             <img v-else
+              class="term-icon"
+              :src="require('@/assets/images/v-rounded.png')"
+            /> 
+            <span>
+            A mixture of both uppercase and lowercase letters A mixture of letters and numbers
+            </span>
+          </div>
+          <div class="form-term">
+            <img v-if="isContainsSpacial"
+              class="term-icon"
+              :src="require('@/assets/images/fill-rounded-v-icon.svg')"
+            /> 
+             <img v-else
+              class="term-icon"
+              :src="require('@/assets/images/v-rounded.png')"
+            /> 
+            <span>Inclusion of at least one special character, e.g., ! @ # ? ]</span>
+          </div>
+        </div>
+
+        <button type="submit" class="">
+            <template v-if="showLoading">
+              <img class="auth-loading" :src="require('@/assets/images/white-loader.gif')" alt="">
+            </template>
+            <template v-else>Save </template>
+          </button>
       </form>
-      <div v-else>{{isLinkError}}</div>
-      <div class="form-terms">
-        <div class="form-term">
-          <img
-            class="term-icon"
-            :src="require('@/assets/images/fill-rounded-v-icon.svg')"
-          /> 
-          <p>At least 8 characters</p>
-        </div>
-        <div class="form-term">
-          <img
-            class="term-icon"
-            :src="require('@/assets/images/fill-rounded-v-icon.svg')"
-          /> 
-          <p>
-           A mixture of both uppercase and lowercase letters A mixture of letters and numbers
-          </p>
-        </div>
-        <div class="form-term">
-          <img
-            class="term-icon"
-            :src="require('@/assets/images/fill-rounded-v-icon.svg')"
-          /> 
-          <p>Inclusion of at least one special character, e.g., ! @ # ? ]</p>
-        </div>
-      </div>
+      
     </div>
   </div>
 </template>
@@ -100,7 +126,12 @@ export default {
     return {
       password: "",
       confirmPassword: "",
-      isLinkError: ""
+      errorMessage: "",
+      showLoading: false,
+      is8Char: false,
+      isSame: false,
+      isMix: false,
+      isContainsSpacial: false
     };
   },
   setup() {
@@ -128,28 +159,50 @@ export default {
       }
       password.setAttribute("type", type);
     },
+    changePassword() {
+      this.isSame = this.password == this.confirmPassword;
+      this.is8Char = this.confirmPassword.length >= 8;
+      this.isMix = this.confirmPassword.match('(?=.*?[A-Z])') != null && this.confirmPassword.match('(?=.*?[a-z])') != null && this.confirmPassword.match('(?=.*?[0-9])') != null;
+      this.isContainsSpacial =  this.confirmPassword.match('(?=.*?[#?!@$%^&*-])') != null;
+    },
     createPassword: async function () {
       //let confirmPassword = await this.v$.$validate();
       //if (confirmPassword) {
+        if(!this.isSame) {
+          this.errorMessage = "Passwords do not match";
+          return;
+        } 
+        if(!this.is8Char || !this.isMix || !this.isContainsSpacial ) {
+          this.errorMessage = "Please fill in the fields according to the rules";
+          return;
+        }
+        
+        this.showLoading = true;
         let updatedUser = new User();
         updatedUser = JSON.parse(localStorage.getItem("currentUser"));
-
+        
         //firebase
         const newPassword = this.password;
         const auth = this.$fire.auth
         let user = auth.currentUser;
         await user.updatePassword(newPassword).then(async () => {
            //node js update password
-            await updatePasswordInNode(updatedUser._id, this.password).then((res) => {
+            await updatePasswordInNode(updatedUser._id, newPassword).then((res) => {
               localStorage.setItem("currentUser", JSON.stringify(updatedUser));
               localStorage.removeItem("emailVerified");
 
               this.$router.push({
                 path: "/rp/create"
               });
-
+              this.showLoading = false;
+            }).catch((err)=>{
+              this.showLoading = false;
+              this.errorMessage = "Internal Server Error, Please Contact us"
             });
-        })
+        }).catch((err)=>{
+          this.showLoading = false;
+          this.errorMessage = "Internal Server Error, Please Contact us"
+        });
       //}
     },
     confirmSignIn: async function () {
