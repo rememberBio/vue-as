@@ -16,6 +16,8 @@
          :class="{ 'btn-lb-reverse': this.$store.state.curEditRP._id }" :value="'create'">
           <a v-if="this.$store.state.curEditRP._id" class="btn-lb view-rp" target="_blank" :href="$store.state.curEditRP.link">View Remember Page</a>
         </div>
+        <span style="width:100%" class="error-massage" v-if="$store.state.errorUpdateRP">{{$store.state.errorUpdateRP}}</span>
+
     </div>
    </div>
 </template>
@@ -24,8 +26,7 @@
 export default {
   name: "SidebarFooter",
    data() {
-    return {
-    }
+    return {}
   },
   methods: {
     submitForm () {
@@ -35,13 +36,17 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
+span.error-massage {
+    width: 100%;
+    text-align: center;
+}
 .sidebar-footer .blue-sidebar {
     display: flex;
     align-items: center;
     padding: 24px 28px;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 .sidebar-footer .blue-sidebar .wrap-btns {
   gap: 10px;

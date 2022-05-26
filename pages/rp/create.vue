@@ -1138,6 +1138,12 @@ export default {
           return moment(String(value)).format('YYYY-MM-DD');
     },
     async submitForm () {
+      this.$refs.createForm[0].focus();
+      this.$store.commit('setState',{
+        state: 'errorUpdateRP',
+        value: ""
+      })
+      this.errorUpdateRP = "";
       if (this.mainImg) {
         if(this.name){
           if(this.$store.state.curEditRP._id)
@@ -1162,14 +1168,28 @@ export default {
             this.stopLoader();
           }).catch((err) => {
             console.log(err);
+            this.$store.commit('setState',{
+              state: 'errorUpdateRP',
+              value: err.message
+            })
             this.stopLoader();
           });
         } else {
           this.showMainFieldGroups = true;
           this.$refs.createForm[0].focus();
+           this.$store.commit('setState',{
+              state: 'errorUpdateRP',
+              value: "Please fill required fields"
+          })
+          
         }
       } else {
         this.showMainFieldGroups = true;
+        this.$refs.createForm[0].focus();
+          this.$store.commit('setState',{
+            state: errorUpdateRP,
+            value: "Please fill required fields"
+        })
       }
     },
     // checkValidForm: async function () {

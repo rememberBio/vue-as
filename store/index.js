@@ -6,7 +6,8 @@ export const state = () => ({
     userToken : "",
     curEditRP: null,
     playLoader:false,
-    loaderMessage:""
+    loaderMessage:"",
+    errorUpdateRP: "",
 
 })
 export const mutations = {
