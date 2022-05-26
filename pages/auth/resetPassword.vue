@@ -161,9 +161,9 @@ export default {
     },
     changePassword() {
       this.isSame = this.password == this.confirmPassword;
-      this.is8Char = this.confirmPassword.length >= 8;
-      this.isMix = this.confirmPassword.match('(?=.*?[A-Z])') != null && this.confirmPassword.match('(?=.*?[a-z])') != null && this.confirmPassword.match('(?=.*?[0-9])') != null;
-      this.isContainsSpacial =  this.confirmPassword.match('(?=.*?[#?!@$%^&*-])') != null;
+      this.is8Char = this.password.length >= 8;
+      this.isMix = this.password.match('(?=.*?[A-Z])') != null && this.password.match('(?=.*?[a-z])') != null && this.password.match('(?=.*?[0-9])') != null;
+      this.isContainsSpacial =  this.password.match('(?=.*?[#?!@$%^&*-])') != null;
     },
     createPassword: async function () {
       //let confirmPassword = await this.v$.$validate();
