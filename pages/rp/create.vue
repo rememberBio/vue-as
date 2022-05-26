@@ -1143,7 +1143,6 @@ export default {
         state: 'errorUpdateRP',
         value: ""
       })
-      this.errorUpdateRP = "";
       if (this.mainImg) {
         if(this.name){
           if(this.$store.state.curEditRP._id)
@@ -1187,7 +1186,7 @@ export default {
         this.showMainFieldGroups = true;
         this.$refs.createForm[0].focus();
           this.$store.commit('setState',{
-            state: errorUpdateRP,
+            state: 'errorUpdateRP',
             value: "Please fill required fields"
         })
       }
