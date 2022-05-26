@@ -845,11 +845,6 @@
               </div>
               <div class="wrap-field">
                 <label class="field-label"> Grave Location </label>
-                <!-- <GMapAutocomplete
-                  placeholder="Type And Select"
-                  @place_changed="setPlace($event)"
-                >
-                </GMapAutocomplete> -->
                 <input v-if="!this.grave.address.name" ref="autocomplete"  type="text" id="autocomplete" placeholder="Type And Select" />
                 <input v-else ref="autocomplete" type="text" id="autocomplete" :placeholder="this.grave.address.name" />
 
@@ -993,6 +988,10 @@ export default {
             lng: 0,
           },
           name: "",
+          city:"",
+          country: "",
+          streetNumber: "",
+          streetName: "",
         },
       },
       addHebrewDate: false,
@@ -1115,6 +1114,16 @@ export default {
         let name = place.formatted_address;
         this.grave.address.location = { lat: place.geometry.location.lat(),lng: place.geometry.location.lng() };
         this.grave.address.name = name;
+        let address = place.address_components;
+
+        //set address components
+        address.forEach(function(v1) {v1.types.forEach(function(v2){address[v2]=v1.long_name});});
+
+        this.grave.address.city = address.locality;
+        this.grave.address.country = address.country;
+        this.grave.address.streetNumber = address.street_number;
+        this.grave.address.streetName = address.route;
+
         this.updateCurrentEditedRPAttributes("grave",this.grave);
       }
     },
@@ -1143,8 +1152,8 @@ export default {
           });
           await createOrUpdateRememberPage(this.$store.state.curEditRP,userToken).then((rememberPage) => {
             rememberPage = rememberPage.data;
-            rememberPage.dateOfBirth = convertDateToDatePickerVal(rememberPage.dateOfBirth);
-            rememberPage.dateOfDeath = convertDateToDatePickerVal(rememberPage.dateOfDeath);
+            rememberPage.dateOfBirth = this.convertDateToDatePickerVal(rememberPage.dateOfBirth);
+            rememberPage.dateOfDeath = this.convertDateToDatePickerVal(rememberPage.dateOfDeath);
             this.$store.commit('setState',{
               state:"curEditRP",
               value: rememberPage
