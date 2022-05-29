@@ -35,7 +35,7 @@
                   name="main-image"
                   placeholder=""
                   accept="image/*"
-                  @change="(event) => uploadFiles(event,'mainImg','image')"
+                  @change="(event) => uploadFiles(event,'mainImgBeforeCrop','image')"
                 />
                 <span class="error-message" v-if="errorUploadMainImage">
                   {{errorUploadMainImage}}
@@ -887,17 +887,21 @@
         </div>
         <button type="submit">save</button>
       </form>
-      <div class="wrap-cropper-popup" v-if="showCropper && mainImgBeforeCrop">
+      <div class="wrap-cropper-popup" v-show="showCropper && mainImgBeforeCrop">
         <VueCropper
             ref="cropper"
-            :src="mainImgBeforeCrop"
             :aspectRatio="1/1" 
+            :src="mainImgBeforeCrop"
             :initialAspectRatio="1/1"
             :autoCropArea="1"
             :zoomable="false"
             alt="Crop Main Image"
           >
         </VueCropper >
+        <div class="flex">
+          <a href="" @click="saveCropperImage($event)" class="save btn-lb max-content">Save</a>
+          <a href="" @click="cancelCropper($event)" class="cancel btn-lb-reverse max-content">Cancel</a>
+        </div>
       </div>
     </div>
   </div>
@@ -1217,18 +1221,9 @@ export default {
         })
       }
     },
-    // checkValidForm: async function () {
-    //   let isFormCorrect = await this.v$.$validate();
-    //   if (isFormCorrect) {
-    //     return true;
-    //   } else return false;
-    // },
     changerememberPageState: async function (attributeName, event) {
       let value = this[attributeName];
-      //let isFieldCorrect = await this.v$[attributeName].$validate();
-      //if (isFieldCorrect) {
       this.updateCurrentEditedRPAttributes(attributeName,value);
-      //}
     },
     addElement: function (attributeName, event, galleryItemIndex = 0) {
       event.preventDefault();
@@ -1323,7 +1318,6 @@ export default {
       if(desc == 'Grave' && this["show" + desc + "FieldGroups"]) this.setGoogleMap();
     },
   
-
     //files integation with s3
     async removeFileFunc(event,fileUrl,attrName,fileType,fileIndex,itemIndex,albumIndex) {
       event.preventDefault();
@@ -1364,7 +1358,9 @@ export default {
       if (event) files = event.target.files;
       if(!files.length) 
         this.stopLoader();
-            
+      if(attrName == 'mainImgBeforeCrop') {
+        this.showCropperFunc(files[0]);
+      } else
       for (let index = 0; index < files.length; index++) {
         let file = files[index];
         await uploadFile(file,fileTypeThatCanUploaded,this.$store.state.currentUser._id).then((fileUrl) => {
@@ -1435,6 +1431,38 @@ export default {
         });
       }
     },
+    //cropper
+    showCropperFunc(file) {
+      if(file) {
+        var fileReader = new FileReader();  
+        fileReader.onload = async () => {
+            this.mainImgBeforeCrop = fileReader.result;
+            this.$refs.cropper.replace(this.mainImgBeforeCrop);
+            this.stopLoader();
+            this.showCropper = true;
+        }
+        fileReader.readAsDataURL(file);
+      }
+    },
+    cancelCropper(event) {
+      event.preventDefault();
+      this.mainImgBeforeCrop = "";
+      this.showCropper = false;
+    },
+    saveCropperImage(event) {
+      event.preventDefault();
+      // Upload cropped image to server if the browser supports `HTMLCanvasElement.toBlob`
+      this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
+        const eventObj = {
+          target: {
+            files:[blob]
+          }
+        }
+        this.uploadFiles(eventObj,'mainImg','image');
+        this.showCropper = false;
+      }, 'image/png');
+    },
+    //loader
     stopLoader (){
       this.$store.commit('setState',{
         state:"playLoader",
@@ -1498,7 +1526,26 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.wrap-cropper-popup {
+    width: 29%;
+    position: fixed;
+    height: 100%;
+    background: rgba(255,255,255,0.67);
+    z-index: 9999999;
+    display: flex;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    flex-direction: column;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+}
+.wrap-cropper-popup .flex {
+  gap: 20px;
+}
+
 .wrap-field-groups:not(.active) .field-groups-content {display: none;}
 
 .wrap-map {

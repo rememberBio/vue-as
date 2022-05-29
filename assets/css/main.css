@@ -592,7 +592,7 @@ button,
 input[type="button"],
 input[type="reset"],
 input[type="submit"],
-.btn-lb {
+.btn-lb,.btn-lb-reverse {
 	border: none;
     box-shadow: 0px 3px 12px #00000029;
 	border-radius: 24px;
@@ -1068,6 +1068,9 @@ span.breadcrumb_last,p#breadcrumbs a:last-of-type+span {color: #9F9F9F;}
 a.disabled {
 	pointer-events: none;
 	cursor: default;
+}
+.max-content {
+	width: max-content;
 }
 .color-black {
 	color: black !important;
