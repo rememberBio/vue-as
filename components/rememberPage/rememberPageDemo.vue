@@ -59,7 +59,7 @@
       </section>
       <!-- END hero -->
       <!-- cf -->
-      <section class="main-candles-and-flowers">
+      <section class="main-candles-and-flowers" style="display:none;">
         <a class="write-candles-flowers-btn disabled">
             <img :src="require('@/assets/images/createPage/candle.svg')" alt="">
             <div class="right-btn">

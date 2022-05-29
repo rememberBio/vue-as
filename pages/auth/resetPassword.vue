@@ -188,7 +188,7 @@ export default {
         await user.updatePassword(newPassword).then(async () => {
            //node js update password
             await updatePasswordInNode(updatedUser._id, newPassword).then((res) => {
-              res.password = newPassword;
+              //res.password = newPassword;
               localStorage.setItem("currentUser", JSON.stringify(res));
               localStorage.removeItem("emailVerified");
               //localStorage.removeItem("currentEditedRP");

@@ -27,48 +27,55 @@ const uploadFile = async (file,fileTypeThatCanUploaded,userId) => {
     return new Promise((resolve,reject) => {
         if (file) {
             let fileType = file.type;
-            let valid = ["image/webp","image/png","image/jpeg"];
-            if(fileTypeThatCanUploaded == "video") valid = ["video/webm","video/mp4"];
-            if (valid.includes(fileType)) {
-                var fileReader = new FileReader();
-                let uploadedFile = new Object();
-                uploadedFile.type = file.type;
-                let currentTimespan = new Date().getTime()
-                uploadedFile.name = currentTimespan+ '_' + userId + '_' + file.name;
-            
-                fileReader.onload = async () => {
-                    let fileCode = fileReader.result;
-                    //send to S3
-                    uploadedFile.blob = fileCode;
-                    let formData = new FormData();
-                    formData.append("fileName", uploadedFile.name);
-                    formData.append("type", uploadedFile.type);
-                    formData.append("name", file.name);
-                    formData.append("blob", uploadedFile.blob);
-                    const axios = require("axios");
-                    await axios
-                    .post(`${apiTarget}/files`, formData, {
-                        headers: { "Content-Type": "multipart/form-data" , 'Authorization': `Bearer ${adminToken}` },
-                    })
-                    .then((res) => {
-                        if(res.status == 500) throw new Error("Internal server error");
-                        resolve (
-                            res.data.file
-                        );
-                    })
-                    .catch((err) => {
-                        console.log("error in save file");
-                        console.log(err);
-                        reject (
-                            "error in save file, please try later"
-                        );
-                    });
-                };
-                fileReader.readAsDataURL(file);
-            
+            let fileSize = file.size;
+            if(!(fileTypeThatCanUploaded == "image" && fileSize > 1000000)) {
+                let valid = ["image/webp","image/png","image/jpeg"];
+                if(fileTypeThatCanUploaded == "video") valid = ["video/webm","video/mp4"];
+                if (valid.includes(fileType)) {
+                    var fileReader = new FileReader();
+                    let uploadedFile = new Object();
+                    uploadedFile.type = file.type;
+                    let currentTimespan = new Date().getTime()
+                    uploadedFile.name = currentTimespan+ '_' + userId + '_' + file.name;
+                
+                    fileReader.onload = async () => {
+                        let fileCode = fileReader.result;
+                        //send to S3
+                        uploadedFile.blob = fileCode;
+                        let formData = new FormData();
+                        formData.append("fileName", uploadedFile.name);
+                        formData.append("type", uploadedFile.type);
+                        formData.append("name", file.name);
+                        formData.append("blob", uploadedFile.blob);
+                        const axios = require("axios");
+                        await axios
+                        .post(`${apiTarget}/files`, formData, {
+                            headers: { "Content-Type": "multipart/form-data" , 'Authorization': `Bearer ${adminToken}` },
+                        })
+                        .then((res) => {
+                            if(res.status == 500) throw new Error("Internal server error");
+                            resolve (
+                                res.data.file
+                            );
+                        })
+                        .catch((err) => {
+                            console.log("error in save file");
+                            console.log(err);
+                            reject (
+                                "error in save file, please try later"
+                            );
+                        });
+                    };
+                    fileReader.readAsDataURL(file);
+                
+                } else {
+                    reject (
+                        "file type is not valid"
+                    );
+                }
             } else {
                 reject (
-                    "file type is not valid"
+                    "file size is too large"
                 );
             }
         }

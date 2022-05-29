@@ -1,10 +1,10 @@
  <template>
  <div class="sidebar-footer">
     <div class="blue-sidebar">
-        <a class="wrap-icon profile flex flex-col">
+        <!-- <a class="wrap-icon profile flex flex-col">
           <img :src="require('@/assets/images/createPage/settings.png')"  alt="">
           <span class="font-12">Setting</span>
-        </a>
+        </a> -->
         <div class="wrap-btns flex">
           <input type="button"
           @click="submitForm($event)" 
@@ -80,6 +80,7 @@ span[class*='-massage'] {
 }
 .sidebar-footer .blue-sidebar .wrap-btns {
   gap: 10px;
+  margin-left: auto;
 }
 a.btn-lb.view-rp:before {
     content: "";

@@ -40,7 +40,7 @@
                 <span class="error-message" v-if="errorUploadMainImage">
                   {{errorUploadMainImage}}
                 </span>
-                <span class="error-message" v-if="!mainImg">
+                <span class="error-message" v-if="!mainImg && formSubmited">
                   This field is required
                 </span>
               </div>
@@ -58,7 +58,7 @@
                   @input="changerememberPageState('name', $event)"
                 />
               </div>
-              <span class="error-message" v-if="!name">
+              <span class="error-message" v-if="!name && formSubmited">
                 This field is required
               </span>
             </div>
@@ -1068,7 +1068,10 @@ export default {
 
       //cropper
       mainImgBeforeCrop: "",
-      showCropper:false
+      showCropper:false,
+
+      //submit form
+      formSubmited:false
      
 
     };
@@ -1175,6 +1178,7 @@ export default {
       }
     },
     async submitForm () {
+      this.formSubmited = true;
       this.$refs.createForm[0].focus();
       this.$store.commit('setState',{
         state: 'messageUpdateRP',
@@ -1190,7 +1194,6 @@ export default {
           this.playLoader("Create Page...");
 
           const userToken = await this.$store.getters.getUserToken;
-          console.log('From create component, user token: ',userToken);
           this.$store.commit("setState",{
               state:"userToken",
               value: userToken
@@ -1470,6 +1473,14 @@ export default {
     showCropperFunc(file) {
       if(file) {
         let fileType = file.type;
+        let fileSize = file.size;
+        
+        if(fileSize > 1000000) {
+          this.errorUploadMainImage =  "file size is too large";
+          this.stopLoader();
+          return;
+        }
+
         let valid = ["image/webp","image/png","image/jpeg"];
         if (valid.includes(fileType)) {
           var fileReader = new FileReader();  
@@ -1607,12 +1618,12 @@ export default {
 .popup-bottom {
     margin-top: 48px;
     gap: 10px;
-    align-self: center;
+    align-self: flex-end;
+}
+.popup-bottom a {
+  box-shadow: none;
 }
 
-.popup-body {
-    align-self: center;
-}
 .wrap-popup a.close {
     width: 100%;
     display: flex;

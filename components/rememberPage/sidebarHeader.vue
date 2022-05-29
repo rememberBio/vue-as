@@ -4,7 +4,7 @@
       <div class="logo">
         <img :src="require('@/assets/images/white-logo.png')"  alt="">
       </div>
-      <div class="wrap-icons flex">
+      <!-- <div class="wrap-icons flex">
         <a class="wrap-icon profile flex flex-col">
           <img :src="require('@/assets/images/createPage/profile.svg')"  alt="">
           <span class="font-12">Edit profile</span>
@@ -13,7 +13,7 @@
           <img :src="require('@/assets/images/createPage/notifications.svg')"  alt="">
           <span class="font-12">notifications</span>
         </a>
-      </div>
+      </div> -->
     </div>
    </div>
 </template>

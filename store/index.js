@@ -56,9 +56,7 @@ export const getters = {
         let userToken = state.userToken;
         if(!userToken) {
             userToken = await createToken(state.currentUser.email,state.currentUser.password);
-            console.log('From getters, after await user token: ',userToken);
         }
-        console.log('From getters, after if !userToken: ',userToken);
         return userToken;
     }
 }
