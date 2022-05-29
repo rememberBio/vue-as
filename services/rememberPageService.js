@@ -14,6 +14,8 @@ const createOrUpdateRememberPage = (newRememberPage,userToken) => {
         'Authorization': `Bearer ${userToken}`
     };
     if(!newRememberPage.status) newRememberPage.status = 'in progress';
+    console.log('From rp service , userToken: ',userToken);
+
     return axios.post( apiTarget + '/rp/createOrUpdate', newRememberPage,headers);
 }
 module.exports = {

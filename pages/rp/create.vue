@@ -887,6 +887,18 @@
         </div>
         <button type="submit">save</button>
       </form>
+      <div class="wrap-cropper-popup" v-if="showCropper && mainImgBeforeCrop">
+        <VueCropper
+            ref="cropper"
+            :src="mainImgBeforeCrop"
+            :aspectRatio="1/1" 
+            :initialAspectRatio="1/1"
+            :autoCropArea="1"
+            :zoomable="false"
+            alt="Crop Main Image"
+          >
+        </VueCropper >
+      </div>
     </div>
   </div>
 </template>
@@ -894,7 +906,11 @@
 
 import { createOrUpdateRememberPage } from "../../services/rememberPageService";
 import { uploadFile, removeFile, removeFiles } from '../../services/s3Service';
+//google map
 import { gmaps, gmapsMap } from "x5-gmaps";
+//cropper
+import VueCropper from 'vue-cropperjs';
+import 'cropperjs/dist/cropper.css';
 import moment from 'moment';
 
 import dates from "../../functions/dates";
@@ -911,7 +927,7 @@ import {
 } from "vuelidate/validators";*/
 export default {
   name: "CreatePageSidebar",
-  components: { gmapsMap },
+  components: { gmapsMap,VueCropper },
   /*setup() {
     return { v$: useVuelidate() };
   },*/
@@ -1035,6 +1051,10 @@ export default {
       },
       autocomplete: null,
       places: null,
+
+      //cropper
+      mainImgBeforeCrop: "",
+      showCropper:false
      
 
     };
@@ -1134,8 +1154,11 @@ export default {
       };
     },
     convertDateToDatePickerVal: function (value) {
-      if(value)
-          return moment(String(value)).format('YYYY-MM-DD');
+      if(value){
+          if(typeof(value) != 'string') value = String(value);
+          value = moment(value).format('YYYY-MM-DD');
+          return value;
+      }
     },
     async submitForm () {
       this.$refs.createForm[0].focus();
@@ -1151,19 +1174,22 @@ export default {
           this.playLoader("Create Page...");
 
           const userToken = await this.$store.getters.getUserToken;
+          console.log('From create component, user token: ',userToken);
           this.$store.commit("setState",{
               state:"userToken",
               value: userToken
           });
           await createOrUpdateRememberPage(this.$store.state.curEditRP,userToken).then((rememberPage) => {
             rememberPage = rememberPage.data;
-            rememberPage.dateOfBirth = this.convertDateToDatePickerVal(rememberPage.dateOfBirth);
-            rememberPage.dateOfDeath = this.convertDateToDatePickerVal(rememberPage.dateOfDeath);
+            rememberPage.attributes.dateOfBirth = this.convertDateToDatePickerVal(rememberPage.attributes.dateOfBirth);
+            rememberPage.attributes.dateOfDeath = this.convertDateToDatePickerVal(rememberPage.attributes.dateOfDeath);
+            
             this.$store.commit('setState',{
               state:"curEditRP",
               value: rememberPage
             });
-            localStorage.setItem('currentEditedRP',JSON.stringify(rememberPage));
+            window.localStorage.setItem('currentEditedRP',JSON.stringify(rememberPage));
+
             this.stopLoader();
           }).catch((err) => {
             console.log(err);

@@ -162,7 +162,7 @@ export default {
     changePassword() {
       this.isSame = this.password == this.confirmPassword;
       this.is8Char = this.password.length >= 8;
-      this.isMix = this.password.match('(?=.*?[A-Z])') != null && this.password.match('(?=.*?[a-z])') != null && this.password.match('(?=.*?[0-9])') != null;
+      this.isMix = (this.password.match('(?=.*?[A-Z])') != null) && (this.password.match('(?=.*?[a-z])') != null) && (this.password.match('(?=.*?[0-9])') != null);
       this.isContainsSpacial =  this.password.match('(?=.*?[#?!@$%^&*-])') != null;
     },
     createPassword: async function () {
@@ -190,6 +190,21 @@ export default {
             await updatePasswordInNode(updatedUser._id, newPassword).then((res) => {
               localStorage.setItem("currentUser", JSON.stringify(updatedUser));
               localStorage.removeItem("emailVerified");
+              localStorage.removeItem("currentEditedRP");
+              //init store variables
+              this.$store.commit('setState',{
+                state: 'userToken',
+                value: ""
+              });
+              this.$store.commit('setState',{
+                state: 'curEditRP',
+                value: null
+              });
+              this.$store.commit('setState',{
+                state: 'currentUser',
+                value: null
+              });
+
 
               this.$router.push({
                 path: "/rp/create"
