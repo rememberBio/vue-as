@@ -1311,8 +1311,10 @@ export default {
           if(album.videos && album.videos.length)
             files = files.concat(album.videos);
         }
-        if(files.length)
+        if(files.length) {
           await removeFiles(files);
+          this.$eventBus.emit('re-init-gallery-slider');
+        }
       } else if(attributeName == "album-gallery") {
         let files = [];
         array = this['gallery'].items[galleryAlbumItemIndex].albumes;
@@ -1321,8 +1323,10 @@ export default {
           files = files.concat(album.images);
         if(album.videos && album.videos.length)
           files = files.concat(album.videos);
-        if(files.length)
+        if(files.length) {
           await removeFiles(files);
+          this.$eventBus.emit('re-init-gallery-slider');
+        }
       }
 
       if(attributeName == "stories" || attributeName == 'placesOfCommemoration') {
@@ -1362,6 +1366,7 @@ export default {
                 this.gallery.items[itemIndex].albumes[albumIndex].images.splice(fileIndex,1);
               else 
                this.gallery.items[itemIndex].albumes[albumIndex].videos.splice(fileIndex,1);
+               this.$eventBus.emit('re-init-gallery-slider');
               break;
             case 'placesOfCommemoration':
               this.placesOfCommemoration[fileIndex].image = "";
@@ -1372,7 +1377,6 @@ export default {
         }
         this.updateCurrentEditedRPAttributes(attrName,this[attrName]);
         this.renderDisplay(this,attrName);
-        this.$eventBus.emit('re-init-gallery-slider');
         this.stopLoader();        
       }).catch((err)=>{
         this.stopLoader();
