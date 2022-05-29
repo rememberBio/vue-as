@@ -16,7 +16,7 @@
          :class="{ 'btn-lb-reverse': this.$store.state.curEditRP._id }" :value="'create'">
           <a v-if="this.$store.state.curEditRP._id" class="btn-lb view-rp" target="_blank" :href="$store.state.curEditRP.link">View Remember Page</a>
         </div>
-        <span style="width:100%" class="error-massage" v-if="$store.state.errorUpdateRP">{{$store.state.errorUpdateRP}}</span>
+        <span style="width:100%" :class="{'error-massage': $store.state.messageUpdateRP.type == 'error','success-massage': $store.state.messageUpdateRP.type == 'success',}" v-if="$store.state.messageUpdateRP.message">{{$store.state.messageUpdateRP.message}}</span>
 
     </div>
    </div>
@@ -38,8 +38,38 @@ export default {
 
 <style scoped>
 span.error-massage {
-    width: 100%;
-    text-align: center;
+    color: red;
+}
+span.error-massage::before {
+    background: url(@/assets/images/icons/error-icon.svg) no-repeat white;
+}
+span.success-massage {
+    color: var(--custom-light-blue);
+}
+span.success-massage::before {
+    background: url(@/assets/images/icons/success-icon.svg) no-repeat white;
+}
+span[class*='-massage']::before {
+    content: "";
+    display: inline-block;
+    border: none;
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+}
+span[class*='-massage'] {
+  background: #FBFBFB 0% 0% no-repeat padding-box;
+  box-shadow: 0px -1px 6px #00000029;
+  position: absolute;
+  min-height: 52px;
+  bottom: 88px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 19px;
+  gap: 8px;
 }
 .sidebar-footer .blue-sidebar {
     display: flex;

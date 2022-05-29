@@ -7,7 +7,10 @@ export const state = () => ({
     curEditRP: null,
     playLoader:false,
     loaderMessage:"",
-    errorUpdateRP: "",
+    messageUpdateRP: {
+        type: "", //error/success
+        message: ""
+    },
 
 })
 export const mutations = {
@@ -30,6 +33,7 @@ export const mutations = {
         else {
             state.curEditRP.attributes[payload.attr] = payload.value;
         }
+        state.messageUpdateRP.message = '';
         localStorage.setItem('currentEditedRP',JSON.stringify(state.curEditRP));
     },
 }

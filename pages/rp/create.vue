@@ -35,7 +35,7 @@
                   name="main-image"
                   placeholder=""
                   accept="image/*"
-                  @change="(event) => uploadFiles(event,'mainImgBeforeCrop','image')"
+                  @input="(event) => uploadFiles(event,'mainImgBeforeCrop','image')"
                 />
                 <span class="error-message" v-if="errorUploadMainImage">
                   {{errorUploadMainImage}}
@@ -887,20 +887,30 @@
         </div>
         <button type="submit">save</button>
       </form>
-      <div class="wrap-cropper-popup" v-show="showCropper && mainImgBeforeCrop">
-        <VueCropper
-            ref="cropper"
-            :aspectRatio="1/1" 
-            :src="mainImgBeforeCrop"
-            :initialAspectRatio="1/1"
-            :autoCropArea="1"
-            :zoomable="false"
-            alt="Crop Main Image"
-          >
-        </VueCropper >
-        <div class="flex">
-          <a href="" @click="saveCropperImage($event)" class="save btn-lb max-content">Save</a>
-          <a href="" @click="cancelCropper($event)" class="cancel btn-lb-reverse max-content">Cancel</a>
+      <div class="wrap-popup" v-show="showCropper && mainImgBeforeCrop">
+        <div class="wrap-popup-content">
+          <div class="popup-header">
+            <a href="" @click="cancelCropper($event)" class="close" aria-label="close crop image popup">
+              <img :src="require('@/assets/images/icons/blue-x-icon.svg')"  alt="close crop popup">
+            </a>
+            <span class="title">Crop the photo</span>
+          </div>
+          <div class="popup-body">
+            <VueCropper
+                ref="cropper"
+                :aspectRatio="1/1" 
+                :src="mainImgBeforeCrop"
+                :initialAspectRatio="1/1"
+                :autoCropArea="1"
+                :zoomable="false"
+                alt="Crop Main Image"
+              >
+            </VueCropper >
+          </div>
+          <div class="popup-bottom flex">
+            <a href="" @click="saveCropperImage($event)" class="save btn-lb max-content">Save And Upload</a>
+            <a href="" @click="cancelCropper($event)" class="cancel btn-lb-reverse max-content">Cancel</a>
+          </div>
         </div>
       </div>
     </div>
@@ -1167,8 +1177,10 @@ export default {
     async submitForm () {
       this.$refs.createForm[0].focus();
       this.$store.commit('setState',{
-        state: 'errorUpdateRP',
-        value: ""
+        state: 'messageUpdateRP',
+        value: {
+          message: ""
+        }
       })
       if (this.mainImg) {
         if(this.name){
@@ -1193,22 +1205,34 @@ export default {
               value: rememberPage
             });
             window.localStorage.setItem('currentEditedRP',JSON.stringify(rememberPage));
-
+            this.$store.commit('setState',{
+              state: 'messageUpdateRP',
+                value: {
+                'type':"success",
+                'message':"successfully updated"
+              }
+            });
             this.stopLoader();
           }).catch((err) => {
             console.log(err);
             this.$store.commit('setState',{
-              state: 'errorUpdateRP',
-              value: err.message
+              state: 'messageUpdateRP',
+              value: {
+                'type':"error",
+                'message':err.message
+              }
             })
             this.stopLoader();
           });
         } else {
           this.showMainFieldGroups = true;
           this.$refs.createForm[0].focus();
-           this.$store.commit('setState',{
-              state: 'errorUpdateRP',
-              value: "Please fill required fields"
+          this.$store.commit('setState',{
+            state: 'messageUpdateRP',
+              value: {
+              'type':"error",
+              'message':"Please fill required fields"
+            }
           })
           
         }
@@ -1216,8 +1240,11 @@ export default {
         this.showMainFieldGroups = true;
         this.$refs.createForm[0].focus();
           this.$store.commit('setState',{
-            state: 'errorUpdateRP',
-            value: "Please fill required fields"
+            state: 'messageUpdateRP',
+              value: {
+              'type':"error",
+              'message':"Please fill required fields"
+            }
         })
       }
     },
@@ -1359,6 +1386,8 @@ export default {
       if(!files.length) 
         this.stopLoader();
       if(attrName == 'mainImgBeforeCrop') {
+        
+
         this.showCropperFunc(files[0]);
       } else
       for (let index = 0; index < files.length; index++) {
@@ -1434,14 +1463,22 @@ export default {
     //cropper
     showCropperFunc(file) {
       if(file) {
-        var fileReader = new FileReader();  
-        fileReader.onload = async () => {
-            this.mainImgBeforeCrop = fileReader.result;
-            this.$refs.cropper.replace(this.mainImgBeforeCrop);
-            this.stopLoader();
-            this.showCropper = true;
+        let fileType = file.type;
+        let valid = ["image/webp","image/png","image/jpeg"];
+        if (valid.includes(fileType)) {
+          var fileReader = new FileReader();  
+          fileReader.onload = async () => {
+              this.mainImgBeforeCrop = fileReader.result;
+              this.$refs.cropper.replace(this.mainImgBeforeCrop);
+              this.stopLoader();
+              this.errorUploadMainImage = "";
+              this.showCropper = true;
+          }
+          fileReader.readAsDataURL(file);
+        } else {
+          this.errorUploadMainImage =  "file type is not valid";
+          this.stopLoader();
         }
-        fileReader.readAsDataURL(file);
       }
     },
     cancelCropper(event) {
@@ -1527,11 +1564,11 @@ export default {
 </script>
 
 <style scoped>
-.wrap-cropper-popup {
+.wrap-popup {
     width: 29%;
     position: fixed;
     height: 100%;
-    background: rgba(255,255,255,0.67);
+    background: #000000A5;
     z-index: 9999999;
     display: flex;
     top: 0;
@@ -1541,11 +1578,41 @@ export default {
     align-items:center;
     justify-content:center;
     gap:20px;
+    overflow: auto;
 }
-.wrap-cropper-popup .flex {
-  gap: 20px;
+.wrap-popup-content {
+    background: white;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 33px 43px 27px;
+    border: 1px solid #707070;
+    border-radius: 18px;
 }
 
+.popup-header {
+    color: var(--custom-blue);
+    font-size: 16px;
+    margin-bottom: 33px;
+    font-family: 'Rubik Medium';
+}
+
+.popup-bottom {
+    margin-top: 48px;
+    gap: 10px;
+    align-self: center;
+}
+
+.popup-body {
+    align-self: center;
+}
+.wrap-popup a.close {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 6px;
+}
 .wrap-field-groups:not(.active) .field-groups-content {display: none;}
 
 .wrap-map {
@@ -1631,7 +1698,7 @@ label.field-label.wrap-remove {display: flex;justify-content: space-between;alig
 .wrap-add-button a:before {content: '+';color: white;background-color: var(--custom-light-blue);border-radius: 50%;width: 21px;height: 21px;display: inline-block;text-align: center;margin-right: 12px;font-family: 'Rubik Medium';box-shadow: 0px 3px 6px;}
 span.field-groups-name { margin-bottom: 32px;cursor: pointer;font-size: 18px;font-weight: bold;color: var(--custom-blue);border-bottom: 1px solid #B9B9B9;width: 100%;display: flex;
     gap: 5px;}
-.wrap-field-groups.active {margin-bottom: 40px;}
+.wrap-field-groups.active {margin-bottom: 50px;}
 div#create-page-sidebar button[type=submit] {
     height: 0;
     width: 0;

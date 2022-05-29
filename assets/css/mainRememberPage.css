@@ -6,7 +6,7 @@
     height: 100vh;
 }
 .left-side.sidebar .main-content {
-    padding: 43px 28px;
+    padding: 43px 28px 100px;
 }
 
 .right-side {
