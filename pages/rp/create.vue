@@ -1339,6 +1339,8 @@ export default {
         array = array.splice(index, 1);
       }
 
+      if(attributeName == 'album-gallery') attributeName = 'gallery';
+      
       this.updateCurrentEditedRPAttributes(attributeName,this[attributeName]);
       this.stopLoader();
 
