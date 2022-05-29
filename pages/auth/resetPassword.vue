@@ -188,9 +188,11 @@ export default {
         await user.updatePassword(newPassword).then(async () => {
            //node js update password
             await updatePasswordInNode(updatedUser._id, newPassword).then((res) => {
-              localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+              res.password = newPassword;
+              
+              localStorage.setItem("currentUser", JSON.stringify(res));
               localStorage.removeItem("emailVerified");
-              localStorage.removeItem("currentEditedRP");
+              //localStorage.removeItem("currentEditedRP");
               //init store variables
               this.$store.commit('setState',{
                 state: 'userToken',
