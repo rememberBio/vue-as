@@ -1410,7 +1410,8 @@ export default {
                 tmpArr = self[attrName].items[indexItem].albumes[indexAlbum].images;
               if(tmpArr == undefined) tmpArr = [];
               tmpArr.push(fileUrl);
-              this.errorUploadGalleryImage = ""
+              this.errorUploadGalleryImage = "";
+              this.$eventBus.emit('re-init-gallery-slider');
           } else if(attrName == 'grave') {
             self['grave'].images.push(fileUrl);
             this.errorUploadGraveImage = ""
@@ -1423,7 +1424,6 @@ export default {
           this.updateCurrentEditedRPAttributes(attrName,this[attrName]);
           this.renderDisplay(self,attrName);
           this.stopLoader();
-          this.$eventBus.emit('re-init-gallery-slider');
 
         }).catch((err)=>{
           switch (attrName) {
