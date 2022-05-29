@@ -1199,7 +1199,7 @@ export default {
             rememberPage = rememberPage.data;
             rememberPage.attributes.dateOfBirth = this.convertDateToDatePickerVal(rememberPage.attributes.dateOfBirth);
             rememberPage.attributes.dateOfDeath = this.convertDateToDatePickerVal(rememberPage.attributes.dateOfDeath);
-            
+            rememberPage.attributes.stories.forEach( story => story.date = this.convertDateToDatePickerVal(story.date) );
             this.$store.commit('setState',{
               state:"curEditRP",
               value: rememberPage
