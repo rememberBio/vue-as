@@ -31,6 +31,7 @@ export default function({ route, redirect }) {
                 let rpId = route.query['rp-id'];
                 //http://localhost:8080/rp/create/?rp-id=62945c6f90cfef325bb6cb4
                 if(rpId) rpId = '/?redirect-to=/rp/create/?rp-id=' + rpId;
+                else rpId = "";
                 return redirect(loginRoute + rpId);
             } 
             else {
