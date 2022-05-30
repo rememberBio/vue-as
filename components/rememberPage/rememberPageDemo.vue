@@ -287,6 +287,8 @@ import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 
 import '~/assets/css/editRememberPage.css';
 
+import { rememberPage } from "~/models/rememberPage";
+
 
 export default {
   name: "rememberPageDemo",
@@ -313,7 +315,7 @@ export default {
             {
                 breakpoint: 1100,
                 settings: {
-                    slidesToShow: 2
+                    // slidesToShow: 2
                 },
             },
             {

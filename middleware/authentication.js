@@ -1,4 +1,3 @@
-import { rememberPage } from "~/models/rememberPage";
 
 //auth
 const loginRoute = "/auth/login";
@@ -29,23 +28,12 @@ export default function({ route, redirect }) {
         else if (route.path.includes("/rp")) {
             if (!$nuxt.$fire.auth.currentUser || emailVerified) 
             {
-                return redirect(loginRoute);
+                let rpId = route.query['rp-id'];
+                //http://localhost:8080/rp/create/?rp-id=62945c6f90cfef325bb6cb4
+                if(rpId) rpId = '/?redirect-to=/rp/create/?rp-id=' + rpId;
+                return redirect(loginRoute + rpId);
             } 
             else {
-                if (!$nuxt.$store.state.curEditRP) {
-                    let currendEditedFromLocalStorage = localStorage.getItem('currentEditedRP');
-                    if(!currendEditedFromLocalStorage) {
-                        currendEditedFromLocalStorage = new rememberPage();
-                        localStorage.setItem('currentEditedRP',JSON.stringify(currendEditedFromLocalStorage));
-                    } else {
-                        currendEditedFromLocalStorage = JSON.parse(currendEditedFromLocalStorage);
-                    }    
-
-                    $nuxt.$store.commit("setState", {
-                        value: currendEditedFromLocalStorage,
-                        state: "curEditRP",
-                    });
-                } 
                 let userFromStorage = localStorage.getItem("currentUser");
                 if(userFromStorage) {
                     if (!$nuxt.$store.state.currentUser) {
@@ -58,6 +46,7 @@ export default function({ route, redirect }) {
                     $nuxt.$fire.auth.signOut();
                     return redirect(loginRoute);
                 }
+                
             }
             return route;
         }

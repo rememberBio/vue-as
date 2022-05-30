@@ -8,13 +8,13 @@
         <div class="wrap-btns flex">
           <input type="button"
           @click="submitForm($event)" 
-          v-if="this.$store.state.curEditRP._id"
+          v-if="this.$store.state.curEditRP&&this.$store.state.curEditRP._id"
          :class="{ 'btn-lb-reverse': this.$store.state.curEditRP._id }" :value="'update'">
           <input type="button"
           v-else
           @click="submitForm($event)" 
-         :class="{ 'btn-lb-reverse': this.$store.state.curEditRP._id }" :value="'create'">
-          <a v-if="this.$store.state.curEditRP._id" class="btn-lb view-rp" target="_blank" :href="$store.state.curEditRP.link">View Remember Page</a>
+         :class="{ 'btn-lb-reverse': this.$store.state.curEditRP&&this.$store.state.curEditRP._id }" :value="'create'">
+          <a v-if="this.$store.state.curEditRP&&this.$store.state.curEditRP._id" class="btn-lb view-rp" target="_blank" :href="$store.state.curEditRP.link">View Remember Page</a>
         </div>
         <span style="width:100%" :class="{'error-massage': $store.state.messageUpdateRP.type == 'error','success-massage': $store.state.messageUpdateRP.type == 'success',}" v-if="$store.state.messageUpdateRP.message">{{$store.state.messageUpdateRP.message}}</span>
 

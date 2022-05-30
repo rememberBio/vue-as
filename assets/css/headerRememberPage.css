@@ -26,10 +26,15 @@ header#masthead {
 
 ul#primary-menu {
     align-items: center;
+    justify-content: space-between;;
+    gap: 15px;
     display: flex;
     width: 100%;
 }
-
+#generalHeader ul#primary-menu {
+    justify-content: unset;
+    gap: 0;
+}
 .share-btn {
     display: flex;
     width: max-content;

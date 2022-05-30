@@ -14,10 +14,17 @@ const createOrUpdateRememberPage = (newRememberPage,userToken) => {
         'Authorization': `Bearer ${userToken}`
     };
     if(!newRememberPage.status) newRememberPage.status = 'in progress';
-    console.log('From rp service , userToken: ',userToken);
 
     return axios.post( apiTarget + '/rp/createOrUpdate', newRememberPage,headers);
 }
+
+const getRememberPageById = (id,userToken) => {
+    headers.headers = {
+        'Authorization': `Bearer ${userToken}`
+    };
+    return axios.get( apiTarget + '/rp/getById/' + id,headers);
+}
 module.exports = {
-    createOrUpdateRememberPage
+    createOrUpdateRememberPage,
+    getRememberPageById
 }

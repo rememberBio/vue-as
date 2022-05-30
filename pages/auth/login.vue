@@ -102,9 +102,15 @@ export default {
       const self = this;
       getUserByEmailAndPassword(email,password).then((response) => {
         localStorage.setItem("currentUser", JSON.stringify(response));
-        self.$router.push({
-            path: "/rp/create"
-        });
+        let redirectTo = self.$route.query['redirect-to'];
+        if(redirectTo) 
+          self.$router.push({
+              path: redirectTo
+          });
+        else
+          self.$router.push({
+              path: "/rp/create"
+          });
       });
     },
   },

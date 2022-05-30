@@ -1,5 +1,5 @@
 <template>
-  <div id="create-page-sidebar" class="main-container">
+  <div id="create-page-sidebar" class="main-container rp-sidebar">
     <div class="main-content">
       <form methode="post" ref="createForm">
         <!-- Main -->
@@ -1218,11 +1218,13 @@ export default {
             this.stopLoader();
           }).catch((err) => {
             console.log(err);
+            let val = err.response.data;
+            if(!val) val = err.message;
             this.$store.commit('setState',{
               state: 'messageUpdateRP',
               value: {
                 'type':"error",
-                'message':err.message
+                'message':val
               }
             })
             this.stopLoader();

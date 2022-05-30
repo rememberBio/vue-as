@@ -9,15 +9,7 @@
     min-height: 154px;
     height: inherit;
 }
-   
-@media screen and (max-width:767px) {
-  .desktop-only {
-    display: none;
-  }
-  .mobile-only {
-    display: flex;
-  }
-}
+ 
 .pointer {
     cursor: pointer;
 }
@@ -867,9 +859,22 @@ div#galley-main-slider a {
         width: 100%;
     }
 }
+
 @media screen and (max-width: 767px) {
+    .desktop-only {
+        display: none;
+    }
+    .mobile-only {
+        display: flex;
+    }
+    .slick-slider {
+        height: max-content;
+    }
     section.hero.main-hero {
         height: calc(100vh - 15px);
+    }
+    .wrap-content.empty-places .wrap-place, section.main-places .wrap-content>a.wrap-place.notHaveImage {
+        width: 100%;
     }
     section.hero.main-hero>.mobile-only {
         flex-direction: column-reverse;

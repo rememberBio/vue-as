@@ -15,7 +15,7 @@
     margin-left: auto;
     position: relative;
 }
-div#create-page-sidebar {
+.rp-sidebar {
     height: 100%;
     padding: 88px 0px;
 }
