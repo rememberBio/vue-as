@@ -304,7 +304,7 @@ export default {
         //gallery slider
         carouselKey: 0,
         settings: {
-            slidesToShow: 2,
+            // slidesToShow: 2,
             centerMode: false,
             variableWidth: true,
             autoplay: true,

@@ -228,7 +228,7 @@ header#generalHeader .wrap-serach input:focus,footer#generalFooter.wrap-serach i
 header#generalHeader #site-navigation:not(.toggled) {display: none;}
 header#generalHeader #site-navigation {position: absolute;right: 0;width: unset;}
 
-header#generalHeader #site-navigation li a {font-size: 16px;line-height: 19px;padding: 21px 30px;border-bottom: 1px solid #E2E2E2;;min-width: 250px;}
+header#generalHeader #site-navigation li a {width:100%;font-size: 16px;line-height: 19px;padding: 21px 30px;border-bottom: 1px solid #E2E2E2;;min-width: 250px;}
 
 header#generalHeader #site-navigation ul {    
 	padding-top: 0;
