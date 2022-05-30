@@ -497,6 +497,7 @@ section.main-tomb .acf-map,section.main-tomb .custom-acf-map {
     border-radius: 15px 15px 0px 0px;
     box-shadow: 0px 0px 6px #00000029;
     margin-bottom: 0;
+    background-color: #CBCBCB;
 }
 
 section.main-tomb .wrap-address {

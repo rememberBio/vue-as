@@ -459,7 +459,7 @@
                 v-for="(item, index) in gallery.items"
                 :key="index"
               >
-                <label for="" class="field-label" :class="{ 'wrap-remove': index > 0}">
+                <!-- <label for="" class="field-label" :class="{ 'wrap-remove': index > 0}">
                   Gallery Item {{ index + 1 }}
                   <a
                     href=""
@@ -494,13 +494,13 @@
                       @input="changerememberPageState('gallery', $event)"
                     />
                   </div>
-                </div>
+                </div> -->
                 <div
                 class="wrap-loop"
                 v-for="(album, indexAl) in item.albumes"
                 :key="indexAl"
                 >
-                  <label for="" class="field-label" :class="{ 'wrap-remove': indexAl > 0}">
+                  <!-- <label for="" class="field-label" :class="{ 'wrap-remove': indexAl > 0}">
                     Albume {{ indexAl + 1 }}
                     <a
                       href=""
@@ -548,7 +548,7 @@
                           @input="changerememberPageState('gallery', $event)"
                         />
                       </div>
-                  </div>
+                  </div> -->
                   <div class="wrap-field upload-images">
                     <label v-if="album.images&&album.images.length&&album.images[0]" class="small-small-field-label upload-video"> upload images </label>
                     <span class="error-message multiply-upload-error-message" v-if="errorUploadGalleryImage && errorUploadGalleryImage.index == index && errorUploadGalleryImage.albumIndex == indexAl && errorUploadGalleryImage.type == 'image'">
@@ -636,17 +636,17 @@
                     </div>
                   </div>
                 </div>
-                <div class="wrap-add-button">
+                <!-- <div class="wrap-add-button">
                       <a href="" @click="addElement('gallery-album', $event,index)"
                         >Add Albume In This Gallery</a
                       >
-                </div>
+                </div> -->
               </div>
-              <div class="wrap-add-button">
+              <!-- <div class="wrap-add-button">
                 <a href="" @click="addElement('gallery', $event)"
                   >Add New Gallery</a
                 >
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
