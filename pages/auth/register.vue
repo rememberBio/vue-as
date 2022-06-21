@@ -112,7 +112,6 @@ export default {
       emailSend: false,
       errorMessage: "",
       url: window.location.href,
-      currentUser: localStorage.getItem("currentUser"),
       showLoading: false
     };
   },
@@ -142,13 +141,14 @@ export default {
         user.email = email;
         user.types = ['pageManager'];
         await createUser(user).then(async (newUser) => {
-          this.$store.commit("setState", {
-            value: newUser,
-            state: "currentUser",
-          });
-          //newUser.password = '';
-          localStorage.setItem("currentUser", JSON.stringify(newUser));
-         
+          if(newUser == 'userNotActive') {
+            this.emailSend = true;
+          } else {
+            this.$store.commit("setState", {
+              value: newUser,
+              state: "currentUser",
+            });
+          }
           this.sendEmailLink();
           this.showLoading = false;
          
@@ -188,17 +188,10 @@ export default {
     // },
   },
   created() {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (this.currentUser && this.currentUser != "") {
-      this.email = this.currentUser.email;
-      this.firstName = this.currentUser.firstName;
-      this.lastName = this.currentUser.lastName;
-      this.$store.commit("setState", {
-        value: this.currentUser,
-        state: "currentUser",
-      });
-    }
-    if((localStorage.getItem("emailForSignIn") ||  localStorage.getItem("emailVerified"))  && this.currentUser && this.currentUser != "") this.emailSend = true;
+   if((localStorage.getItem("emailForSignIn") && localStorage.getItem("emailForSignIn") != 'null')) {
+        this.email = localStorage.getItem("emailForSignIn");
+        this.emailSend = true;
+   }
   },
 };
 </script>

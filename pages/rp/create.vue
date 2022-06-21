@@ -1025,7 +1025,6 @@ export default {
         },
       },
       addHebrewDate: false,
-      currentUser: localStorage.getItem("currentUser"),
 
       //Show content
       showMainFieldGroups: true,
@@ -1193,11 +1192,7 @@ export default {
           else
           this.playLoader("Create Page...");
 
-          const userToken = await this.$store.getters.getUserToken;
-          this.$store.commit("setState",{
-              state:"userToken",
-              value: userToken
-          });
+          const userToken = await this.$fire.auth.currentUser.getIdToken();
           await createOrUpdateRememberPage(this.$store.state.curEditRP,userToken).then((rememberPage) => {
             rememberPage = rememberPage.data;
             rememberPage.attributes.dateOfBirth = this.convertDateToDatePickerVal(rememberPage.attributes.dateOfBirth);
@@ -1557,7 +1552,7 @@ export default {
     }
   },
   created() {
-    const currentEditedRPAttrs = JSON.parse(localStorage.getItem('currentEditedRP')).attributes;
+    const currentEditedRPAttrs = JSON.parse(JSON.stringify(this.$store.state.curEditRP.attributes));
     let self = this;
     Object.keys(currentEditedRPAttrs).forEach( key => {
         let value = currentEditedRPAttrs[key];

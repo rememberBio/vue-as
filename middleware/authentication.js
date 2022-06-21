@@ -1,3 +1,4 @@
+import { getUserByEmail } from "~/services/userService";
 
 //auth
 const loginRoute = "/auth/login";
@@ -7,7 +8,7 @@ const createPageRoute = "/rp/create";
 
 
 
-export default function({ route, redirect }) {
+export default async function({ route, redirect }) {
 
     const emailVerified = localStorage.getItem("emailVerified");
 
@@ -29,23 +30,17 @@ export default function({ route, redirect }) {
             if (!$nuxt.$fire.auth.currentUser || emailVerified) 
             {
                 let rpId = route.query['rp-id'];
-                //http://localhost:8080/rp/create/?rp-id=62945c6f90cfef325bb6cb4
                 if(rpId) rpId = '/?redirect-to=/rp/create/?rp-id=' + rpId;
                 else rpId = "";
                 return redirect(loginRoute + rpId);
             } 
             else {
-                let userFromStorage = localStorage.getItem("currentUser");
-                if(userFromStorage) {
-                    if (!$nuxt.$store.state.currentUser) {
-                        $nuxt.$store.commit("setState", {
-                            value: JSON.parse(userFromStorage),
-                            state: "currentUser",
-                        });
-                    } 
-                } else {
-                    $nuxt.$fire.auth.signOut();
-                    return redirect(loginRoute);
+                if (!$nuxt.$store.state.currentUser) {
+                    const userFromDb = await getUserByEmail($nuxt.$fire.auth.currentUser.email);
+                    $nuxt.$store.commit("setState", {
+                        value: userFromDb,
+                        state: "currentUser",
+                    });
                 }
                 
             }

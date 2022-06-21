@@ -51,7 +51,7 @@
 
 <script>
 
-import { getUserByEmailAndPassword } from "~/services/userService.js";
+import { getUserByEmail } from "~/services/userService.js";
 
 export default {
   components: {  },
@@ -85,7 +85,7 @@ export default {
       await this.$fire.auth
         .signInWithEmailAndPassword(email, password)
         .then( async (response) => {
-          await self.getLoginUser(email,password);
+          await self.getLoginUser(email);
           this.showLoading = false;
         })
         .catch((error) => {
@@ -98,10 +98,14 @@ export default {
           this.showLoading = false;
         });
     },
-    async getLoginUser(email,password) {
+    async getLoginUser(email) {
       const self = this;
-      getUserByEmailAndPassword(email,password).then((response) => {
-        localStorage.setItem("currentUser", JSON.stringify(response));
+      getUserByEmail(email).then((response) => {
+        this.$store.commit("setState", {
+            value: response,
+            state: "currentUser",
+        });
+        localStorage.removeItem("currentEditedRP");
         let redirectTo = self.$route.query['redirect-to'];
         if(redirectTo) 
           self.$router.push({

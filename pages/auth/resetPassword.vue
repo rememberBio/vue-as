@@ -114,7 +114,6 @@
 <script>
 //import useVuelidate from "vuelidate/core";
 //import { required, minLength, sameAs } from "vuelidate/validators";
-import { updatePasswordInNode } from "~/services/userService.js";
 import { updateUserStatus } from "~/services/userService.js";
 
 import { User } from "../../models/user";
@@ -131,7 +130,8 @@ export default {
       is8Char: false,
       isSame: false,
       isMix: false,
-      isContainsSpacial: false
+      isContainsSpacial: false,
+      email:""
     };
   },
   setup() {
@@ -178,73 +178,55 @@ export default {
         }
         
         this.showLoading = true;
-        let updatedUser = new User();
-        updatedUser = JSON.parse(localStorage.getItem("currentUser"));
-        
         //firebase
         const newPassword = this.password;
         const auth = this.$fire.auth
         let user = auth.currentUser;
         await user.updatePassword(newPassword).then(async () => {
-           //node js update password
-            await updatePasswordInNode(updatedUser._id, newPassword).then((res) => {
-              //res.password = newPassword;
-              localStorage.setItem("currentUser", JSON.stringify(res));
-              localStorage.removeItem("emailVerified");
-              //localStorage.removeItem("currentEditedRP");
-              //init store variables
-              this.$store.commit('setState',{
-                state: 'userToken',
-                value: ""
-              });
-              this.$store.commit('setState',{
-                state: 'curEditRP',
-                value: null
-              });
-              this.$store.commit('setState',{
-                state: 'currentUser',
-                value: null
-              });
-
-
-              this.$router.push({
-                path: "/rp/create"
-              });
-              this.showLoading = false;
-            }).catch((err)=>{
-              this.showLoading = false;
-              this.errorMessage = "Internal Server Error, Please Contact us"
-            });
+          //res.password = newPassword;
+          localStorage.removeItem("emailVerified");
+          //init store variables
+          this.$store.commit('setState',{
+            state: 'curEditRP',
+            value: null
+          });
+          this.$store.commit('setState',{
+            state: 'currentUser',
+            value: null
+          });
+          
+          //save on mongo with isActive=true
+          await this.updateUser(this.email, true);
+            
         }).catch((err)=>{
+          console.log(err);
           this.showLoading = false;
           this.errorMessage = "Internal Server Error, Please Contact us"
         });
       //}
     },
     confirmSignIn: async function () {
+      console.log("hi fro confirm sign in");
       if(this.$fire.auth.isSignInWithEmailLink(window.location.href)) {
         let email = localStorage.getItem("emailForSignIn");
-        if (!email) {
-          // eslint-disable-next-line no-console
-          console.log("not email");
-        }
-        this.$fire.auth.signInWithEmailLink(email, window.location.href)
-        .then((result) => {
-          // Clear email from storage.
-          window.localStorage.removeItem("emailForSignIn");
-          localStorage.setItem("emailVerified", true);
-
-          //save on mongo with isActive=true
-          this.updateUser(email, true);
-        })
-        .catch((error) => {
-          console.log("error occured in auth link");
-          console.log(error);
-          window.localStorage.setItem("emailForSignIn",email);
-          this.$router.push({
-            path: "/auth/register",
+        console.log(this.email);
+        if(this.email) {
+          console.log("sigh in with email link");
+          this.$fire.auth.signInWithEmailLink(this.email, window.location.href)
+          .then(async(result) => {
+            // Clear email from storage.
+            window.localStorage.removeItem("emailForSignIn");
+            localStorage.setItem("emailVerified", true);
+          })
+          .catch((error) => {
+            console.log("error occured in auth link");
+            console.log(error);
+            window.localStorage.setItem("emailForSignIn",this.email);
+            this.$router.push({
+              path: "/auth/register",
+            });
           });
-        });
+        }
       }
       else {
         if (this.emailVerified != true) {
@@ -255,20 +237,36 @@ export default {
       }
     },
     updateUser: async function (email, isActive) {
-      await updateUserStatus(email, isActive).then((updateUser) => {
-        let cUser = JSON.parse(localStorage.getItem("currentUser"));
-        cUser["_id"] = updateUser._id;
-        cUser["firstName"] = updateUser.firstName;
-        cUser["lastName"] = updateUser.lastName;
-        cUser["username"] = cUser["firstName"] + " " + cUser["lastName"];
-        cUser["phone"] = updateUser.phone;
-        localStorage.setItem("currentUser", JSON.stringify(cUser));
+      //save on mongo with isActive=true
+      let token = await this.$fire.auth.currentUser.getIdToken();
+      await updateUserStatus(email, isActive, token).then((updateUser) => {
+        localStorage.removeItem("currentEditedRP");
+        this.$store.commit("setState", {
+            value: updateUser,
+            state: "currentUser",
+        });
+        
+        this.$router.push({
+          path: "/rp/create"
+        });
+      }).catch((err)=>{
+        console.log("error in update user");
+        console.log(err);
       });
     }
 
   },
   created: async function () {
-    await this.confirmSignIn(this.url);
+    console.log("cerated reset pass component");
+    this.email = localStorage.getItem("emailForSignIn");
+    if(this.email) {
+      await this.confirmSignIn(this.url);
+    }
+    else {
+      this.$router.push({
+        path: "/auth/register",
+      });
+    }
   },
   computed: {
     emailVerified: function () {

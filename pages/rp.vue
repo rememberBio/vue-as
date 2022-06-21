@@ -30,6 +30,7 @@ import Loader from '../components/general/loader.vue';
 
 import { rememberPage } from "~/models/rememberPage";
 import { getRememberPageById } from "~/services/rememberPageService";
+import { getUserRp } from "~/services/userService";
 
 import moment from 'moment';
 
@@ -47,25 +48,45 @@ export default {
     methods: {
       accessToNotAllowedPage() {
         localStorage.removeItem('currentEditedRP');
-        this.setRpStoreFromLocalStorage();
+        this.setRpStoreFromUser();
         this.$nuxt.error({ statusCode: 404, message: 'Page not found' })
       },
-      setRpStoreFromLocalStorage() {
+      async setRpStoreFromUser() {
         //Get last edited page from cookie
         if (!this.$store.state.curEditRP) {
-          let currendEditedFromLocalStorage = localStorage.getItem('currentEditedRP');
-          if(!currendEditedFromLocalStorage) {
-            currendEditedFromLocalStorage = new rememberPage();
-            localStorage.setItem('currentEditedRP',JSON.stringify(currendEditedFromLocalStorage));
+          let currendEditedFromUser = await this.getUserRpObj();
+          if(!currendEditedFromUser) {
+            let rpStorage = localStorage.getItem('currentEditedRP');
+            if(rpStorage) {
+              rpStorage = JSON.parse(rpStorage);
+            }
+            else {
+              rpStorage = new rememberPage();
+            }
+            currendEditedFromUser = rpStorage;
           } else {
-            currendEditedFromLocalStorage = JSON.parse(currendEditedFromLocalStorage);
-          }    
+            currendEditedFromUser.attributes.dateOfBirth = this.convertDateToDatePickerVal(currendEditedFromUser.attributes.dateOfBirth);
+            currendEditedFromUser.attributes.dateOfDeath = this.convertDateToDatePickerVal(currendEditedFromUser.attributes.dateOfDeath);
+            currendEditedFromUser.attributes.stories.forEach( story => story.date = this.convertDateToDatePickerVal(story.date) );
+          }
 
           this.$store.commit("setState", {
-            value: currendEditedFromLocalStorage,
+            value: currendEditedFromUser,
             state: "curEditRP",
           });
+          localStorage.setItem('currentEditedRP',JSON.stringify(currendEditedFromUser));
         }
+      },
+      async getUserRpObj() {
+        const userToken = await this.$fire.auth.currentUser.getIdToken();
+        try {
+          const rp = await getUserRp(userToken);
+          return rp;
+        } catch (error) {
+          return null;
+        }
+        
+        
       },
       convertDateToDatePickerVal: function (value) {
         if(value){
@@ -86,8 +107,9 @@ export default {
       this.setLoadingMessage('Loading...');
       if( rpId ) {
         console.log('ther are rpId: ',rpId);
-        let token = await this.$store.getters.getUserToken;
-        await getRememberPageById( rpId,token ).then((rememberPage) => {
+        //save on mongo with isActive=true
+        let token = await this.$fire.auth.currentUser.getIdToken();
+        await getRememberPageById( rpId,token ).then(async (rememberPage) => {
           console.log('get remember Page By Id');
           rememberPage = rememberPage.data;
 
@@ -96,7 +118,7 @@ export default {
           rememberPage.attributes.stories.forEach( story => story.date = this.convertDateToDatePickerVal(story.date) );
 
           localStorage.setItem('currentEditedRP',JSON.stringify(rememberPage));
-          this.setRpStoreFromLocalStorage();
+          await this.setRpStoreFromUser();
           this.completeCreated = true;
           this.setLoadingMessage('');
         }).catch((err) => {
@@ -108,7 +130,12 @@ export default {
         });
       } else {
         console.log("not get id param. go to func");
-        this.setRpStoreFromLocalStorage();
+        try {
+          await this.setRpStoreFromUser();
+
+        } catch (error) {
+          console.log(error)
+        }
         this.completeCreated = true;
         this.setLoadingMessage('');
       }

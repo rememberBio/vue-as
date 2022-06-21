@@ -116,7 +116,7 @@
                         <h3>Wife:</h3>
                     </template>
                     <a v-if="currentRPAttrs.spouse&&currentRPAttrs.spouse.rememberPageLink" :href="currentRPAttrs.spouse.rememberPageLink"><span>{{currentRPAttrs.spouse.name}}</span></a>
-                    <span v-else>{{currentRPAttrs.spouse.name}}</span>
+                    <span v-if="currentRPAttrs.spouse&&!currentRPAttrs.spouse.rememberPageLink">{{currentRPAttrs.spouse.name}}</span>
                 </div>
 
                 <div class="circle parents">
@@ -187,7 +187,7 @@
                     <template #prevArrow="">
                         <button class="slide-arrow prev-arrow"><img src="@/assets/images/white-arrow.svg" /></button>
                     </template>
-                    <template v-if="getOnlyFilesByType('',currentRPAttrs.gallery.items).length">
+                    <template v-if="currentRPAttrs.gallery&&getOnlyFilesByType('',currentRPAttrs.gallery.items).length">
                         <a v-for="(image,indexItem) in getOnlyFilesByType('image',currentRPAttrs.gallery.items)" :key="indexItem" class="wrap-image disabled">
                             <img class="lazy" :src="image" alt="" v-if="image">
                         </a>
@@ -249,7 +249,7 @@
         <section class="main-tomb">
             <h2 class="main-heading">The Tomb</h2>
             <div class="wrap-content">
-                <div class="custom-acf-map"  v-if="currentRPAttrs.grave.address&&currentRPAttrs.grave.address.location.lat  && currentRPAttrs.grave.address.location.lng">
+                <div class="custom-acf-map"  v-if="currentRPAttrs.grave&&currentRPAttrs.grave.address&&currentRPAttrs.grave.address.location.lat  && currentRPAttrs.grave.address.location.lng">
                     <gmaps-map
                     :options="{
                     center: currentRPAttrs.grave.address.location,
@@ -266,9 +266,9 @@
                 <div class="custom-acf-map" v-else>
                 </div>
                 <a class="wrap-address disabled">
-                    <span class="name" v-if="currentRPAttrs.grave.nameOfCemetery">{{ currentRPAttrs.grave.nameOfCemetery }}</span>
+                    <span class="name" v-if="currentRPAttrs.grave&&currentRPAttrs.grave.nameOfCemetery">{{ currentRPAttrs.grave.nameOfCemetery }}</span>
                     <span class="name" v-else >Place of the tomb</span>
-                    <span class="street" v-if="currentRPAttrs.grave.address.name">{{currentRPAttrs.grave.address.name}}</span>
+                    <span class="street" v-if="currentRPAttrs.grave&&currentRPAttrs.grave.address.name">{{currentRPAttrs.grave.address.name}}</span>
                     <span class="street" v-else>Street, city, country</span>
                     <div class="pointer">View ></div>
                 </a>
@@ -294,7 +294,9 @@ export default {
   name: "rememberPageDemo",
   computed: {
     currentRPAttrs: function () {
-        return this.$store.state.curEditRP.attributes;
+        if(this.$store.state.curEditRP)
+            return this.$store.state.curEditRP.attributes;
+        else return {};
     }
   },
   components: { gmapsMap,VueSlickCarousel },

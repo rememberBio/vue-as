@@ -4,6 +4,7 @@
       <div class="logo">
         <img :src="require('@/assets/images/white-logo.png')"  alt="">
       </div>
+      <button @click="logout"> Logout </button>
       <!-- <div class="wrap-icons flex">
         <a class="wrap-icon profile flex flex-col">
           <img :src="require('@/assets/images/createPage/profile.svg')"  alt="">
@@ -21,6 +22,18 @@
 <script>
 export default {
   name: "SidebarHeader",
+  methods: {
+    logout() {
+      this.$fire.auth.signOut();
+      this.$router.push({
+        path: "/auth/login"
+      });
+      this.$store.commit("setState", {
+        value: null,
+        state: "curEditRP",
+      });
+    },
+  }
 };
 </script>
 

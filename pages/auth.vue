@@ -23,14 +23,7 @@ export default {
     methods: {
   },
    created: async function () {
-     //get user token
-    const updatedUser = this.$store.state.currentUser;
-    if(updatedUser) {
-      let email = updatedUser.email;
-      let password = updatedUser.password;
-      //this.token = await createToken(email,password);
-    }
-  },
+    },
   computed: {},
 }
 </script>
