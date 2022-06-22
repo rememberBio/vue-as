@@ -206,12 +206,8 @@ export default {
       //}
     },
     confirmSignIn: async function () {
-      console.log("hi fro confirm sign in");
       if(this.$fire.auth.isSignInWithEmailLink(window.location.href)) {
-        let email = localStorage.getItem("emailForSignIn");
-        console.log(this.email);
         if(this.email) {
-          console.log("sigh in with email link");
           this.$fire.auth.signInWithEmailLink(this.email, window.location.href)
           .then(async(result) => {
             // Clear email from storage.
@@ -229,11 +225,9 @@ export default {
         }
       }
       else {
-        if (this.emailVerified != true) {
-          this.$router.push({
-            path: "/auth/register",
-          });
-        } 
+        this.$router.push({
+          path: "/auth/register",
+        });
       }
     },
     updateUser: async function (email, isActive) {

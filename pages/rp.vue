@@ -110,7 +110,6 @@ export default {
         //save on mongo with isActive=true
         let token = await this.$fire.auth.currentUser.getIdToken();
         await getRememberPageById( rpId,token ).then(async (rememberPage) => {
-          console.log('get remember Page By Id');
           rememberPage = rememberPage.data;
 
           rememberPage.attributes.dateOfBirth = this.convertDateToDatePickerVal(rememberPage.attributes.dateOfBirth);
@@ -129,7 +128,6 @@ export default {
           this.setLoadingMessage('');
         });
       } else {
-        console.log("not get id param. go to func");
         try {
           await this.setRpStoreFromUser();
 
@@ -139,7 +137,6 @@ export default {
         this.completeCreated = true;
         this.setLoadingMessage('');
       }
-      console.log('end before create function');
     },
     computed: {},
 }

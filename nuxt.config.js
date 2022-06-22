@@ -50,12 +50,13 @@ export default {
     ['@nuxtjs/firebase',
         {
           config: {
-            apiKey: "AIzaSyB1NNNnAUH-cRCD2g6tB9OcoC9Jut6Z0I4",
-            authDomain: "remember-342807.firebaseapp.com",
-            projectId: "remember-342807",
-            storageBucket: "remember-342807.appspot.com",
-            messagingSenderId: "562807779101",
-            appId: "1:562807779101:web:6df9df8236bbf9e1273bf4"
+            apiKey: "AIzaSyCnBNfZ5SpOKyLLNmTELYvZ95i6yuC0tUA",
+            authDomain: "remember-aa856.firebaseapp.com",
+            projectId: "remember-aa856",
+            storageBucket: "remember-aa856.appspot.com",
+            messagingSenderId: "475296626500",
+            appId: "1:475296626500:web:d093bcf3a07505add0c911",
+            measurementId: "G-389B30HMF8"
           },
           services: {
             auth: {
